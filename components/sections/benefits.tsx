@@ -4,9 +4,9 @@ export default function BenefitsSection() {
     return (
         <section className="container mx-auto max-w-5xl py-6 md:py-8 mb-10 px-4">
             <div className="flex w-full justify-center py-8 md:py-10">
-                <h1 className="font-extralight leading-tight text-3xl md:text-5xl text-center">
+                <h2 className="font-extralight leading-tight text-3xl md:text-5xl text-center">
                     Kenapa Harus Memilih Kami?
-                </h1>
+                </h2>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-10 lg:gap-20">

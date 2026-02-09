@@ -10,9 +10,9 @@ export default function FaqSections() {
     return (
         <div className="w-full max-w-[900px] mx-auto px-4 mb-10">
             <div className="flex w-full justify-center py-8 md:py-10">
-                <h1 className="font-extralight leading-tight text-3xl md:text-5xl text-center">
+                <h2 className="font-extralight leading-tight text-3xl md:text-5xl text-center">
                     Frequently Asked Questions
-                </h1>
+                </h2>
             </div>
             <Accordion
                 type="single"
