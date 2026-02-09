@@ -21,14 +21,61 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
         };
     }
 
+    // Optimize title to max 60 characters
+    // Suffix " | Aki Mobil Jogja" is 18 chars. Max product name length = 60 - 18 = 42.
+    const suffix = ' | Aki Mobil Jogja';
+    const maxNameLength = 60 - suffix.length; // 42
+
+    let pageTitle = product.nama;
+    if (pageTitle.length > maxNameLength) {
+        pageTitle = pageTitle.substring(0, maxNameLength - 3) + '...';
+    }
+    pageTitle = `${pageTitle}${suffix}`;
+
+    // Create comprehensive meta description (120-160 chars)
+    // Best practice: Action oriented, contains keywords, and value proposition.
+    const capacity = product.specifications?.[0]?.kapasitas;
+    const voltage = product.specifications?.[0]?.voltase;
+
+    let metaDescription = `Jual aki mobil ${product.nama} ${product.merek || ''} di Jogja. `;
+
+    if (capacity) metaDescription += `Kapasitas ${capacity}Ah. `;
+    if (voltage) metaDescription += `Voltase ${voltage}. `;
+
+    metaDescription += `Garansi resmi, harga terbaik & gratis antar pasang 24 jam.`;
+
+    // Ensure length is optimal (not too long, not too short)
+    if (metaDescription.length > 160) {
+        metaDescription = metaDescription.substring(0, 157) + '...';
+    }
+
+    const productUrl = `https://akimobiljogja.com/katalog/product/${slug}`;
+
     return {
-        title: `${product.nama} - Jual Aki Mobil Jogja`,
-        description: `Beli ${product.nama} harga terbaik di Jogja. ${product.deskripsi ? product.deskripsi.substring(0, 150) : 'Layanan ganti aki 24 jam.'}`,
+        title: pageTitle,
+        description: metaDescription,
+        alternates: {
+            canonical: productUrl,
+        },
         openGraph: {
-            title: product.nama,
-            description: product.deskripsi?.substring(0, 150) || product.nama,
-            images: product.gambar ? [product.gambar] : [],
+            title: pageTitle,
+            description: metaDescription,
+            url: productUrl,
+            siteName: 'Aki Mobil Jogja',
+            images: product.gambar ? [{
+                url: product.gambar,
+                width: 800,
+                height: 800,
+                alt: product.nama,
+            }] : [],
             type: 'website',
+            locale: 'id_ID',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: pageTitle,
+            description: metaDescription,
+            images: product.gambar ? [product.gambar] : [],
         },
     };
 }
@@ -74,9 +121,35 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
     };
 
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://akimobiljogja.com'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Katalog',
+                item: 'https://akimobiljogja.com/katalog'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: product.nama,
+                item: `https://akimobiljogja.com/katalog/product/${product.id}`
+            }
+        ]
+    };
+
     return (
         <>
             <JsonLd data={jsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
             <ClientPage initialProduct={product as any} relatedProducts={relatedProducts as any} />
         </>
     );
