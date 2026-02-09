@@ -3,6 +3,8 @@ import CatalogSections from "@/components/sections/catalog/catalog-sections";
 import HomeLayout from "@/components/layouts/home-layout"
 import JsonLd from '@/components/json-ld';
 
+import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
+
 export const metadata: Metadata = {
     title: 'Katalog Aki Mobil - Harga Terbaru | Aki Mobil Jogja',
     description: 'Jual berbagai merek aki mobil: GS Astra, Yuasa, Incoe, Panasonic. Tersedia aki basah, kering (MF), hybrid untuk segala jenis mobil. Harga bersaing, garansi resmi.',
@@ -32,7 +34,14 @@ export const metadata: Metadata = {
     },
 };
 
-export default function KatalogPage() {
+export default async function KatalogPage() {
+    const [categories, brands, amperes, products] = await Promise.all([
+        fetchCategories(),
+        fetchBrands(),
+        fetchCapacities(),
+        fetchAllProducts()
+    ]);
+
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -42,29 +51,25 @@ export default function KatalogPage() {
         mainEntity: {
             '@type': 'OfferCatalog',
             name: 'Katalog Aki Mobil',
-            itemListElement: [
-                {
-                    '@type': 'Offer',
-                    itemOffered: {
-                        '@type': 'Product',
-                        name: 'Aki Basah'
-                    }
-                },
-                {
-                    '@type': 'Offer',
-                    itemOffered: {
-                        '@type': 'Product',
-                        name: 'Aki Kering (MF)'
-                    }
+            itemListElement: products.slice(0, 20).map((product: any) => ({
+                '@type': 'Offer',
+                itemOffered: {
+                    '@type': 'Product',
+                    name: product.nama
                 }
-            ]
+            }))
         }
     };
 
     return (
         <HomeLayout>
             <JsonLd data={jsonLd} />
-            <CatalogSections />
+            <CatalogSections
+                initialCategories={categories}
+                initialBrands={brands}
+                initialAmperes={amperes}
+                initialProducts={products}
+            />
         </HomeLayout>
     );
 }

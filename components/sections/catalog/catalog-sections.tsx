@@ -17,7 +17,19 @@ import {
     SheetClose,
 } from "@/components/ui/sheet";
 import { motion } from "framer-motion";
-export default function CatalogSections() {
+interface CatalogSectionsProps {
+    initialCategories: any[];
+    initialBrands: any[];
+    initialAmperes: any[];
+    initialProducts: any[];
+}
+
+export default function CatalogSections({
+    initialCategories,
+    initialBrands,
+    initialAmperes,
+    initialProducts
+}: CatalogSectionsProps) {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedMereks, setSelectedMereks] = useState<string[]>([]);
     const [selectedKondisis, setSelectedKondisis] = useState<string[]>([]);
@@ -25,34 +37,17 @@ export default function CatalogSections() {
 
     const [priceRange, setPriceRange] = useState([5000000]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [allProducts, setAllProducts] = useState<any[]>([]);
 
-    const [categories, setCategories] = useState<any[]>([]);
-    const [brands, setBrands] = useState<any[]>([]);
-    const [amperes, setAmperes] = useState<any[]>([]);
+    // Initialize with server data
+    const [allProducts] = useState<any[]>(initialProducts);
+    const [categories] = useState<any[]>(initialCategories);
+    const [brands] = useState<any[]>(initialBrands);
+    const [amperes] = useState<any[]>(initialAmperes);
 
-    const [loading, setLoading] = useState(true);
     const [sheetOpen, setSheetOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const [cats, brds, amps, products] = await Promise.all([
-                fetchCategories(),
-                fetchBrands(),
-                fetchCapacities(),
-                fetchAllProducts()
-            ]);
-
-            setCategories(cats);
-            setBrands(brds);
-            setAmperes(amps);
-            setAllProducts(products);
-            setLoading(false);
-        };
-
-        fetchData();
-    }, []);
+    // Data is loaded from server, so no loading state needed for initial render
+    const loading = false;
 
     const filteredProducts = useMemo(() => {
         return allProducts.filter(item => {

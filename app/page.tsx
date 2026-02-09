@@ -7,6 +7,8 @@ import FaqSections from "@/components/sections/faq";
 import Footer from "@/components/sections/footer";
 import JsonLd from "@/components/json-ld";
 
+import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
+
 export const metadata: Metadata = {
     title: "Aki Mobil Jogja - Layanan Ganti Aki 24 Jam & Delivery",
     description: "Layanan ganti aki mobil di Jogja 24 jam. Terima panggilan ke rumah/kantor. Teknisi berpengalaman, harga bersaing, garansi resmi. Hubungi kami sekarang!",
@@ -48,7 +50,14 @@ export const metadata: Metadata = {
     },
 };
 
-export default function Page() {
+export default async function Page() {
+    const [categories, brands, amperes, products] = await Promise.all([
+        fetchCategories(),
+        fetchBrands(),
+        fetchCapacities(),
+        fetchAllProducts()
+    ]);
+
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'AutoPartsStore',
@@ -95,7 +104,12 @@ export default function Page() {
             <SiteHeader />
             <HeroSection />
             <BenefitsSection />
-            <CatalogSection />
+            <CatalogSection
+                initialCategories={categories}
+                initialBrands={brands}
+                initialAmperes={amperes}
+                initialProducts={products}
+            />
             <FaqSections />
             <Footer />
         </>
