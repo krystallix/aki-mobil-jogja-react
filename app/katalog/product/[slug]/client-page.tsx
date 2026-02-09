@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { fetchProductBySlug, fetchRelatedProducts } from "@/lib/supabase/queries";
 import {
@@ -135,9 +136,9 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                 <div className="border-b bg-white">
                     <div className="container mx-auto px-4 py-3">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <a href="/" className="hover:text-primary">Home</a>
+                            <Link href="/" className="hover:text-primary">Home</Link>
                             <span>/</span>
-                            <a href="/katalog" className="hover:text-primary">Katalog</a>
+                            <Link href="/katalog" className="hover:text-primary">Katalog</Link>
                             <span>/</span>
                             <span className="text-foreground">{product.nama}</span>
                         </div>
@@ -327,10 +328,10 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                             </h3>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                                 {relatedProducts.map((relProduct) => (
-                                    <button
+                                    <Link
                                         key={relProduct.id}
-                                        onClick={() => router.push(`/katalog/product/${relProduct.id}`)}
-                                        className="group relative rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all bg-white hover:shadow-md"
+                                        href={`/katalog/product/${relProduct.id}`}
+                                        className="group relative block rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all bg-white hover:shadow-md"
                                     >
                                         {/* Image Container */}
                                         <div className="aspect-square bg-muted p-3">
@@ -343,7 +344,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
 
                                         {/* Product Info */}
                                         <div className="p-3 space-y-1.5">
-                                            <p className="text-sm font-medium line-clamp-2 text-left leading-tight">
+                                            <p className="text-sm font-medium line-clamp-2 text-left leading-tight text-foreground">
                                                 {relProduct.nama}
                                             </p>
                                             <div className="flex items-center justify-between gap-1.5">
@@ -360,7 +361,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                                 )}
                                             </div>
                                         </div>
-                                    </button>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
