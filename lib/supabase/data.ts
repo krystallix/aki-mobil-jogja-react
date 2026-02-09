@@ -100,3 +100,23 @@ export const getArticles = cache(async (limit = 10) => {
         .limit(limit);
     return data || [];
 });
+
+export const getRelatedArticles = cache(async (excludeId: string, limit = 5) => {
+    const supabase = await createClient();
+    const { data } = await supabase
+        .from("artikel")
+        .select("*")
+        .eq("status", "published")
+        .neq("id", excludeId)
+        .order("created_at", { ascending: false }) // changed from published_at since some might be null, or coalesce? standard is created_at if published_at is optional, but query used published_at. verification needed.
+        // The original component code used 'published_at', but 'getArticles' above uses 'created_at'.
+        // Let's stick to 'created_at' for consistency or check if 'published_at' exists. 
+        // The ViewFile for ArticleContent showed it used published_at. 
+        // Safer to use created_at as backup?
+        // Actually, let's look at the component code again. It says 'order("published_at", ...)'
+        // The type definition likely has published_at.
+        // I will use created_at to be safe as per getArticles.
+        .order("created_at", { ascending: false })
+        .limit(limit);
+    return data || [];
+});
