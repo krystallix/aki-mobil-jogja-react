@@ -14,31 +14,11 @@ import { createClient } from '@/lib/supabase/client';
 
 interface ArticleContentProps {
     article: ArticleData;
+    relatedArticles: ArticleData[];
 }
 
-export default function ArticleContent({ article }: ArticleContentProps) {
+export default function ArticleContent({ article, relatedArticles }: ArticleContentProps) {
     const [copied, setCopied] = useState(false);
-    const [relatedArticles, setRelatedArticles] = useState<ArticleData[]>([]);
-
-    // Fetch artikel lainnya
-    useEffect(() => {
-        const fetchRelatedArticles = async () => {
-            const supabase = createClient();
-            const { data } = await supabase
-                .from('artikel')
-                .select('*')
-                .eq('status', 'published')
-                .neq('id', article.id) // Exclude artikel yang sedang dibaca
-                .order('published_at', { ascending: false })
-                .limit(5);
-
-            if (data) {
-                setRelatedArticles(data);
-            }
-        };
-
-        fetchRelatedArticles();
-    }, [article.id]);
 
     // Inisialisasi editor dalam mode read-only
     const editor = useEditor({
