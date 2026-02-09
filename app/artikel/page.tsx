@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ArtikelPage() {
-    const articles = await getArticles();
+    const articles = await getArticles(100);
 
     const jsonLd = {
         '@context': 'https://schema.org',
