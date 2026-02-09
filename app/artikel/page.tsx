@@ -5,13 +5,32 @@ import JsonLd from '@/components/json-ld';
 import { getArticles } from '@/lib/supabase/data';
 
 export const metadata: Metadata = {
-    title: 'Artikel & Tips Otomotif - Panduan Perawatan Aki Mobil',
-    description: 'Kumpulan artikel informatif seputar perawatan aki mobil, tips otomotif, dan panduan memilih aki yang tepat untuk kendaraan Anda.',
+    title: 'Artikel & Tips Aki Mobil - Panduan Lengkap | Aki Mobil Jogja',
+    description: 'Kumpulan artikel informatif seputar perawatan aki mobil, tips otomotif, cara memilih aki yang tepat, dan solusi masalah aki. Update terbaru dari ahlinya.',
+    keywords: ['tips aki mobil', 'perawatan aki', 'cara merawat aki', 'artikel otomotif', 'panduan aki mobil'],
+    alternates: {
+        canonical: 'https://akimobiljogja.com/artikel',
+    },
     openGraph: {
-        title: 'Artikel & Tips Otomotif - Aki Mobil Jogja',
-        description: 'Temukan berbagai tips dan panduan menarik seputar dunia otomotif dan perawatan aki mobil.',
+        title: 'Artikel & Tips Aki Mobil - Panduan Lengkap',
+        description: 'Kumpulan artikel informatif seputar perawatan aki mobil, tips otomotif, dan panduan memilih aki yang tepat untuk kendaraan Anda.',
+        url: 'https://akimobiljogja.com/artikel',
+        siteName: 'Aki Mobil Jogja',
+        images: [{
+            url: 'https://akimobiljogja.com/og-artikel.jpg',
+            width: 1200,
+            height: 630,
+            alt: 'Artikel & Tips Aki Mobil Jogja',
+        }],
+        locale: 'id_ID',
         type: 'website',
-    }
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Artikel & Tips Aki Mobil - Panduan Lengkap',
+        description: 'Kumpulan artikel informatif seputar perawatan aki mobil dan tips otomotif.',
+        images: ['https://akimobiljogja.com/og-artikel.jpg'],
+    },
 };
 
 export default async function ArtikelPage() {

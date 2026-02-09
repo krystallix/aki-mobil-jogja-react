@@ -10,9 +10,42 @@ import JsonLd from "@/components/json-ld";
 export const metadata: Metadata = {
     title: "Aki Mobil Jogja - Layanan Ganti Aki 24 Jam & Delivery",
     description: "Layanan ganti aki mobil di Jogja 24 jam. Terima panggilan ke rumah/kantor. Teknisi berpengalaman, harga bersaing, garansi resmi. Hubungi kami sekarang!",
+    keywords: ['aki mobil jogja', 'ganti aki 24 jam', 'aki mobil murah', 'aki mobil yogyakarta', 'service aki jogja', 'aki mobil delivery'],
     alternates: {
         canonical: 'https://akimobiljogja.com',
-    }
+    },
+    openGraph: {
+        title: 'Aki Mobil Jogja - Layanan Ganti Aki 24 Jam & Delivery',
+        description: 'Layanan ganti aki mobil di Jogja 24 jam. Terima panggilan ke rumah/kantor. Teknisi berpengalaman, harga bersaing, garansi resmi.',
+        url: 'https://akimobiljogja.com',
+        siteName: 'Aki Mobil Jogja',
+        images: [{
+            url: 'https://akimobiljogja.com/og-image.jpg',
+            width: 1200,
+            height: 630,
+            alt: 'Aki Mobil Jogja - Layanan Ganti Aki 24 Jam',
+        }],
+        locale: 'id_ID',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Aki Mobil Jogja - Layanan Ganti Aki 24 Jam & Delivery',
+        description: 'Layanan ganti aki mobil di Jogja 24 jam. Terima panggilan ke rumah/kantor. Teknisi berpengalaman, harga bersaing, garansi resmi.',
+        images: ['https://akimobiljogja.com/og-image.jpg'],
+        creator: '@akimobiljogja',
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    },
 };
 
 export default function Page() {
