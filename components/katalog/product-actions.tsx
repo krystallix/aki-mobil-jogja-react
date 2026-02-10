@@ -17,6 +17,7 @@ import { toast } from "sonner"
 import { DeleteProductDialog } from "@/components/katalog/delete-product-dialog"
 import { EditProductDialog } from "@/components/katalog/edit-product-dialog"
 import { useRouter } from "next/navigation"
+import { revalidateProducts } from "@/app/actions/revalidate"
 
 interface ProductActionsProps {
     battery: Battery
@@ -36,7 +37,8 @@ export function ProductActions({ battery }: ProductActionsProps) {
         window.open(`/products/${battery.id}`, "_blank")
     }
 
-    const handleSuccess = () => {
+    const handleSuccess = async () => {
+        await revalidateProducts(battery.id)
         router.refresh()
     }
 
