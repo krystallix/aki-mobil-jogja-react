@@ -31,7 +31,9 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { createClient } from "@/lib/supabase/client"
 import { uploadProductImage, createProduct, ProductData, deleteProductImage } from "@/lib/supabase/queries"
+import { revalidateProducts } from "@/app/actions/revalidate"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 interface FormValues {
     nama: string
@@ -73,6 +75,7 @@ export function AddProductDialog({ open, onOpenChange, onSuccess }: AddProductDi
     const [mobil, setMobil] = useState<string[]>([])
     const [mobilInput, setMobilInput] = useState("")
     const supabase = createClient()
+    const router = useRouter()
 
     const form = useForm<FormValues>({
         defaultValues: {
@@ -222,6 +225,8 @@ export function AddProductDialog({ open, onOpenChange, onSuccess }: AddProductDi
             setMobilInput("")
             onOpenChange(false)
 
+            await revalidateProducts()
+            router.refresh()
             toast.success("Produk berhasil ditambahkan!")
             onSuccess?.()
 
