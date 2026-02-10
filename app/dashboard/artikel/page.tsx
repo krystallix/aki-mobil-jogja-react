@@ -47,6 +47,7 @@ import {
     uploadFeaturedImage,
     type ArticleData
 } from "@/lib/supabase/queries";
+import { revalidateArticles } from "@/app/actions/revalidate";
 import { createClient } from "@/lib/supabase/client";
 
 const DEFAULT_FORM: ArticleData = {
@@ -271,6 +272,8 @@ export default function ArtikelPage() {
                 } else {
                     toast.success('Draft berhasil disimpan!');
                 }
+                const slug = savedData.slug || undefined;
+                await revalidateArticles(slug);
             }
         } catch (error) {
             console.error("Failed to save article:", error);
@@ -304,6 +307,8 @@ export default function ArtikelPage() {
             setDeleteDialogOpen(false);
             setArticleToDelete(null);
             toast.success('Artikel berhasil dihapus');
+            const slug = articleToDelete.slug || undefined;
+            await revalidateArticles(slug);
         } catch (error) {
             console.error("Failed to delete article:", error);
             toast.error('Gagal menghapus artikel. Silakan coba lagi.');
