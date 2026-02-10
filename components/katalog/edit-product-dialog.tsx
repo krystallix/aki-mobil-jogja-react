@@ -36,6 +36,7 @@ import {
     updateProductWithTransaction,
     deleteProductImage,
 } from "@/lib/supabase/queries"
+import { revalidateProducts } from "@/app/actions/revalidate"
 import { toast } from "sonner"
 import { Battery } from "@/types/battery"
 import Image from "next/image"
@@ -314,6 +315,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
             }
 
             toast.success("Produk berhasil diperbarui!")
+            await revalidateProducts(product.id)
             onOpenChange(false)
             onSuccess?.()
 
