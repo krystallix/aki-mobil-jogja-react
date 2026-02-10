@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
     let metaDescription = `Jual aki mobil ${product.nama} ${product.merek || ''} di Jogja. `;
 
-    if (capacity) metaDescription += `Kapasitas ${capacity}Ah. `;
+    if (capacity) metaDescription += `Kapasitas ${capacity}. `;
     if (voltage) metaDescription += `Voltase ${voltage}. `;
 
     metaDescription += `Garansi resmi, harga terbaik & gratis antar pasang 24 jam.`;

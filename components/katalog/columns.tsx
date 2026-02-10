@@ -98,7 +98,7 @@ export const columns: ColumnDef<Battery>[] = [
 
             return (
                 <div className="flex flex-col gap-1 text-sm">
-                    {spec.kapasitas && <span>{spec.kapasitas} Ah</span>}
+                    {spec.kapasitas && <span>{spec.kapasitas}</span>}
                 </div>
             )
         },
