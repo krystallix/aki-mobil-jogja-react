@@ -11,6 +11,7 @@ import HomeLayout from "@/components/layouts/home-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import JsonLd from "@/components/json-ld";
 
 
 export default function TentangKamiPage() {
@@ -68,8 +69,37 @@ export default function TentangKamiPage() {
         }
     };
 
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        name: 'Tentang Kami',
+        description: 'Kami adalah bengkel dan toko aki mobil terpercaya di Jogja sejak 2000.',
+        url: 'https://akimobiljogja.com/tentang-kami'
+    };
+
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://akimobiljogja.com'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Tentang Kami',
+                item: 'https://akimobiljogja.com/tentang-kami'
+            }
+        ]
+    };
+
     return (
         <HomeLayout>
+            <JsonLd data={jsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
             <div className="min-h-screen bg-background overflow-hidden">
                 {/* Hero Section */}
                 <div className="bg-gradient-to-r from-primary to-primary/80 text-white">

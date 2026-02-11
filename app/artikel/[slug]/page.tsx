@@ -122,9 +122,35 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }
     };
 
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://akimobiljogja.com'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Artikel',
+                item: 'https://akimobiljogja.com/artikel'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: article.title,
+                item: `https://akimobiljogja.com/artikel/${article.slug}`
+            }
+        ]
+    };
+
     return (
         <HomeLayout>
             <JsonLd data={jsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
             <ArticleContent article={article} relatedArticles={relatedArticles} />
         </HomeLayout>
     );

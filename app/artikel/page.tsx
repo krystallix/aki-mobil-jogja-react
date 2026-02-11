@@ -44,9 +44,29 @@ export default async function ArtikelPage() {
         url: 'https://akimobiljogja.com/artikel'
     };
 
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://akimobiljogja.com'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Artikel',
+                item: 'https://akimobiljogja.com/artikel'
+            }
+        ]
+    };
+
     return (
         <HomeLayout>
             <JsonLd data={jsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
             <div className="py-16">
                 {/* Hero Section */}
                 <div className="text-center mb-16">
