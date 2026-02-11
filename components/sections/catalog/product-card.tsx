@@ -61,7 +61,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
     const handleWhatsApp = () => {
         const message = `Halo, saya tertarik dengan produk:\n${product.nama}\nHarga: ${formatPrice(product.harga_tukar || product.harga_jual)}`;
-        const whatsappNumber = "6281234567890";
+        const whatsappNumber = "6281354007400";
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     };

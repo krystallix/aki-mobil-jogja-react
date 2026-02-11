@@ -13,7 +13,7 @@ const navItems = [
 ]
 
 export default function MainNav() {
-    const whatsappNumber = '6281234567890' // Ganti dengan nomor WhatsApp Anda
+    const whatsappNumber = '6281354007400' // Ganti dengan nomor WhatsApp Anda
     const whatsappMessage = 'Halo, saya ingin konsultasi tentang aki mobil'
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
 

@@ -87,13 +87,13 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
     const handleWhatsApp = () => {
         if (!product) return;
         const message = `Halo, saya tertarik dengan produk:\n${product.nama}\nHarga: ${formatPrice(product.harga_tukar || product.harga_jual)}`;
-        const whatsappNumber = "6281234567890";
+        const whatsappNumber = "6281354007400";
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
     };
 
     const handleCall = () => {
-        window.location.href = "tel:+6281234567890";
+        window.location.href = "tel:+6281354007400";
     };
 
     const handleShare = async () => {
