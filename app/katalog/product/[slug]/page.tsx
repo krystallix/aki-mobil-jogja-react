@@ -100,18 +100,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
         '@context': 'https://schema.org',
         '@type': 'Product',
         name: product.nama,
-        image: product.gambar ? [product.gambar] : [],
-        description: product.deskripsi || product.nama,
+        image: product.gambar ? [product.gambar] : ['https://akimobiljogja.com/android-chrome-512x512.png'],
+        description: product.deskripsi || `Jual aki mobil ${product.nama} terbaik di Jogja via Aki Mobil Jogja.`,
+        sku: product.tipe || product.id,
+        mpn: product.tipe || product.id,
         brand: {
             '@type': 'Brand',
-            name: product.merek || 'Unknown'
+            name: product.merek || 'Aki Mobil Jogja'
         },
         offers: {
             '@type': 'Offer',
-            url: `https://akimobiljogja.com/katalog/product/${product.id}`,
+            url: `https://akimobiljogja.com/katalog/product/${slug}`,
             priceCurrency: 'IDR',
-            price: product.harga_jual,
-            priceValidUntil: '2025-12-31',
+            price: product.harga_jual || 0,
+            priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
             itemCondition: product.kondisi === 'Baru' ? 'https://schema.org/NewCondition' : 'https://schema.org/UsedCondition',
             availability: product.stok > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
             seller: {
@@ -141,7 +143,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 '@type': 'ListItem',
                 position: 3,
                 name: product.nama,
-                item: `https://akimobiljogja.com/katalog/product/${product.id}`
+                item: `https://akimobiljogja.com/katalog/product/${slug}`
             }
         ]
     };
