@@ -78,7 +78,7 @@ export default async function Page() {
             longitude: 110.3688
         },
         url: 'https://akimobiljogja.com',
-        telephone: '+6281234567890',
+        telephone: '+6281354007400',
         openingHoursSpecification: [
             {
                 '@type': 'OpeningHoursSpecification',
