@@ -7,6 +7,7 @@ import FaqSections from "@/components/sections/faq";
 import Footer from "@/components/sections/footer";
 import JsonLd from "@/components/json-ld";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
@@ -103,6 +104,7 @@ export default async function Page() {
             <JsonLd data={jsonLd} />
             <Analytics />
             <SiteHeader />
+            <SpeedInsights />
             <HeroSection />
             <BenefitsSection />
             <CatalogSection
