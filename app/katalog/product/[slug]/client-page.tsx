@@ -163,6 +163,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                         variant="secondary"
                                         className="rounded-full"
                                         onClick={toggleFavorite}
+                                        aria-label={isFavorite ? "Hapus dari favorit" : "Tambah ke favorit"}
                                     >
                                         <Heart
                                             className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''
@@ -174,6 +175,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                         variant="secondary"
                                         className="rounded-full"
                                         onClick={handleShare}
+                                        aria-label="Bagikan produk"
                                     >
                                         <Share2 className="h-5 w-5" />
                                     </Button>
@@ -296,6 +298,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                         size="lg"
                                         variant="outline"
                                         onClick={handleCall}
+                                        aria-label="Telepon dan jadwalkan ganti aki"
                                     >
                                         <Phone className="h-5 w-5" />
                                     </Button>

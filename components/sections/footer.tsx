@@ -100,6 +100,7 @@ export default function Footer() {
                                     href="https://www.facebook.com/people/Reparasi-Dan-Tukar-Tambah-Aki-Bp-Siswanto/61551816056838/"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    aria-label="Facebook Aki Mobil Jogja"
                                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
                                 >
                                     <FiFacebook size={20} />
@@ -108,6 +109,7 @@ export default function Footer() {
                                     href="https://www.instagram.com/akimobiljogja_"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    aria-label="Instagram Aki Mobil Jogja"
                                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
                                 >
                                     <FaInstagram size={20} />
@@ -116,6 +118,7 @@ export default function Footer() {
                                     href="https://tiktok.com/@akimobiljogja"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    aria-label="TikTok Aki Mobil Jogja"
                                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
                                 >
                                     <PiTiktokLogo size={20} />
@@ -124,6 +127,7 @@ export default function Footer() {
                                     href="https://maps.app.goo.gl/D9CgHvefsKVA3dD1A"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    aria-label="Google Maps Lokasi Aki Mobil Jogja"
                                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors"
                                 >
                                     <LiaMapSolid size={20} />

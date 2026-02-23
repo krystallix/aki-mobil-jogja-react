@@ -86,6 +86,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                     }}
                     variant="ghost"
                     className="absolute top-2 right-2 p-1.5 transition-all z-10"
+                    aria-label={isFavorite ? "Hapus dari favorit" : "Tambah ke favorit"}
                 >
                     <Heart
                         className={`size-4 transition-colors ${isFavorite
