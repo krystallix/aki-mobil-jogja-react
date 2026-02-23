@@ -11,6 +11,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/aki',
+        destination: '/katalog',
+        permanent: true, // 301 redirect
+      },
+      {
+        source: '/aki/:slug*',
+        destination: '/katalog/product/:slug*',
+        permanent: true, // 301 redirect
+      },
+    ];
+  },
 };
 
 export default nextConfig;
