@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from "next";
 import HeroSection from "@/components/sections/hero";
 import SiteHeader from "@/components/sections/header";
@@ -107,12 +108,14 @@ export default async function Page() {
             <SpeedInsights />
             <HeroSection />
             <BenefitsSection />
-            <CatalogSection
-                initialCategories={categories}
-                initialBrands={brands}
-                initialAmperes={amperes}
-                initialProducts={products}
-            />
+            <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>}>
+                <CatalogSection
+                    initialCategories={categories}
+                    initialBrands={brands}
+                    initialAmperes={amperes}
+                    initialProducts={products}
+                />
+            </Suspense>
             <FaqSections />
             <Footer />
         </>
