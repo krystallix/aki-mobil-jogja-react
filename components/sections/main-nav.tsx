@@ -9,6 +9,7 @@ const navItems = [
     { href: '/', label: 'Home' },
     { href: '/katalog', label: 'Katalog' },
     { href: '/artikel', label: 'Artikel' },
+    { href: '/rekomendasi-aki', label: 'Rekomendasi Aki' },
     { href: '/tentang-kami', label: 'Tentang Kami' },
 ]
 
