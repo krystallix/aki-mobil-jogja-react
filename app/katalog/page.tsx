@@ -56,7 +56,15 @@ export default async function KatalogPage() {
                 '@type': 'Offer',
                 itemOffered: {
                     '@type': 'Product',
-                    name: product.nama
+                    name: product.nama,
+                    image: product.image_url || 'https://akimobiljogja.com/og-catalog.jpg',
+                    offers: {
+                        '@type': 'Offer',
+                        priceCurrency: 'IDR',
+                        price: product.harga_jual || Math.max(product.harga_tukar_tambah || 0, 500000),
+                        availability: 'https://schema.org/InStock',
+                        url: `https://akimobiljogja.com/katalog/product/${product.slug}`
+                    }
                 }
             }))
         }
