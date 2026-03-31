@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import CatalogSections from "@/components/sections/catalog/catalog-sections";
 import HomeLayout from "@/components/layouts/home-layout"
@@ -84,12 +85,14 @@ export default async function KatalogPage() {
         <HomeLayout>
             <JsonLd data={jsonLd} />
             <JsonLd data={breadcrumbJsonLd} />
-            <CatalogSections
-                initialCategories={categories}
-                initialBrands={brands}
-                initialAmperes={amperes}
-                initialProducts={products}
-            />
+            <Suspense fallback={null}>
+                <CatalogSections
+                    initialCategories={categories}
+                    initialBrands={brands}
+                    initialAmperes={amperes}
+                    initialProducts={products}
+                />
+            </Suspense>
         </HomeLayout>
     );
 }

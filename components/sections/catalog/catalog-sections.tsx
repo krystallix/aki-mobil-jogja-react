@@ -1,5 +1,6 @@
 "use client"
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import ProductGrid from "@/components/sections/catalog/product-grid";
 import FilterSection from "@/components/sections/catalog/filter-section";
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
@@ -30,13 +31,16 @@ export default function CatalogSections({
     initialAmperes,
     initialProducts
 }: CatalogSectionsProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedMereks, setSelectedMereks] = useState<string[]>([]);
     const [selectedKondisis, setSelectedKondisis] = useState<string[]>([]);
     const [selectedAmperes, setSelectedAmperes] = useState<string[]>([]);
 
     const [priceRange, setPriceRange] = useState([5000000]);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "");
 
     // Initialize with server data
     const [allProducts] = useState<any[]>(initialProducts);
@@ -87,6 +91,17 @@ export default function CatalogSections({
         });
     }, [allProducts, selectedCategories, selectedMereks, selectedKondisis, selectedAmperes, priceRange, searchQuery]);
 
+    const handleSearch = useCallback((value: string) => {
+        setSearchQuery(value);
+        const params = new URLSearchParams(searchParams.toString());
+        if (value) {
+            params.set("q", value);
+        } else {
+            params.delete("q");
+        }
+        router.replace(`?${params.toString()}`, { scroll: false });
+    }, [router, searchParams]);
+
     const handleReset = () => {
         setSelectedCategories([]);
         setSelectedMereks([]);
@@ -94,6 +109,9 @@ export default function CatalogSections({
         setSelectedAmperes([]);
         setPriceRange([5000000]);
         setSearchQuery("");
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("q");
+        router.replace(`?${params.toString()}`, { scroll: false });
     };
 
     const handleAddToCart = (productId: string) => {
@@ -133,7 +151,7 @@ export default function CatalogSections({
                                 type="text"
                                 placeholder="Cari nama, tipe baterai, atau kendaraan..."
                                 value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onChange={(e) => handleSearch(e.target.value)}
                                 className="pl-10"
                             />
 
