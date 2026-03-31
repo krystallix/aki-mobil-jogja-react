@@ -201,16 +201,25 @@ export default function Footer() {
                         <p className="text-sm text-gray-500">
                             &copy; {new Date().getFullYear()} Aki Mobil Jogja. All rights reserved.
                         </p>
-                        <div className="flex gap-1 text-sm">
-                            <span className="text-gray-500">dibuat dan didesain oleh</span>
-                            <a
-                                href="https://instagram.com/risewise.dev"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-400 underline hover:text-pink-600 transition-colors"
+                        <div className="flex items-center gap-4 text-sm">
+                            <Link
+                                href="/kebijakan-pengembalian"
+                                className="text-gray-400 hover:text-white transition-colors"
                             >
-                                risewise.dev
-                            </a>
+                                Kebijakan Pengembalian
+                            </Link>
+                            <span className="text-gray-700">·</span>
+                            <div className="flex gap-1">
+                                <span className="text-gray-500">dibuat dan didesain oleh</span>
+                                <a
+                                    href="https://instagram.com/risewise.dev"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-gray-400 underline hover:text-pink-600 transition-colors"
+                                >
+                                    risewise.dev
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
