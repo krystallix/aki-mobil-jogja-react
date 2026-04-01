@@ -14,7 +14,7 @@ export default function RekomendasiAkiPage() {
             <div className="py-10 px-4 md:px-0">
                 {/* Hero Section */}
                 <div className="text-center mb-10">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-800 bg-clip-text text-transparent">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-linear-to-r from-primary to-blue-800 bg-clip-text text-transparent">
                         Rekomendasi Aki
                     </h1>
                     <p className="text-gray-600 text-lg max-w-2xl mx-auto">

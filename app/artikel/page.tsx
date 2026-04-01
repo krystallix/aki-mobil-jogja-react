@@ -70,7 +70,7 @@ export default async function ArtikelPage() {
             <div className="py-16">
                 {/* Hero Section */}
                 <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-blue-800 bg-clip-text text-transparent">
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-linear-to-r from-primary to-blue-800 bg-clip-text text-transparent">
                         Artikel & Tips
                     </h1>
                     <p className="text-gray-600 text-lg max-w-2xl mx-auto">

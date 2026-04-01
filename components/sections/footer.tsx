@@ -62,7 +62,7 @@ export default function Footer() {
                         <div className="mb-8">
                             <h4 className="text-white text-lg font-semibold mb-4">Alamat</h4>
                             <div className="flex items-start gap-3 text-gray-400">
-                                <MapPin size={20} className="flex-shrink-0 mt-1" />
+                                <MapPin size={20} className="shrink-0 mt-1" />
                                 <span>
                                     Kanggotan No. 21, Pleret, Bantul<br />
                                     Yogyakarta 55791
@@ -75,15 +75,15 @@ export default function Footer() {
                             <h4 className="text-white text-lg font-semibold mb-4">Informasi</h4>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
-                                    <Phone size={20} className="text-gray-400 flex-shrink-0" />
+                                    <Phone size={20} className="text-gray-400 shrink-0" />
                                     <span className="text-gray-400">81354007400 / 088227968449</span>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <Mail size={20} className="text-gray-400 flex-shrink-0" />
+                                    <Mail size={20} className="text-gray-400 shrink-0" />
                                     <span className="text-gray-400">info@akimobiljogja.com</span>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <Clock size={20} className="text-gray-400 flex-shrink-0 mt-1" />
+                                    <Clock size={20} className="text-gray-400 shrink-0 mt-1" />
                                     <div className="text-gray-400">
                                         <p>Senin - Sabtu: 08.00 - 21.00 WIB</p>
                                         <p>Minggu: 10.00 - 21.00 WIB</p>
@@ -160,7 +160,7 @@ export default function Footer() {
                                             className="group cursor-pointer block"
                                         >
                                             <div className="flex gap-4">
-                                                <div className={`${bgColor} rounded-lg flex-shrink-0 w-28 h-28 flex items-center justify-center overflow-hidden relative`}>
+                                                <div className={`${bgColor} rounded-lg shrink-0 w-28 h-28 flex items-center justify-center overflow-hidden relative`}>
                                                     {post.featured_image ? (
                                                         <Image
                                                             src={post.featured_image}
