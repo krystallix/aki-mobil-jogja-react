@@ -3,14 +3,14 @@
 import { ArticleData } from '@/lib/supabase/queries';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, Tag, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft, Share2, Phone, MessageSquare } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TiptapImage from '@tiptap/extension-image';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import { createClient } from '@/lib/supabase/client';
+import { FaWhatsapp } from 'react-icons/fa';
 
 interface ArticleContentProps {
     article: ArticleData;
@@ -20,13 +20,12 @@ interface ArticleContentProps {
 export default function ArticleContent({ article, relatedArticles }: ArticleContentProps) {
     const [copied, setCopied] = useState(false);
 
-    // Inisialisasi editor dalam mode read-only
     const editor = useEditor({
         extensions: [
             StarterKit,
             TiptapImage.configure({
                 HTMLAttributes: {
-                    class: 'rounded-xl shadow-lg my-8',
+                    class: 'rounded-3xl my-8',
                 },
             }),
             Underline,
@@ -39,14 +38,13 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
         immediatelyRender: false,
         editorProps: {
             attributes: {
-                class: 'prose prose-lg max-w-none focus:outline-none',
+                class: 'prose prose-lg lg:prose-xl max-w-none focus:outline-none',
             },
         },
     });
 
     const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
+        return new Date(dateString).toLocaleDateString('id-ID', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
@@ -56,13 +54,11 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
     const getReadingTime = (content: string) => {
         const wordsPerMinute = 200;
         const wordCount = content.split(/\s+/).length;
-        const minutes = Math.ceil(wordCount / wordsPerMinute);
-        return `${minutes} menit`;
+        return `${Math.ceil(wordCount / wordsPerMinute)} mnt baca`;
     };
 
     const handleShare = async () => {
         const url = window.location.href;
-
         if (navigator.share) {
             try {
                 await navigator.share({
@@ -70,9 +66,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                     text: article.excerpt || article.title,
                     url: url,
                 });
-            } catch (err) {
-                // Ignore share error
-            }
+            } catch (err) {}
         } else {
             navigator.clipboard.writeText(url);
             setCopied(true);
@@ -81,71 +75,60 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
     };
 
     const category = article.tags?.[0] || 'ARTIKEL';
-    const bgColor = category.toLowerCase().includes('tips')
-        ? 'bg-blue-500'
-        : category.toLowerCase().includes('promo')
-            ? 'bg-orange-500'
-            : 'bg-green-500';
 
     return (
-        <div className="py-8">
-            {/* Back Button */}
-            <div className="max-w-7xl mx-auto px-4 mb-8">
-                <Link
-                    href="/artikel"
-                    className="inline-flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-                >
-                    <ArrowLeft size={20} />
-                    <span>Kembali ke Artikel</span>
-                </Link>
-            </div>
+        <div className="min-h-screen bg-background">
+            {/* Immersive Header Section */}
+            <div className="relative pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="container mx-auto px-6 max-w-4xl relative z-10">
+                    <Link
+                        href="/artikel"
+                        className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-all mb-8 group"
+                    >
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                        <span>KEMBALI KE ARTIKEL</span>
+                    </Link>
 
-            {/* Main Content - 2 Column Grid */}
-            <div className="max-w-7xl mx-auto px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Main Article Content - 2/3 width */}
-                    <article className="lg:col-span-2">
-                        {/* Category Badge */}
-                        <div className="mb-4">
-                            <span className={`${bgColor} text-white px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide inline-block`}>
-                                {category}
-                            </span>
+                    <div className="space-y-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
+                            <span>{category}</span>
                         </div>
-
-                        {/* Title */}
-                        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 leading-tight">
+                        
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-foreground leading-[1.05]">
                             {article.title}
                         </h1>
 
-                        {/* Excerpt */}
-                        {article.excerpt && (
-                            <p className="text-xl text-gray-600 mb-6 leading-relaxed">
-                                {article.excerpt}
-                            </p>
-                        )}
-
-                        {/* Meta Info */}
-                        <div className="flex flex-wrap items-center gap-6 mb-8 pb-8 border-b border-gray-200">
-                            <div className="flex items-center gap-2 text-gray-600">
-                                <Calendar size={18} />
+                        <div className="flex flex-wrap items-center gap-6 pt-4 text-sm font-medium text-muted-foreground border-t border-border/50">
+                            <div className="flex items-center gap-2">
+                                <Calendar size={16} className="text-primary" />
                                 <span>{formatDate(article.published_at || article.created_at)}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-600">
-                                <Clock size={18} />
+                            <div className="flex items-center gap-2">
+                                <Clock size={16} className="text-primary" />
                                 <span>{getReadingTime(article.content)}</span>
                             </div>
                             <button
                                 onClick={handleShare}
-                                className="ml-auto flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
+                                className="flex items-center gap-2 hover:text-primary transition-colors"
                             >
-                                <Share2 size={18} />
+                                <Share2 size={16} className="text-primary" />
                                 <span>{copied ? 'Link Disalin!' : 'Bagikan'}</span>
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
 
+            {/* Main Content Area */}
+            <div className="container mx-auto px-6 max-w-7xl pb-24">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+                    {/* Left Column - Article Content */}
+                    <div className="lg:col-span-8">
                         {/* Featured Image */}
                         {article.featured_image && (
-                            <div className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden mb-12 shadow-xl">
+                            <div className="relative w-full aspect-[21/9] rounded-[2rem] lg:rounded-[3rem] overflow-hidden mb-12 border border-border/50">
                                 <Image
                                     src={article.featured_image}
                                     alt={article.title}
@@ -153,41 +136,33 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                                     className="object-cover"
                                     priority
                                 />
+                                <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-100" />
                             </div>
                         )}
 
-                        {/* Article Content */}
-                        <EditorContent
-                            editor={editor}
-                            className="prose prose-lg max-w-none mb-12
-                                prose-headings:font-bold prose-headings:text-gray-900
-                                prose-h1:text-4xl prose-h1:mt-12 prose-h1:mb-6
-                                prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
-                                prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-                                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
-                                prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-                                prose-strong:text-gray-900 prose-strong:font-bold
-                                prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
-                                prose-ol:my-6 prose-ol:list-decimal prose-ol:pl-6
-                                prose-li:text-gray-700 prose-li:mb-2
-                                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-gray-700
-                                prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8
-                                prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:text-primary
-                                prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-6 prose-pre:rounded-xl prose-pre:overflow-x-auto"
-                        />
+                        <div className="prose prose-lg lg:prose-xl max-w-none 
+                            prose-headings:font-extrabold prose-headings:tracking-tighter prose-headings:text-foreground
+                            prose-h2:text-3xl lg:prose-h2:text-4xl prose-h2:mt-12
+                            prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:font-light
+                            prose-strong:text-foreground prose-strong:font-bold
+                            prose-img:rounded-3xl prose-img:border prose-img:border-border/50
+                            prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-foreground
+                            prose-a:text-primary prose-a:font-bold prose-a:no-underline hover:prose-a:underline">
+                            <EditorContent editor={editor} />
+                        </div>
 
-                        {/* Tags */}
+                        {/* Tags Section */}
                         {article.tags && article.tags.length > 0 && (
-                            <div className="pt-8 border-t border-gray-200">
-                                <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
-                                    Tags
+                            <div className="mt-16 pt-8 border-t border-border/50">
+                                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">
+                                    Topik Terkait
                                 </h3>
-                                <div className="flex flex-wrap gap-3">
+                                <div className="flex flex-wrap gap-2">
                                     {article.tags.map((tag, idx) => (
                                         <Link
                                             key={idx}
                                             href={`/artikel?tag=${encodeURIComponent(tag)}`}
-                                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-primary hover:text-white rounded-full text-sm font-medium text-gray-700 transition-all"
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-card border border-border/50 hover:border-primary/50 hover:text-primary rounded-xl text-sm font-bold transition-all"
                                         >
                                             <Tag size={14} />
                                             {tag}
@@ -196,63 +171,78 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                                 </div>
                             </div>
                         )}
-                    </article>
+                    </div>
 
-                    {/* Sidebar - 1/3 width */}
-                    <aside className="lg:col-span-1">
-                        <div className="sticky top-24 space-y-8">
-                            {/* Artikel Lainnya */}
-                            <div className="bg-white rounded-2xl p-6">
-                                <h3 className="text-xl font-bold text-gray-900 mb-6">
-                                    Artikel Lainnya
-                                </h3>
-                                <div className="space-y-6">
-                                    {relatedArticles.map((relatedArticle) => (
-                                        <Link
-                                            key={relatedArticle.id}
-                                            href={`/artikel/${relatedArticle.slug}`}
-                                            className="block group"
-                                        >
-                                            {relatedArticle.featured_image && (
-                                                <div className="relative w-full h-40 rounded-xl overflow-hidden mb-3">
-                                                    <Image
-                                                        src={relatedArticle.featured_image}
-                                                        alt={relatedArticle.title}
-                                                        fill
-                                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                                    />
-                                                </div>
-                                            )}
-                                            <h4 className="font-semibold text-gray-900 group-hover:text-primary transition-colors line-clamp-2 mb-2">
-                                                {relatedArticle.title}
-                                            </h4>
-                                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                                                <Calendar size={14} />
-                                                <span>{formatDate(relatedArticle.published_at || relatedArticle.created_at)}</span>
-                                            </div>
-                                        </Link>
-                                    ))}
+                    {/* Right Column - Sidebar */}
+                    <aside className="lg:col-span-4 space-y-12">
+                        {/* Featured Sidebar CTA */}
+                        <div className="relative overflow-hidden bg-card border border-border/50 rounded-[2.5rem] p-8 group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="relative z-10 space-y-6">
+                                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                    <MessageSquare size={24} />
                                 </div>
-                            </div>
-
-                            {/* CTA Section */}
-                            <div className="bg-gradient-to-br from-primary to-blue-800 rounded-2xl p-6 text-white shadow-lg">
-                                <h3 className="text-xl font-bold mb-3">
-                                    Butuh Konsultasi Aki Mobil?
+                                <h3 className="text-2xl font-extrabold tracking-tight">
+                                    Butuh Konsultasi Aki?
                                 </h3>
-                                <p className="mb-6 text-blue-100 text-sm">
-                                    Hubungi kami untuk mendapatkan rekomendasi aki yang tepat untuk kendaraan Anda
+                                <p className="text-muted-foreground font-light text-sm leading-relaxed">
+                                    Tanyakan langsung pada ahlinya mengenai masalah aki kendaraan Anda. Gratis konsultasi via WhatsApp!
                                 </p>
                                 <a
                                     href="https://wa.me/6281354007400"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="block w-full text-center bg-white text-primary px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors"
+                                    className="inline-flex items-center justify-center gap-2 w-full h-12 rounded-full bg-primary text-primary-foreground font-bold hover:scale-105 transition-transform"
                                 >
-                                    Hubungi via WhatsApp
+                                    <FaWhatsapp size={18} />
+                                    Chat Sekarang
                                 </a>
                             </div>
                         </div>
+
+                        {/* Related Articles */}
+                        {relatedArticles.length > 0 && (
+                            <div className="space-y-6">
+                                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2">
+                                    Baca Juga
+                                </h3>
+                                <div className="space-y-4">
+                                    {relatedArticles.slice(0, 3).map((rel) => (
+                                        <Link
+                                            key={rel.id}
+                                            href={`/artikel/${rel.slug}`}
+                                            className="flex gap-4 group items-center p-2 rounded-2xl hover:bg-card transition-colors"
+                                        >
+                                                <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-border/50">
+                                                    {rel.featured_image ? (
+                                                        <>
+                                                            <Image
+                                                                src={rel.featured_image}
+                                                                alt={rel.title}
+                                                                fill
+                                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                            />
+                                                            <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-40" />
+                                                        </>
+                                                    ) : (
+                                                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                                                        <Tag className="w-6 h-6 text-primary opacity-20" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="space-y-1">
+                                                <h4 className="font-bold text-sm line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+                                                    {rel.title}
+                                                </h4>
+                                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                                                    {rel.tags?.[0] || 'Artikel'}
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </aside>
                 </div>
             </div>

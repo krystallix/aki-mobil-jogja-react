@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import HomeLayout from "@/components/layouts/home-layout";
 import { FaWhatsapp } from "react-icons/fa";
+import ProductCard from "@/components/sections/catalog/product-card";
 
 type Specification = {
     kapasitas: string;
@@ -131,49 +132,49 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
 
     return (
         <HomeLayout>
-            <div className="min-h-screen bg-background my-10">
-                {/* Breadcrumb */}
-                <div className="border-b bg-white">
-                    <div className="container mx-auto px-4 py-3">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Link href="/" className="hover:text-primary">Home</Link>
-                            <span>/</span>
-                            <Link href="/katalog" className="hover:text-primary">Katalog</Link>
-                            <span>/</span>
-                            <span className="text-foreground">{product.nama}</span>
-                        </div>
+            <div className="min-h-screen pb-20">
+                {/* Clean, transparent breadcrumb */}
+                <div className="container mx-auto px-6 py-8 max-w-7xl">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+                        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                        <span>/</span>
+                        <Link href="/katalog" className="hover:text-primary transition-colors">Katalog</Link>
+                        <span>/</span>
+                        <span className="text-foreground line-clamp-1">{product.nama}</span>
                     </div>
                 </div>
 
                 {/* Main Content */}
-                <div className="container mx-auto px-4 py-6">
-                    <div className="grid lg:grid-cols-2 gap-8">
-                        {/* Left Column - Images */}
-                        <div className="space-y-4">
-                            {/* Main Image */}
-                            <div className="aspect-square bg-muted rounded-lg overflow-hidden flex items-center justify-center p-4 relative">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-16 lg:mb-24">
+                        {/* Left Column - Image Gallery */}
+                        <div className="space-y-6">
+                            <div className="relative aspect-square rounded-3xl bg-gradient-to-br from-primary/5 via-transparent to-transparent border border-border/50 overflow-hidden flex items-center justify-center p-8 lg:p-12 group">
+                                {/* Decorative elements */}
+                                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+                                
                                 <img
                                     src={mainImage}
                                     alt={product.nama}
-                                    className="w-full h-full object-contain"
+                                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 relative z-10"
                                 />
-                                <div className="absolute top-4 right-4 flex gap-2">
+                                
+                                <div className="absolute top-6 right-6 flex flex-col gap-3 z-20">
                                     <Button
                                         size="icon"
-                                        variant="secondary"
-                                        className="rounded-full"
+                                        variant="outline"
+                                        className="rounded-full bg-background/80 backdrop-blur-sm border-border/50 shadow-sm hover:text-primary hover:border-primary/50"
                                         onClick={toggleFavorite}
                                         aria-label={isFavorite ? "Hapus dari favorit" : "Tambah ke favorit"}
                                     >
                                         <Heart
-                                            className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''
-                                                }`}
+                                            className={`h-5 w-5 transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : ''}`}
                                         />
                                     </Button>
                                     <Button
                                         size="icon"
-                                        variant="secondary"
-                                        className="rounded-full"
+                                        variant="outline"
+                                        className="rounded-full bg-background/80 backdrop-blur-sm border-border/50 shadow-sm hover:text-primary hover:border-primary/50"
                                         onClick={handleShare}
                                         aria-label="Bagikan produk"
                                     >
@@ -181,101 +182,83 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                     </Button>
                                 </div>
                                 {product.kondisi === "Baru" && (
-                                    <Badge className="absolute top-4 left-4 bg-green-500">
+                                    <Badge className="absolute top-6 left-6 bg-green-500 text-white border-0 shadow-sm px-3 py-1 text-xs font-bold z-20">
                                         Baru
                                     </Badge>
                                 )}
                             </div>
-
-
                         </div>
 
                         {/* Right Column - Product Info */}
-                        <div className="space-y-6">
+                        <div className="flex flex-col justify-center space-y-8">
                             {/* Header */}
-                            <div>
-                                <div className="flex items-start justify-between gap-4">
-                                    <div>
-                                        <Badge variant="outline" className="mb-2">
-                                            {product.merek}
-                                        </Badge>
-                                        <h1 className="text-2xl md:text-3xl font-bold">
-                                            {product.nama}
-                                        </h1>
-                                    </div>
-                                </div>
-
+                            <div className="space-y-4">
+                                <Badge variant="outline" className="text-xs font-bold tracking-widest uppercase border-primary/30 bg-primary/5 text-primary px-3 py-1 rounded-full">
+                                    {product.merek}
+                                </Badge>
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter text-foreground leading-[1.1]">
+                                    {product.nama}
+                                </h1>
                             </div>
 
-                            {/* Price */}
-                            <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-                                {product.harga_tukar && product.harga_tukar < product.harga_jual && (
-                                    <div>
-                                        <p className="text-sm text-muted-foreground line-through">
-                                            {formatPrice(product.harga_jual)}
-                                        </p>
-                                        <div className="flex items-baseline gap-2">
-                                            <p className="text-3xl font-bold text-primary">
-                                                {formatPrice(product.harga_tukar)}
+                            {/* Price Box */}
+                            <div className="bg-card border border-border/50 rounded-3xl p-6 shadow-sm relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                
+                                {product.harga_tukar && product.harga_tukar < product.harga_jual ? (
+                                    <div className="space-y-1 relative z-10">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <p className="text-sm md:text-base text-muted-foreground line-through font-medium">
+                                                {formatPrice(product.harga_jual)}
                                             </p>
+                                            <Badge variant="secondary" className="text-[10px] uppercase font-bold text-primary bg-primary/10 border border-primary/20">
+                                                Tukar Tambah
+                                            </Badge>
                                         </div>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            *Harga Tukar Tambah
+                                        <p className="text-4xl md:text-5xl font-black text-primary tracking-tight">
+                                            {formatPrice(product.harga_tukar)}
                                         </p>
                                     </div>
-                                )}
-                                {!product.harga_tukar && (
-                                    <p className="text-3xl font-bold">
+                                ) : (
+                                    <p className="text-4xl md:text-5xl font-black text-foreground tracking-tight relative z-10">
                                         {formatPrice(product.harga_jual)}
                                     </p>
                                 )}
                             </div>
 
-                            {/* Specifications */}
-                            <div className="space-y-3">
-                                <h3 className="font-semibold">Spesifikasi Teknis</h3>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
-                                        <Zap className="h-5 w-5 text-primary" />
-                                        <div>
-                                            <p className="text-xs text-muted-foreground">Kapasitas</p>
-                                            <p className="font-semibold">{product.specifications[0]?.kapasitas || '-'}</p>
-                                        </div>
+                            {/* Bento Grid Specifications */}
+                            <div className="space-y-4">
+                                <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+                                    <Zap className="w-5 h-5 text-primary" />
+                                    Spesifikasi Teknis
+                                </h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:border-primary/30 transition-colors group/spec">
+                                        <p className="text-xs text-muted-foreground font-medium mb-1">Kapasitas</p>
+                                        <p className="font-bold text-lg text-foreground group-hover/spec:text-primary transition-colors">{product.specifications[0]?.kapasitas || '-'}</p>
                                     </div>
-                                    <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
-                                        <BatteryCharging className="h-5 w-5 text-primary" />
-                                        <div>
-                                            <p className="text-xs text-muted-foreground">Voltase</p>
-                                            <p className="font-semibold">{product.specifications[0]?.voltase || '-'}</p>
-                                        </div>
+                                    <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:border-primary/30 transition-colors group/spec">
+                                        <p className="text-xs text-muted-foreground font-medium mb-1">Voltase</p>
+                                        <p className="font-bold text-lg text-foreground group-hover/spec:text-primary transition-colors">{product.specifications[0]?.voltase || '-'}</p>
                                     </div>
-                                    <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
-                                        <ShieldCheck className="h-5 w-5 text-primary" />
-                                        <div>
-                                            <p className="text-xs text-muted-foreground">Tipe</p>
-                                            <p className="font-semibold capitalize">{product.tipe}</p>
-                                        </div>
+                                    <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:border-primary/30 transition-colors group/spec">
+                                        <p className="text-xs text-muted-foreground font-medium mb-1">Tipe Baterai</p>
+                                        <p className="font-bold text-lg text-foreground capitalize group-hover/spec:text-primary transition-colors">{product.tipe}</p>
                                     </div>
-                                    <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
-                                        <div className="h-5 w-5 flex items-center justify-center text-primary font-bold">
-                                            <ShieldCheck />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs text-muted-foreground">Garansi</p>
-                                            <p className="font-semibold">{product.garansi}</p>
-                                        </div>
+                                    <div className="bg-card border border-border/50 rounded-2xl p-4 shadow-sm hover:border-primary/30 transition-colors group/spec">
+                                        <p className="text-xs text-muted-foreground font-medium mb-1">Garansi</p>
+                                        <p className="font-bold text-lg text-foreground group-hover/spec:text-primary transition-colors">{product.garansi || '-'}</p>
                                     </div>
-
                                 </div>
                             </div>
 
                             {/* Compatible Vehicles */}
                             {product.applications && product.applications.length > 0 && (
                                 <div className="space-y-3">
-                                    <h3 className="font-semibold">Cocok Untuk Kendaraan</h3>
+                                    <h3 className="font-bold text-sm text-muted-foreground uppercase tracking-wider">Cocok Untuk Kendaraan</h3>
                                     <div className="flex flex-wrap gap-2">
                                         {product.applications.map((app, idx) => (
-                                            <Badge key={idx} variant="secondary">
+                                            <Badge key={idx} variant="secondary" className="bg-muted text-muted-foreground hover:text-foreground font-medium rounded-lg px-3 py-1.5 border border-border/50">
                                                 {app.nama_mobil}
                                             </Badge>
                                         ))}
@@ -284,19 +267,20 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                             )}
 
                             {/* Action Buttons */}
-                            <div className="space-y-3 pt-4 border-t">
-                                <div className="flex gap-3">
+                            <div className="space-y-6 pt-6 border-t border-border/50">
+                                <div className="flex gap-4">
                                     <Button
                                         size="lg"
-                                        className="flex-1"
+                                        className="flex-1 h-14 rounded-full text-base font-bold bg-green-600 hover:bg-green-700 shadow-none hover:scale-[1.02] transition-all"
                                         onClick={handleWhatsApp}
                                     >
-                                        <FaWhatsapp className="mr-2 h-5 w-5" />
-                                        Chat WhatsApp
+                                        <FaWhatsapp className="mr-2 h-6 w-6" />
+                                        Konsultasi & Pesan via WA
                                     </Button>
                                     <Button
                                         size="lg"
                                         variant="outline"
+                                        className="h-14 w-14 rounded-full border-border/50 shadow-none hover:text-primary hover:border-primary/50 transition-all shrink-0 p-0 hover:scale-105"
                                         onClick={handleCall}
                                         aria-label="Telepon dan jadwalkan ganti aki"
                                     >
@@ -304,67 +288,49 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                     </Button>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                                    <div className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded">
-                                        <Truck className="h-4 w-4 text-primary" />
-                                        <span className="text-muted-foreground">Gratis Ongkir</span>
+                                {/* Trust Badges */}
+                                <div className="grid grid-cols-3 gap-2 text-center pt-2">
+                                    <div className="flex flex-col items-center gap-2 p-3 rounded-2xl">
+                                        <div className="bg-primary/10 p-2.5 rounded-full text-primary">
+                                            <Truck className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-xs font-bold text-foreground">Gratis Antar<br/>Pasang</span>
                                     </div>
-                                    <div className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded">
-                                        <Award className="h-4 w-4 text-primary" />
-                                        <span className="text-muted-foreground">Garansi Resmi</span>
+                                    <div className="flex flex-col items-center gap-2 p-3 rounded-2xl">
+                                        <div className="bg-primary/10 p-2.5 rounded-full text-primary">
+                                            <Award className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-xs font-bold text-foreground">Garansi<br/>Resmi</span>
                                     </div>
-                                    <div className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded">
-                                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                                        <span className="text-muted-foreground">100% Original</span>
+                                    <div className="flex flex-col items-center gap-2 p-3 rounded-2xl">
+                                        <div className="bg-primary/10 p-2.5 rounded-full text-primary">
+                                            <CheckCircle2 className="h-5 w-5" />
+                                        </div>
+                                        <span className="text-xs font-bold text-foreground">100%<br/>Original</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {/* Related Products Section - Below main content */}
-                <div className="container mx-auto px-4 pb-8">
-                    {relatedProducts.length > 0 && (
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold">
-                                Baterai Lainnya ({product.specifications[0]?.kapasitas})
-                            </h3>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                                {relatedProducts.map((relProduct) => (
-                                    <Link
-                                        key={relProduct.id}
-                                        href={`/katalog/product/${relProduct.id}`}
-                                        className="group relative block rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all bg-white hover:shadow-md"
-                                    >
-                                        {/* Image Container */}
-                                        <div className="aspect-square bg-muted p-3">
-                                            <img
-                                                src={relProduct.gambar || "/placeholder-battery.jpg"}
-                                                alt={relProduct.nama}
-                                                className="w-full h-full object-contain group-hover:scale-105 transition-transform"
-                                            />
-                                        </div>
 
-                                        {/* Product Info */}
-                                        <div className="p-3 space-y-1.5">
-                                            <p className="text-sm font-medium line-clamp-2 text-left leading-tight text-foreground">
-                                                {relProduct.nama}
-                                            </p>
-                                            <div className="flex items-center justify-between gap-1.5">
-                                                <p className="text-sm font-bold text-primary">
-                                                    {relProduct.harga_tukar && relProduct.harga_tukar < relProduct.harga_jual
-                                                        ? formatPrice(relProduct.harga_tukar)
-                                                        : formatPrice(relProduct.harga_jual)
-                                                    }
-                                                </p>
-                                                {relProduct.harga_tukar && relProduct.harga_tukar < relProduct.harga_jual && (
-                                                    <Badge className="text-[10px] px-1.5 py-0.5 h-5" variant="secondary">
-                                                        Tukar Tambah
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </Link>
+                {/* Related Products Section */}
+                <div className="container mx-auto px-6 max-w-7xl pt-10 lg:pt-16 border-t border-border/50">
+                    {relatedProducts.length > 0 && (
+                        <div className="space-y-8">
+                            <div>
+                                <h2 className="text-2xl md:text-4xl font-extrabold tracking-tighter text-foreground">
+                                    Baterai Serupa ({product.specifications[0]?.kapasitas})
+                                </h2>
+                                <p className="text-muted-foreground mt-2">Rekomendasi aki lain dengan kapasitas yang sesuai untuk Anda.</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+                                {relatedProducts.slice(0, 4).map((relProduct) => (
+                                    <ProductCard 
+                                        key={relProduct.id} 
+                                        product={relProduct}
+                                    />
                                 ))}
                             </div>
                         </div>

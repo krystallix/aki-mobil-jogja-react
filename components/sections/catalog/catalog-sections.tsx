@@ -4,20 +4,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ProductGrid from "@/components/sections/catalog/product-grid";
 import FilterSection from "@/components/sections/catalog/filter-section";
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
-import { Search, Funnel } from "lucide-react";
+import { Search, Funnel, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-    SheetFooter,
-    SheetClose,
-} from "@/components/ui/sheet";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 interface CatalogSectionsProps {
     initialCategories: any[];
     initialBrands: any[];
@@ -134,81 +124,80 @@ export default function CatalogSections({
 
     return (
         <>
+            {/* Section Header */}
+            <div className="py-6 lg:py-8 border-y border-border/50 bg-card overflow-hidden flex relative">
+                <div
+                    className="flex w-max animate-marquee"
+                >
+                    {[...[1, 2, 3, 4, 5, 6, 7], ...[1, 2, 3, 4, 5, 6, 7]].map((logoNum, i) => (
+                        <div key={i} className="flex shrink-0 justify-center items-center px-6 lg:px-12">
+                            <img
+                                src={`/logo/${logoNum}.png`}
+                                alt={`Brand Logo ${logoNum}`}
+                                className="h-10 lg:h-16 w-auto object-contain opacity-50 hover:opacity-100 active:opacity-100 transition-opacity duration-300 cursor-pointer"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-            <div className="container mx-auto px-4 mb-10">
+            <div className="py-10 lg:py-20 bg-background border-b border-border/50 relative overflow-hidden">
+                {/* Background Glow */}
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="container mx-auto px-6 max-w-7xl mb-8 lg:mb-12 relative z-10">
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
+                                <span>Pilihan Terbaik</span>
+                            </div>
+                            <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground to-foreground/50">
+                                Katalog Produk
+                            </h2>
+                            <p className="text-sm lg:text-lg text-muted-foreground font-light max-w-2xl">
+                                Temukan aki yang tepat untuk kendaraan Anda. Kami menyediakan berbagai jenis aki dengan kualitas terjamin.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            <div className="container mx-auto px-4 lg:px-6 max-w-7xl mb-10 relative z-10">
                 {/* Search Bar */}
                 <motion.div
-                    className="my-3 flex flex-row w-full gap-2"
+                    className="my-4 lg:my-6 flex flex-row w-full gap-3"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full group">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                            <Search className="absolute left-4 lg:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
                             <Input
                                 id="search"
                                 type="text"
                                 placeholder="Cari nama, tipe baterai, atau kendaraan..."
                                 value={searchQuery}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                className="pl-10"
+                                className="pl-12 lg:pl-14 h-12 lg:h-14 rounded-full border-border/50 bg-card shadow-none hover:border-primary/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-sm lg:text-base"
                             />
-
                         </div>
                     </div>
 
                     <div className="md:hidden">
-                        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-                            <SheetTrigger asChild>
-                                <Button variant="outline" size="icon" className="relative">
-                                    <Funnel className="size-4" />
-                                    {activeFiltersCount > 0 && (
-                                        <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                            {activeFiltersCount}
-                                        </span>
-                                    )}
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="bottom" className="h-[85vh] overflow-y-auto">
-                                <SheetHeader className="pb-0">
-                                    <SheetTitle>Filter Produk</SheetTitle>
-                                    <SheetDescription>
-                                        Pilih filter untuk menyaring produk sesuai kebutuhan Anda
-                                    </SheetDescription>
-                                </SheetHeader>
+                        <Button 
+                            variant="outline" 
+                            size="icon" 
+                            onClick={() => setSheetOpen(true)}
+                            className="relative h-12 w-12 rounded-full border-border/50 bg-card shadow-none hover:border-primary/40 hover:text-primary transition-all"
+                        >
+                            <Funnel className="size-5" />
+                            {activeFiltersCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-none">
+                                    {activeFiltersCount}
+                                </span>
+                            )}
+                        </Button>
 
-                                <div className="py-0">
-                                    <FilterSection
-                                        selectedCategories={selectedCategories}
-                                        setSelectedCategories={setSelectedCategories}
-                                        selectedMereks={selectedMereks}
-                                        setSelectedMereks={setSelectedMereks}
-                                        selectedKondisis={selectedKondisis}
-                                        setSelectedKondisis={setSelectedKondisis}
-                                        selectedAmperes={selectedAmperes}
-                                        setSelectedAmperes={setSelectedAmperes}
-                                        priceRange={priceRange}
-                                        setPriceRange={setPriceRange}
-                                        categories={categories}
-                                        brands={brands}
-                                        amperes={amperes}
-                                        onReset={handleReset}
-                                    />
-                                </div>
-
-                                <SheetFooter className="sticky bottom-0 bg-background pt-4 pb-2 border-t">
-                                    <SheetClose asChild>
-                                        <Button
-                                            className="w-full"
-                                            onClick={() => setSheetOpen(false)}
-                                        >
-                                            Terapkan Filter ({filteredProducts.length} Produk)
-                                        </Button>
-                                    </SheetClose>
-                                </SheetFooter>
-                            </SheetContent>
-                        </Sheet>
                     </div>
                 </motion.div>
 
@@ -258,6 +247,63 @@ export default function CatalogSections({
                     </motion.div>
                 </div>
             </div>
+            </div>
+            <AnimatePresence>
+                {sheetOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: "100%" }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: "100%" }}
+                        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        className="fixed inset-0 z-[100] bg-background flex flex-col md:hidden"
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between p-6 border-b border-border/50 bg-background/95 backdrop-blur-sm z-10 shrink-0">
+                            <div>
+                                <h3 className="font-bold text-lg text-foreground">Filter Produk</h3>
+                                <p className="text-xs text-muted-foreground">Sesuaikan dengan kebutuhan Anda</p>
+                            </div>
+                            <button
+                                className="text-foreground p-2 rounded-full hover:bg-muted transition-transform hover:rotate-90 duration-300"
+                                onClick={() => setSheetOpen(false)}
+                                aria-label="Tutup filter"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Scrollable Content */}
+                        <div className="flex-1 overflow-y-auto px-6 py-6 pb-8">
+                            <FilterSection
+                                selectedCategories={selectedCategories}
+                                setSelectedCategories={setSelectedCategories}
+                                selectedMereks={selectedMereks}
+                                setSelectedMereks={setSelectedMereks}
+                                selectedKondisis={selectedKondisis}
+                                setSelectedKondisis={setSelectedKondisis}
+                                selectedAmperes={selectedAmperes}
+                                setSelectedAmperes={setSelectedAmperes}
+                                priceRange={priceRange}
+                                setPriceRange={setPriceRange}
+                                categories={categories}
+                                brands={brands}
+                                amperes={amperes}
+                                onReset={handleReset}
+                            />
+                        </div>
+
+                        {/* Fixed Bottom Action */}
+                        <div className="p-6 border-t border-border/50 bg-background/95 backdrop-blur-sm mt-auto shrink-0 pb-10">
+                            <Button
+                                className="w-full h-14 rounded-full text-base font-bold shadow-none hover:scale-[1.02] transition-all"
+                                onClick={() => setSheetOpen(false)}
+                            >
+                                Terapkan Filter ({filteredProducts.length} Produk)
+                            </Button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }

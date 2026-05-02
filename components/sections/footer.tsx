@@ -46,45 +46,47 @@ export default function Footer() {
     }, []); // Empty dependency - hanya fetch sekali saat mount
 
     return (
-        <footer className="bg-primary text-gray-300">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                    {/* LEFT SIDE */}
-                    <div>
-                        <div className="flex gap-2">
-                            <img src="/logo-light.svg" alt="Logo" className="size-8" />
-                            <h3 className="text-white text-2xl font-bold mb-8">
-                                Aki Mobil Jogja
-                            </h3>
+        <footer className="bg-background text-muted-foreground py-8 lg:py-16 border-t border-border">
+            <div className="container mx-auto px-6 max-w-7xl">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-8 lg:mb-16">
+
+                    {/* LEFT COLUMN - Company Info */}
+                    <div className="flex flex-col space-y-6 lg:space-y-10">
+                        {/* Logo/Brand */}
+                        <div className="flex items-center gap-3 text-foreground">
+                            <div className="bg-primary p-2 rounded-lg">
+                                <Image src="/logo-light.svg" alt="Logo" width={24} height={24} className="block" />
+                            </div>
+                            <span className="text-2xl font-bold tracking-tight">Aki Mobil Jogja</span>
                         </div>
 
                         {/* Alamat */}
-                        <div className="mb-8">
-                            <h4 className="text-white text-lg font-semibold mb-4">Alamat</h4>
-                            <div className="flex items-start gap-3 text-gray-400">
-                                <MapPin size={20} className="shrink-0 mt-1" />
-                                <span>
+                        <div>
+                            <h3 className="text-foreground font-semibold mb-2 lg:mb-4 text-base lg:text-lg">Alamat</h3>
+                            <div className="flex items-start gap-3 text-muted-foreground">
+                                <MapPin className="w-5 h-5 shrink-0 mt-0.5" />
+                                <p className="leading-relaxed">
                                     Kanggotan No. 21, Pleret, Bantul<br />
                                     Yogyakarta 55791
-                                </span>
+                                </p>
                             </div>
                         </div>
 
                         {/* Informasi */}
-                        <div className="mb-8">
-                            <h4 className="text-white text-lg font-semibold mb-4">Informasi</h4>
-                            <div className="space-y-3">
+                        <div>
+                            <h3 className="text-foreground font-semibold mb-2 lg:mb-4 text-base lg:text-lg">Informasi</h3>
+                            <div className="space-y-4 text-muted-foreground">
                                 <div className="flex items-center gap-3">
-                                    <Phone size={20} className="text-gray-400 shrink-0" />
-                                    <span className="text-gray-400">81354007400 / 088227968449</span>
+                                    <Phone className="w-5 h-5 shrink-0" />
+                                    <span>081354007400 / 088227968449</span>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <Mail size={20} className="text-gray-400 shrink-0" />
-                                    <span className="text-gray-400">info@akimobiljogja.com</span>
+                                    <Mail className="w-5 h-5 shrink-0" />
+                                    <span>info@akimobiljogja.com</span>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <Clock size={20} className="text-gray-400 shrink-0 mt-1" />
-                                    <div className="text-gray-400">
+                                    <Clock className="w-5 h-5 shrink-0 mt-0.5" />
+                                    <div>
                                         <p>Senin - Sabtu: 08.00 - 21.00 WIB</p>
                                         <p>Minggu: 10.00 - 21.00 WIB</p>
                                     </div>
@@ -94,133 +96,113 @@ export default function Footer() {
 
                         {/* Social Media */}
                         <div>
-                            <h4 className="text-white text-lg font-semibold mb-4">Sosial Media</h4>
-                            <div className="flex gap-4">
+                            <h3 className="text-foreground font-semibold mb-2 lg:mb-4 text-base lg:text-lg">Sosial Media</h3>
+                            <div className="flex items-center gap-3">
                                 <a
                                     href="https://www.facebook.com/people/Reparasi-Dan-Tukar-Tambah-Aki-Bp-Siswanto/61551816056838/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="Facebook Aki Mobil Jogja"
-                                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors text-foreground"
                                 >
-                                    <FiFacebook size={20} />
+                                    <FiFacebook size={18} />
                                 </a>
                                 <a
                                     href="https://www.instagram.com/akimobiljogja_"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="Instagram Aki Mobil Jogja"
-                                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
+                                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors text-foreground"
                                 >
-                                    <FaInstagram size={20} />
+                                    <FaInstagram size={18} />
                                 </a>
                                 <a
                                     href="https://tiktok.com/@akimobiljogja"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="TikTok Aki Mobil Jogja"
-                                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-600 transition-colors"
+                                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors font-bold text-sm text-foreground"
                                 >
-                                    <PiTiktokLogo size={20} />
+                                    <PiTiktokLogo size={18} />
                                 </a>
                                 <a
                                     href="https://maps.app.goo.gl/D9CgHvefsKVA3dD1A"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="Google Maps Lokasi Aki Mobil Jogja"
-                                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors"
+                                    className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors text-foreground"
                                 >
-                                    <LiaMapSolid size={20} />
+                                    <LiaMapSolid size={18} />
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    {/* RIGHT SIDE - FEATURED POSTS */}
+                    {/* RIGHT COLUMN - Featured Articles */}
                     <div>
-                        <h3 className="text-white text-lg font-semibold mb-8 tracking-wide">
-                            ARTIKEL PILIHAN
-                        </h3>
-                        <div className="space-y-8">
+                        <h3 className="text-foreground font-bold tracking-widest text-sm mb-4 lg:mb-8 uppercase">Artikel Pilihan</h3>
+                        <div className="flex flex-col gap-4 lg:gap-6">
                             {isLoading ? (
-                                <p className="text-gray-500 text-sm">Memuat artikel...</p>
+                                <p className="text-muted-foreground text-sm">Memuat artikel...</p>
                             ) : featuredPosts.length > 0 ? (
                                 featuredPosts.map((post) => {
                                     const category = post.tags?.[0] || 'ARTIKEL';
-                                    const bgColor = category.toLowerCase().includes('tips')
-                                        ? 'bg-blue-100'
-                                        : category.toLowerCase().includes('promo')
-                                            ? 'bg-orange-100'
-                                            : 'bg-green-100';
 
                                     return (
                                         <Link
                                             key={post.id}
                                             href={`/artikel/${post.slug}`}
-                                            className="group cursor-pointer block"
+                                            className="group flex gap-5 items-start"
                                         >
-                                            <div className="flex gap-4">
-                                                <div className={`${bgColor} rounded-lg shrink-0 w-28 h-28 flex items-center justify-center overflow-hidden relative`}>
-                                                    {post.featured_image ? (
-                                                        <Image
-                                                            src={post.featured_image}
-                                                            alt={post.title}
-                                                            fill
-                                                            className="object-cover"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-20 h-20 bg-white/20 rounded-full"></div>
-                                                    )}
-                                                </div>
-
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-xs text-gray-500 mb-2 uppercase tracking-wide">
-                                                        {category}
-                                                    </p>
-                                                    <h4 className="text-white text-base font-semibold mb-2 group-hover:text-blue-400 transition-colors leading-snug line-clamp-2">
-                                                        {post.title}
-                                                    </h4>
-                                                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
-                                                        {post.excerpt || 'Baca selengkapnya...'}
-                                                    </p>
-                                                </div>
+                                            <div className="relative w-20 h-20 lg:w-24 lg:h-24 shrink-0 rounded-xl overflow-hidden bg-muted border border-border/50">
+                                                {post.featured_image ? (
+                                                    <Image
+                                                        src={post.featured_image}
+                                                        alt={post.title}
+                                                        fill
+                                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-muted/50 rounded-xl" />
+                                                )}
+                                            </div>
+                                            <div className="flex-1">
+                                                <span className="text-[10px] text-primary font-bold uppercase tracking-wider mb-1 block">
+                                                    {category}
+                                                </span>
+                                                <h4 className="text-foreground font-bold text-sm sm:text-base leading-snug mb-2 group-hover:text-primary transition-colors">
+                                                    {post.title}
+                                                </h4>
+                                                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                                                    {post.excerpt || 'Baca selengkapnya...'}
+                                                </p>
                                             </div>
                                         </Link>
                                     );
                                 })
                             ) : (
-                                <p className="text-gray-500 text-sm">Belum ada artikel tersedia.</p>
+                                <p className="text-muted-foreground text-sm">Belum ada artikel tersedia.</p>
                             )}
                         </div>
                     </div>
                 </div>
 
-                {/* Copyright */}
-                <div className="mt-16 pt-8 border-t border-gray-800">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-sm text-gray-500">
-                            &copy; {new Date().getFullYear()} Aki Mobil Jogja. All rights reserved.
-                        </p>
-                        <div className="flex items-center gap-4 text-sm">
-                            <Link
-                                href="/kebijakan-pengembalian"
-                                className="text-gray-400 hover:text-white transition-colors"
+                {/* BOTTOM ROW */}
+                <div className="pt-6 lg:pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+                    <p>© {new Date().getFullYear()} Aki Mobil Jogja. All rights reserved.</p>
+                    <div className="flex items-center gap-2">
+                        <Link href="/kebijakan-pengembalian" className="hover:text-foreground transition-colors">Kebijakan Pengembalian</Link>
+                        <span>·</span>
+                        <span>dibuat dan didesain oleh{' '}
+                            <a
+                                href="https://instagram.com/risewise.dev"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-foreground hover:text-primary transition-colors underline underline-offset-2"
                             >
-                                Kebijakan Pengembalian
-                            </Link>
-                            <span className="text-gray-700">·</span>
-                            <div className="flex gap-1">
-                                <span className="text-gray-500">dibuat dan didesain oleh</span>
-                                <a
-                                    href="https://instagram.com/risewise.dev"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-gray-400 underline hover:text-pink-600 transition-colors"
-                                >
-                                    risewise.dev
-                                </a>
-                            </div>
-                        </div>
+                                risewise.dev
+                            </a>
+                        </span>
                     </div>
                 </div>
             </div>

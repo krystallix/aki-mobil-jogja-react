@@ -3,6 +3,7 @@ import HomeLayout from "@/components/layouts/home-layout";
 import ArticleList from "@/components/sections/article-list";
 import JsonLd from '@/components/json-ld';
 import { getArticles } from '@/lib/supabase/data';
+import * as motion from "framer-motion/client";
 
 export const metadata: Metadata = {
     title: 'Artikel & Tips Aki Mobil - Panduan Lengkap | Aki Mobil Jogja',
@@ -67,18 +68,33 @@ export default async function ArtikelPage() {
         <HomeLayout>
             <JsonLd data={jsonLd} />
             <JsonLd data={breadcrumbJsonLd} />
-            <div className="py-16">
-                {/* Hero Section */}
-                <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-linear-to-r from-primary to-blue-800 bg-clip-text text-transparent">
-                        Artikel & Tips
-                    </h1>
-                    <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                        Temukan tips, panduan, dan informasi terkini seputar aki mobil dan perawatannya
-                    </p>
-                </div>
+            <div className="pt-24 pb-12 lg:pt-32 lg:pb-20 relative overflow-hidden">
+                {/* Background Glow */}
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
-                {/* Article List Component */}
+                <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                        className="max-w-3xl"
+                    >
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
+                            <span>Wawasan Otomotif</span>
+                        </div>
+                        <h1 className="text-5xl lg:text-8xl font-extrabold tracking-tighter mb-6 lg:mb-8 text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground to-foreground/50 leading-[1.05]">
+                            Artikel & <br />
+                            <span className="text-primary">Tips Terbaru</span>
+                        </h1>
+                        <p className="text-lg lg:text-xl text-muted-foreground font-light max-w-2xl leading-relaxed">
+                            Temukan panduan ahli, tips perawatan aki, dan wawasan otomotif terkini untuk menjaga kendaraan Anda tetap prima.
+                        </p>
+                    </motion.div>
+                </div>
+            </div>
+
+            <div className="pb-20">
                 <ArticleList initialArticles={articles as any[]} />
             </div>
         </HomeLayout>

@@ -1,12 +1,9 @@
 
 import '@/app/globals.css'
-// import { Inter } from 'next/font/google'
 import SiteHeader from '@/components/sections/header'
 import Footer from '../sections/footer'
 
-// const inter = Inter({ subsets: ['latin'] })
-
-export default function RootLayout({
+export default function HomeLayout({
     children,
 }: {
     children: React.ReactNode
@@ -14,7 +11,8 @@ export default function RootLayout({
     return (
         <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            <main className="flex-1 container mx-auto">
+            {/* pt-20 untuk clearance dari floating navbar (fixed top-4 + height ~60px) */}
+            <main className="flex-1 pt-20">
                 {children}
             </main>
             <footer>

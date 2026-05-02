@@ -1,5 +1,5 @@
 "use client"
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -85,27 +85,27 @@ export default function FilterSection({
 
     return (
         <>
-            <Card className=" border-none shadow-none mt-2 bg-muted-foreground/5 h-fit">
-                <CardHeader>
-                    <div className="md:flex justify-between items-center hidden">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                            <SlidersHorizontal className="size-4" />
-                            Filter
+            <Card className="border-0 shadow-none md:border md:border-border/50 rounded-2xl md:shadow-sm bg-card h-fit overflow-hidden relative group/filter">
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover/filter:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <CardHeader className="border-b border-border/50 bg-muted/30 pb-4">
+                    <div className="md:flex justify-between items-center hidden relative z-10">
+                        <CardTitle className="flex items-center gap-2 text-lg font-bold">
+                            <SlidersHorizontal className="size-5 text-primary" />
+                            Filter Produk
                         </CardTitle>
                         {hasActiveFilters && (
                             <Button
                                 variant="ghost"
                                 onClick={onReset}
-                                className="border-dashed border-muted-foreground/50 text-xs "
+                                className="h-8 px-2.5 text-xs text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-full transition-colors"
                             >
-                                Hapus Filter
-                                <X className="size-4 ml-2" />
+                                Hapus
+                                <X className="size-3.5 ml-1" />
                             </Button>
                         )}
                     </div>
-
                 </CardHeader>
-                <CardContent    >
+                <CardContent className="pt-4 relative z-10">
                     <div className="space-y-6">
 
                         <Accordion type="multiple" defaultValue={["kategori", "merek", "kondisi", "harga"]}>
@@ -256,21 +256,27 @@ export default function FilterSection({
                     </div>
                 </CardContent>
             </Card>
-            <div className="bg-gradient-to-br from-primary mt-4 mx-5 sm:mx-0 to-blue-800 rounded-2xl p-6 text-white shadow-lg">
-                <h3 className="text-xl font-bold mb-3">
-                    Tidak Menemukan Aki yang anda cari?
-                </h3>
-                <p className="mb-6 text-blue-100 text-sm">
-                    Hubungi kami untuk mendapatkan rekomendasi aki yang tepat untuk kendaraan Anda
-                </p>
-                <a
-                    href="https://wa.me/6281354007400"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center bg-white text-primary px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors"
-                >
-                    Hubungi via WhatsApp
-                </a>
+            <div className="mt-6 relative overflow-hidden bg-card border-0 shadow-none md:border md:border-border/50 rounded-2xl p-6 md:shadow-sm group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent opacity-100" />
+                <div className="absolute -top-4 -right-4 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <MessageCircle className="w-32 h-32 text-primary" />
+                </div>
+                <div className="relative z-10">
+                    <h3 className="text-lg font-extrabold mb-2 tracking-tight text-foreground">
+                        Tidak Menemukan Aki?
+                    </h3>
+                    <p className="mb-5 text-muted-foreground text-sm font-light leading-relaxed">
+                        Hubungi kami untuk mendapatkan rekomendasi aki yang tepat untuk kendaraan Anda.
+                    </p>
+                    <a
+                        href="https://wa.me/6281354007400"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-full items-center justify-center gap-2 bg-primary text-primary-foreground px-6 h-12 rounded-full font-bold text-sm shadow-none hover:scale-105 transition-transform"
+                    >
+                        Konsultasi via WA
+                    </a>
+                </div>
             </div>
         </>
     );

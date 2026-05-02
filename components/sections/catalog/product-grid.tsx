@@ -22,7 +22,7 @@ interface ProductGridProps {
 
 export default function ProductGrid({ products, onAddToCart, onReset }: ProductGridProps) {
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(9);
+    const [itemsPerPage, setItemsPerPage] = useState(12);
     const [sortBy, setSortBy] = useState("default");
 
     // Reset page when products change (e.g. filtering)
@@ -137,11 +137,11 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                 <p className="text-sm pt-2 text-muted-foreground">
                     Menampilkan {startIndex + 1}-{Math.min(endIndex, sortedProducts.length)} dari {sortedProducts.length} produk
                 </p>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+                <div className="hidden md:flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                         <p className="text-sm whitespace-nowrap">Baris:</p>
                         <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
-                            <SelectTrigger className="w-full sm:w-24">
+                            <SelectTrigger className="w-full sm:w-24 rounded-full border-border/50 bg-card shadow-none hover:border-primary/40 focus:ring-primary/20 transition-all">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -157,7 +157,7 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                         <p className="text-sm whitespace-nowrap">Urutkan:</p>
                         <Select value={sortBy} onValueChange={handleSortChange}>
-                            <SelectTrigger className="w-full sm:w-48">
+                            <SelectTrigger className="w-full sm:w-48 rounded-full border-border/50 bg-card shadow-none hover:border-primary/40 focus:ring-primary/20 transition-all">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -215,25 +215,25 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                             </p>
 
 
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1.5 bg-card p-1.5 rounded-full border border-border/50 shadow-none">
 
                                 <Button
-                                    variant="outline"
+                                    variant="ghost"
                                     size="icon"
                                     onClick={goToFirstPage}
                                     disabled={currentPage === 1}
-                                    className="h-8 w-8"
+                                    className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                                 >
                                     <ChevronsLeft className="h-4 w-4" />
                                 </Button>
 
 
                                 <Button
-                                    variant="outline"
+                                    variant="ghost"
                                     size="icon"
                                     onClick={goToPreviousPage}
                                     disabled={currentPage === 1}
-                                    className="h-8 w-8"
+                                    className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                                 >
                                     <ChevronLeft className="h-4 w-4" />
                                 </Button>
@@ -248,10 +248,10 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                                         ) : (
                                             <Button
                                                 key={page}
-                                                variant={currentPage === page ? "default" : "outline"}
+                                                variant={currentPage === page ? "default" : "ghost"}
                                                 size="icon"
                                                 onClick={() => goToPage(page as number)}
-                                                className="h-8 w-8"
+                                                className={`h-8 w-8 rounded-full transition-colors ${currentPage === page ? 'shadow-none bg-primary text-primary-foreground' : 'hover:bg-primary/10 hover:text-primary'}`}
                                             >
                                                 {page}
                                             </Button>
@@ -261,22 +261,22 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
 
 
                                 <Button
-                                    variant="outline"
+                                    variant="ghost"
                                     size="icon"
                                     onClick={goToNextPage}
                                     disabled={currentPage === totalPages}
-                                    className="h-8 w-8"
+                                    className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                                 >
                                     <ChevronRight className="h-4 w-4" />
                                 </Button>
 
 
                                 <Button
-                                    variant="outline"
+                                    variant="ghost"
                                     size="icon"
                                     onClick={goToLastPage}
                                     disabled={currentPage === totalPages}
-                                    className="h-8 w-8"
+                                    className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                                 >
                                     <ChevronsRight className="h-4 w-4" />
                                 </Button>
@@ -297,7 +297,7 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                         <p className="text-sm text-muted-foreground">
                             Coba ubah kriteria pencarian Anda
                         </p>
-                        <Button variant="outline" onClick={onReset} className="mt-4">
+                        <Button variant="default" onClick={onReset} className="mt-4 rounded-full px-6 shadow-none hover:scale-105 transition-transform">
                             Reset Filter
                         </Button>
                     </div>
