@@ -218,8 +218,8 @@ export default function ArticleList({ initialArticles = [] }: ArticleListProps) 
                                                 className="object-cover group-hover:scale-110 transition-transform duration-700"
                                             />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-primary/20 to-primary/5">
-                                                <Tag className="w-12 h-12 text-primary opacity-20" />
+                                            <div className="w-full h-full flex items-center justify-center bg-muted">
+                                                <Tag className="w-12 h-12 text-muted-foreground/20" />
                                             </div>
                                         )}
                                         <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-90" />

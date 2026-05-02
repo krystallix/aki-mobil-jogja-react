@@ -67,8 +67,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
 
     return (
-        <div className="group border border-border/50 rounded-xl lg:rounded-2xl overflow-hidden hover:border-primary/40 hover:-translate-y-1 transition-all duration-500 bg-card relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="group border border-border/60 rounded-xl lg:rounded-2xl overflow-hidden hover:border-border transition-all duration-300 bg-card relative">
             
             <Link href={`/katalog/product/${product.id}`} className="absolute inset-0 z-20">
                 <span className="sr-only">Lihat detail {product.nama}</span>

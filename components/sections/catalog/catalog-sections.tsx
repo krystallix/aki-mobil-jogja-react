@@ -142,13 +142,11 @@ export default function CatalogSections({
             </div>
 
             <div className="py-10 lg:py-20 bg-background border-b border-border/50 relative overflow-hidden">
-                {/* Background Glow */}
-                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
                 
                 <div className="container mx-auto px-6 max-w-7xl mb-8 lg:mb-12 relative z-10">
                     <div className="flex justify-between items-end">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-border/60 bg-card text-muted-foreground">
                                 <span>Pilihan Terbaik</span>
                             </div>
                             <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground to-foreground/50">
@@ -171,14 +169,14 @@ export default function CatalogSections({
                 >
                     <div className="flex-1 w-full group">
                         <div className="relative">
-                            <Search className="absolute left-4 lg:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                            <Search className="absolute left-4 lg:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-foreground transition-colors" />
                             <Input
                                 id="search"
                                 type="text"
                                 placeholder="Cari nama, tipe baterai, atau kendaraan..."
                                 value={searchQuery}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                className="pl-12 lg:pl-14 h-12 lg:h-14 rounded-full border-border/50 bg-card shadow-none hover:border-primary/40 focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all text-sm lg:text-base"
+                                className="pl-12 lg:pl-14 h-12 lg:h-14 rounded-full border-border/60 bg-card shadow-none hover:border-border focus:border-border focus:ring-0 transition-all text-sm lg:text-base"
                             />
                         </div>
                     </div>
@@ -188,7 +186,7 @@ export default function CatalogSections({
                             variant="outline" 
                             size="icon" 
                             onClick={() => setSheetOpen(true)}
-                            className="relative h-12 w-12 rounded-full border-border/50 bg-card shadow-none hover:border-primary/40 hover:text-primary transition-all"
+                            className="relative h-12 w-12 rounded-full border-border/60 bg-card shadow-none hover:border-border hover:bg-muted transition-all"
                         >
                             <Funnel className="size-5" />
                             {activeFiltersCount > 0 && (

@@ -256,24 +256,22 @@ export default function FilterSection({
                     </div>
                 </CardContent>
             </Card>
-            <div className="mt-6 relative overflow-hidden bg-card border-0 shadow-none md:border md:border-border/50 rounded-2xl p-6 md:shadow-sm group">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent opacity-100" />
-                <div className="absolute -top-4 -right-4 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <MessageCircle className="w-32 h-32 text-primary" />
-                </div>
+            <div className="mt-4 relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 p-5">
+                <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.12) 0%, transparent 55%)" }} />
                 <div className="relative z-10">
-                    <h3 className="text-lg font-extrabold mb-2 tracking-tight text-foreground">
+                    <h3 className="text-sm font-bold mb-1.5 text-white">
                         Tidak Menemukan Aki?
                     </h3>
-                    <p className="mb-5 text-muted-foreground text-sm font-light leading-relaxed">
-                        Hubungi kami untuk mendapatkan rekomendasi aki yang tepat untuk kendaraan Anda.
+                    <p className="mb-4 text-white/50 text-xs leading-relaxed">
+                        Hubungi kami untuk rekomendasi yang tepat.
                     </p>
                     <a
                         href="https://wa.me/6281354007400"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex w-full items-center justify-center gap-2 bg-primary text-primary-foreground px-6 h-12 rounded-full font-bold text-sm shadow-none hover:scale-105 transition-transform"
+                        className="inline-flex w-full items-center justify-center gap-2 bg-white text-zinc-900 px-4 h-10 rounded-full font-bold text-xs hover:bg-zinc-100 transition-colors"
                     >
+                        <MessageCircle className="w-3.5 h-3.5" />
                         Konsultasi via WA
                     </a>
                 </div>
