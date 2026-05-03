@@ -18,12 +18,12 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
     if (!article) {
         return {
-            title: 'Artikel Tidak Ditemukan - Aki Mobil Jogja',
+            title: 'Artikel Tidak Ditemukan - Siswanto Aki',
         };
     }
 
     // Optimize title to max 60 characters
-    const suffix = ' | Aki Mobil Jogja';
+    const suffix = ' | Siswanto Aki';
     const maxNameLength = 60 - suffix.length;
 
     let pageTitle = article.title;
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     // Create comprehensive meta description (120-160 chars)
     let metaDescription = article.excerpt || '';
     if (!metaDescription || metaDescription.length < 50) {
-        metaDescription = `${article.title} - Temukan tips dan panduan lengkap seputar aki mobil, perawatan, dan solusi masalah aki dari ahlinya di Aki Mobil Jogja.`;
+        metaDescription = `${article.title} - Temukan tips dan panduan lengkap seputar aki mobil, perawatan, and solusi masalah aki dari ahlinya di Siswanto Aki.`;
     }
 
     // Ensure min length if possible, or max length
@@ -61,11 +61,11 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             title: pageTitle,
             description: metaDescription,
             url: articleUrl,
-            siteName: 'Aki Mobil Jogja',
+            siteName: 'Siswanto Aki',
             type: 'article',
             publishedTime: article.published_at || article.created_at,
             modifiedTime: article.updated_at || article.created_at,
-            authors: ['Aki Mobil Jogja'],
+            authors: ['Siswanto Aki'],
             tags: keywords,
             images: article.featured_image ? [{
                 url: article.featured_image,
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             title: pageTitle,
             description: metaDescription,
             images: article.featured_image ? [article.featured_image] : [],
-            creator: '@akimobiljogja',
+            name: 'Siswanto Aki',
         },
     };
 }
@@ -105,12 +105,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         dateModified: article.updated_at || article.created_at,
         author: {
             '@type': 'Organization',
-            name: 'Aki Mobil Jogja',
+            name: 'Siswanto Aki',
             url: 'https://akimobiljogja.com'
         },
         publisher: {
             '@type': 'Organization',
-            name: 'Aki Mobil Jogja',
+            name: 'Siswanto Aki',
             logo: {
                 '@type': 'ImageObject',
                 url: 'https://akimobiljogja.com/logo.png'

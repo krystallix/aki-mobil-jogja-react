@@ -46,7 +46,7 @@ export default function SiteHeader() {
                                 <Image src="/logo-light.svg" alt="Logo" width={16} height={16} className="block" />
                             </div>
                             <span className="font-bold tracking-tight text-foreground text-lg">
-                                Aki Mobil Jogja
+                                Siswanto Aki
                             </span>
                         </Link>
 

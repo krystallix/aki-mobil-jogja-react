@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -26,11 +26,11 @@ const slides: Slide[] = [
     {
         id: "intro",
         eyebrow: "Layanan 24 Jam · Antar Pasang",
-        title: "Aki Mobil\nJogja",
+        title: "Aki Soak?\nHubungi Kami!",
         subtitle: "Teknisi berpengalaman. Harga transparan. Garansi resmi.",
         bg: "from-indigo-800 via-indigo-850 to-indigo-700",
-        image: "https://supabase.arkane.my.id/storage/v1/object/public/aki-mobil-jogja/hero/kering.webp",
-        imageAlt: "Aki Mobil Jogja",
+        image: "https://supabase.arkane.my.id/storage/v1/object/public/aki-mobil-jogja/hero/first_hero.png",
+        imageAlt: "Siswanto Aki",
         ctaLabel: "Konsultasi Gratis",
         ctaHref: whatsappUrl,
     },
@@ -59,7 +59,7 @@ const slides: Slide[] = [
     {
         id: "hybrid",
         eyebrow: "Aki Hybrid · Teknologi Terkini",
-        title: "Terbaik\nDua Dunia",
+        title: "Seimbang\nPerforma & Harga",
         subtitle: "Kombinasi teknologi kering & basah. Performa stabil, perawatan minimal.",
         bg: "from-green-950 via-green-900 to-green-700",
         image: "https://supabase.arkane.my.id/storage/v1/object/public/aki-mobil-jogja/hero/hybrid.webp",
@@ -94,38 +94,48 @@ export default function HeroSection() {
 
     return (
         <section className="pt-24 pb-6 lg:pt-28 lg:pb-10">
-            <div className="container mx-auto px-4 lg:px-6 max-w-7xl">
+            <div className={`container mx-auto px-4 lg:px-6 max-w-7xl ${slide.id === 'intro' ? 'overflow-visible' : ''}`}>
                 {/* Banner Card */}
-                <div
-                    className="relative rounded-2xl lg:rounded-3xl overflow-hidden cursor-pointer select-none"
-                    style={{ minHeight: "220px" }}
+                <motion.div
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.1}
+                    onDragEnd={(_, info) => {
+                        const swipeThreshold = 50;
+                        if (info.offset.x > swipeThreshold) {
+                            prev();
+                        } else if (info.offset.x < -swipeThreshold) {
+                            next();
+                        }
+                    }}
                     onMouseEnter={() => setPaused(true)}
                     onMouseLeave={() => setPaused(false)}
-                    onTouchStart={() => setPaused(true)}
-                    onTouchEnd={() => setPaused(false)}
+                    className={`relative rounded-2xl lg:rounded-3xl cursor-pointer select-none min-h-[160px] lg:min-h-[400px] ${slide.id === 'intro' ? 'overflow-visible' : 'overflow-hidden'}`}
                 >
-                    {/* Animated Background */}
-                    <AnimatePresence custom={direction} mode="sync">
-                        <motion.div
-                            key={`bg-${slide.id}`}
-                            custom={direction}
-                            initial={{ x: direction > 0 ? "100%" : "-100%" }}
-                            animate={{ x: "0%" }}
-                            exit={{ x: direction > 0 ? "-100%" : "100%" }}
-                            transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-                            className={`absolute inset-0 bg-gradient-to-r ${slide.bg}`}
-                        >
-                            {/* Radial glow highlight */}
-                            <div className="absolute inset-0" style={{
-                                background: "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 65%)"
-                            }} />
-                        </motion.div>
-                    </AnimatePresence>
+                    {/* Animated Background — clipped to card */}
+                    <div className="absolute inset-0 rounded-2xl lg:rounded-3xl overflow-hidden">
+                        <AnimatePresence custom={direction} mode="sync">
+                            <motion.div
+                                key={`bg-${slide.id}`}
+                                custom={direction}
+                                initial={{ x: direction > 0 ? "100%" : "-100%" }}
+                                animate={{ x: "0%" }}
+                                exit={{ x: direction > 0 ? "-100%" : "100%" }}
+                                transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
+                                className={`absolute inset-0 bg-linear-to-r ${slide.bg}`}
+                            >
+                                {/* Radial glow highlight */}
+                                <div className="absolute inset-0" style={{
+                                    background: "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 65%)"
+                                }} />
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
 
                     {/* Content Row */}
-                    <div className="relative z-10 flex items-stretch h-full min-h-[180px] lg:min-h-[340px]">
+                    <div className="relative z-10 flex items-stretch h-full min-h-[160px] lg:min-h-[400px]">
                         {/* Left — Text */}
-                        <div className="flex flex-col justify-center px-5 py-6 lg:px-12 lg:py-10 flex-1 min-w-0 max-w-[58%] lg:max-w-[50%] z-10">
+                        <div className="flex flex-col justify-center px-5 py-4 lg:px-12 lg:py-10 flex-1 min-w-0 max-w-[58%] lg:max-w-[50%] z-10">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={`text-${slide.id}`}
@@ -140,7 +150,7 @@ export default function HeroSection() {
                                     </p>
 
                                     {/* Title */}
-                                    <h2 className="text-xl sm:text-2xl lg:text-5xl xl:text-6xl font-extrabold tracking-tighter text-white leading-[1.05] mb-3 lg:mb-5 whitespace-pre-line">
+                                    <h2 className="text-xl sm:text-2xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-[1.05] mb-3 lg:mb-5 whitespace-pre-line">
                                         {slide.title}
                                     </h2>
 
@@ -155,8 +165,7 @@ export default function HeroSection() {
                                             href={slide.ctaHref}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[11px] lg:text-sm transition-all duration-300 hover:opacity-90 active:scale-[0.98] w-fit text-white border border-indigo-400/30"
-                                            style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.25) 0%, transparent 65%), rgb(55,48,163)" }}
+                                            className="relative z-40 inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 hover:bg-white/90 active:scale-[0.98] w-fit bg-white text-zinc-950 shadow-lg shadow-black/10"
                                         >
                                             {slide.ctaLabel}
                                             <ArrowRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
@@ -164,8 +173,7 @@ export default function HeroSection() {
                                     ) : (
                                         <Link href={slide.ctaHref}>
                                             <span
-                                                className="inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[11px] lg:text-sm transition-all duration-300 hover:opacity-90 active:scale-[0.98] w-fit text-white border border-indigo-400/30"
-                                                style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.25) 0%, transparent 65%), rgb(55,48,163)" }}
+                                                className="relative z-40 inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 hover:bg-white/90 active:scale-[0.98] w-fit bg-white text-zinc-950 shadow-lg shadow-black/10"
                                             >
                                                 {slide.ctaLabel}
                                                 <ArrowRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
@@ -176,33 +184,84 @@ export default function HeroSection() {
                             </AnimatePresence>
                         </div>
 
-                        {/* Right — Product Image (centered vertically) */}
-                        <div className="relative flex-1 flex items-center justify-center overflow-hidden">
-                            <AnimatePresence custom={direction} mode="wait">
-                                <motion.div
-                                    key={`img-${slide.id}`}
-                                    custom={direction}
-                                    initial={{ opacity: 0, x: direction > 0 ? 30 : -30, scale: 0.95 }}
-                                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                                    exit={{ opacity: 0, x: direction > 0 ? -20 : 20, scale: 0.95 }}
-                                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                                    className="absolute inset-0"
-                                >
-                                    <Image
-                                        src={slide.image}
-                                        alt={slide.imageAlt}
-                                        fill
-                                        className="object-contain object-center drop-shadow-2xl p-3 lg:p-6"
-                                        priority={current === 0}
-                                        sizes="(max-width: 768px) 42vw, 38vw"
-                                    />
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
+                        {/* Right — Product Image */}
+                        {slide.id === 'intro' ? (
+                            // Breakout image — absolutely positioned to overflow above & beyond card
+                            <>
+                                {/* Spacer to hold the right column layout */}
+                                <div className="flex-1" />
+                                {/* The actual image, absolutely positioned to escape the card */}
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={`img-${slide.id}`}
+                                        initial={{ opacity: 0, y: 30, scale: 0.88 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute z-20 pointer-events-none"
+                                        style={{
+                                            right: "-10%",
+                                            bottom: "-20%",
+                                            width: "63%",
+                                        }}
+                                    >
+                                        <Image
+                                            src={slide.image}
+                                            alt={slide.imageAlt}
+                                            width={900}
+                                            height={640}
+                                            className="w-full h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+                                            priority
+                                            sizes="(max-width: 768px) 60vw, 55vw"
+                                        />
+                                    </motion.div>
+                                </AnimatePresence>
+                            </>
+                        ) : (
+                            // Normal image for other slides
+                            <div className="relative flex-1 flex items-center justify-center overflow-hidden">
+                                <AnimatePresence custom={direction} mode="wait">
+                                    <motion.div
+                                        key={`img-${slide.id}`}
+                                        custom={direction}
+                                        initial={{ opacity: 0, x: direction > 0 ? 30 : -30, scale: 0.95 }}
+                                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                                        exit={{ opacity: 0, x: direction > 0 ? -20 : 20, scale: 0.95 }}
+                                        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                                        className="absolute inset-0"
+                                    >
+                                        <Image
+                                            src={slide.image}
+                                            alt={slide.imageAlt}
+                                            fill
+                                            className="object-contain object-center drop-shadow-2xl p-3 lg:p-6"
+                                            priority={current === 0}
+                                            sizes="(max-width: 768px) 42vw, 38vw"
+                                        />
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
+                        )}
                     </div>
 
+                    {/* Navigation Chevrons - Desktop Only */}
+                    <button
+                        onClick={(e) => { e.stopPropagation(); prev(); }}
+                        className="absolute left-1 top-1/2 -translate-y-1/2 z-40 p-2 text-white/20 hover:text-white/60 transition-all duration-300 hidden lg:block active:scale-90"
+                        aria-label="Previous slide"
+                    >
+                        <ChevronLeft className="size-16" strokeWidth={1} />
+                    </button>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); next(); }}
+                        className="absolute right-1 top-1/2 -translate-y-1/2 z-40 p-2 text-white/20 hover:text-white/60 transition-all duration-300 hidden lg:block active:scale-90"
+                        aria-label="Next slide"
+                    >
+                        <ChevronRight className="size-16" strokeWidth={1} />
+                    </button>
+
                     {/* Dot Navigation */}
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2">
                         {slides.map((s, i) => (
                             <button
                                 key={s.id}
@@ -226,19 +285,7 @@ export default function HeroSection() {
                             transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
                         />
                     )}
-
-                    {/* Prev/Next swipe areas (invisible, mobile-friendly) */}
-                    <button
-                        onClick={prev}
-                        className="absolute left-0 top-0 bottom-8 w-12 z-10 opacity-0"
-                        aria-label="Previous"
-                    />
-                    <button
-                        onClick={next}
-                        className="absolute right-0 top-0 bottom-8 w-12 z-10 opacity-0"
-                        aria-label="Next"
-                    />
-                </div>
+                </motion.div>
             </div>
         </section>
     )

@@ -104,7 +104,8 @@ export default function CatalogSections({
         router.replace(`?${params.toString()}`, { scroll: false });
     };
 
-    const handleAddToCart = (productId: string) => {
+    const handleAddToCart = (_productId: string) => {
+        // Placeholder for future cart functionality
     };
 
     const activeFiltersCount =
@@ -149,7 +150,7 @@ export default function CatalogSections({
                             <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-border/60 bg-card text-muted-foreground">
                                 <span>Pilihan Terbaik</span>
                             </div>
-                            <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground to-foreground/50">
+                            <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50">
                                 Katalog Produk
                             </h2>
                             <p className="text-sm lg:text-lg text-muted-foreground font-light max-w-2xl">

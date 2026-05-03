@@ -149,7 +149,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                     <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-16 lg:mb-24">
                         {/* Left Column - Image Gallery */}
                         <div className="space-y-6">
-                            <div className="relative aspect-square rounded-3xl bg-gradient-to-br from-primary/5 via-transparent to-transparent border border-border/50 overflow-hidden flex items-center justify-center p-8 lg:p-12 group">
+                            <div className="relative aspect-square rounded-3xl bg-linear-to-br from-primary/5 via-transparent to-transparent border border-border/50 overflow-hidden flex items-center justify-center p-8 lg:p-12 group">
                                 {/* Decorative elements */}
                                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
                                 
@@ -203,7 +203,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
 
                             {/* Price Box */}
                             <div className="bg-card border border-border/50 rounded-3xl p-6 shadow-sm relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                                 
                                 {product.harga_tukar && product.harga_tukar < product.harga_jual ? (
                                     <div className="space-y-1 relative z-10">

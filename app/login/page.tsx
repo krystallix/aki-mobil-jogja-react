@@ -8,7 +8,7 @@ export default function LoginPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="/" className="flex items-center gap-2 font-medium">
             <Image src="/logo.svg" alt="Logo" width={30} height={30} className="block" />
-            Aki Mobil Jogja.
+            Siswanto Aki.
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">

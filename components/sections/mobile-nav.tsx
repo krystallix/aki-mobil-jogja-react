@@ -37,7 +37,7 @@ export default function MobileNav() {
                     <div className="flex flex-col gap-6 mt-8 p-4">
                         <Link href="/" className="flex items-center gap-2 mb-4">
                             <Image src="/logo.svg" alt="Logo" width={30} height={30} />
-                            <span className="font-bold text-xl">Aki Mobil Jogja</span>
+                            <span className="font-bold text-xl">Siswanto Aki</span>
                         </Link>
 
                         <nav className="flex flex-col gap-4">
@@ -76,7 +76,7 @@ export default function MobileNav() {
                 <Link href="/" className="flex items-center gap-2">
                     <Image src="/logo.svg" alt="Logo" width={30} height={30} className="block" />
                     <span className="font-bold text-xl leading-none tracking-tight">
-                        Aki Mobil Jogja
+                        Siswanto Aki
                     </span>
                 </Link>
             </Sheet>

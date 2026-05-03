@@ -23,7 +23,7 @@ export default function MainNav() {
             <Link href="/" className="flex items-center gap-2">
                 <Image src="/logo.svg" alt="Logo" width={30} height={30} className="block" />
                 <span className="font-bold text-xl leading-none tracking-tight">
-                    Aki Mobil Jogja
+                    Siswanto Aki
                 </span>
             </Link>
 

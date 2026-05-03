@@ -11,7 +11,7 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { motion } from "framer-motion";
 
 interface FilterSectionProps {
     selectedCategories: string[];
@@ -61,7 +61,6 @@ export default function FilterSection({
         { id: "bekas", name: "Bekas" }
     ];
 
-
     const handleCheckboxChange = (
         checked: boolean,
         value: string,
@@ -86,9 +85,9 @@ export default function FilterSection({
     return (
         <>
             <Card className="border-0 shadow-none md:border md:border-border/50 rounded-2xl md:shadow-sm bg-card h-fit overflow-hidden relative group/filter">
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover/filter:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent opacity-0 group-hover/filter:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <CardHeader className="border-b border-border/50 bg-muted/30 pb-4">
-                    <div className="md:flex justify-between items-center hidden relative z-10">
+                    <div className="md:flex justify-between items-center flex relative z-10">
                         <CardTitle className="flex items-center gap-2 text-lg font-bold">
                             <SlidersHorizontal className="size-5 text-primary" />
                             Filter Produk
@@ -256,26 +255,42 @@ export default function FilterSection({
                     </div>
                 </CardContent>
             </Card>
-            <div className="mt-4 relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-800 p-5">
-                <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.12) 0%, transparent 55%)" }} />
-                <div className="relative z-10">
-                    <h3 className="text-sm font-bold mb-1.5 text-white">
-                        Tidak Menemukan Aki?
-                    </h3>
-                    <p className="mb-4 text-white/50 text-xs leading-relaxed">
-                        Hubungi kami untuk rekomendasi yang tepat.
-                    </p>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-4 relative overflow-hidden rounded-2xl bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800 p-5 lg:p-8"
+            >
+                {/* Background Decorations */}
+                <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.15) 0%, transparent 60%)" }} />
+                <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
+
+                <div className="relative z-10 flex items-center justify-between gap-4 lg:block">
+                    <div>
+                        <h3 className="text-sm lg:text-2xl font-bold text-white tracking-tight leading-[1.1]">
+                            Tidak Menemukan<br className="hidden lg:block" /> Aki?
+                        </h3>
+                        <p className="hidden lg:block mt-2 text-white/50 text-sm leading-relaxed max-w-[200px]">
+                            Hubungi kami untuk rekomendasi yang tepat dan akurat.
+                        </p>
+                        <p className="lg:hidden text-white/40 text-[10px] mt-0.5 font-medium uppercase tracking-wider">
+                            Konsultasi Gratis
+                        </p>
+                    </div>
+
                     <a
                         href="https://wa.me/6281354007400"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex w-full items-center justify-center gap-2 bg-white text-zinc-900 px-4 h-10 rounded-full font-bold text-xs hover:bg-zinc-100 transition-colors"
+                        className="inline-flex shrink-0 lg:w-full items-center justify-center gap-2 bg-white text-indigo-950 px-4 lg:px-5 h-9 lg:h-12 lg:mt-6 rounded-full font-bold text-[10px] lg:text-sm hover:bg-indigo-50 transition-all duration-300 shadow-lg shadow-indigo-950/20 active:scale-95"
                     >
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        Konsultasi via WA
+                        <MessageCircle className="size-3.5 lg:size-4" />
+                        <span className="hidden lg:inline">Hubungi Kami</span>
+                        <span className="lg:hidden">Chat WA</span>
                     </a>
                 </div>
-            </div>
+            </motion.div>
         </>
     );
 }

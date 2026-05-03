@@ -3,18 +3,18 @@ import HomeLayout from "@/components/layouts/home-layout";
 import { ShieldCheck, RotateCcw, Clock, Phone, AlertCircle, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "Kebijakan Pengembalian | Aki Mobil Jogja",
+    title: "Kebijakan Pengembalian | Siswanto Aki",
     description:
-        "Baca kebijakan pengembalian dan penukaran produk Aki Mobil Jogja. Kami menjamin kepuasan pelanggan dengan proses klaim garansi yang mudah dan transparan.",
+        "Baca kebijakan pengembalian dan penukaran produk Siswanto Aki. Kami menjamin kepuasan pelanggan dengan proses klaim garansi yang mudah dan transparan.",
     alternates: {
         canonical: "https://akimobiljogja.com/kebijakan-pengembalian",
     },
     openGraph: {
-        title: "Kebijakan Pengembalian | Aki Mobil Jogja",
+        title: "Kebijakan Pengembalian | Siswanto Aki",
         description:
-            "Kebijakan pengembalian dan penukaran produk Aki Mobil Jogja. Garansi resmi dengan proses klaim mudah.",
+            "Kebijakan pengembalian dan penukaran produk Siswanto Aki. Garansi resmi dengan proses klaim mudah.",
         url: "https://akimobiljogja.com/kebijakan-pengembalian",
-        siteName: "Aki Mobil Jogja",
+        siteName: "Siswanto Aki",
         locale: "id_ID",
         type: "website",
     },
@@ -29,7 +29,7 @@ const sections = [
         items: [
             "Produk dikembalikan dalam kondisi asli (tidak terpasang / tidak digunakan).",
             "Pengembalian dilakukan maksimal 3 × 24 jam setelah produk diterima.",
-            "Produk disertai nota/bukti pembelian resmi dari Aki Mobil Jogja.",
+            "Produk disertai nota/bukti pembelian resmi dari Siswanto Aki.",
             "Kemasan produk dalam keadaan utuh dan tidak rusak.",
             "Pengembalian tidak berlaku untuk produk yang rusak akibat kesalahan pemasangan pelanggan.",
         ],
@@ -84,7 +84,7 @@ export default function KebijakanPengembalianPage() {
                     </h1>
                     <p className="text-muted-foreground text-base leading-relaxed">
                         Kepuasan pelanggan adalah prioritas kami. Berikut adalah ketentuan lengkap
-                        terkait pengembalian, penukaran, dan klaim garansi produk Aki Mobil Jogja.
+                        terkait pengembalian, penukaran, dan klaim garansi produk Siswanto Aki.
                     </p>
                     <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
                         <Clock className="h-3.5 w-3.5" />

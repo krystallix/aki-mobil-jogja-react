@@ -6,7 +6,7 @@ import { getArticles } from '@/lib/supabase/data';
 import * as motion from "framer-motion/client";
 
 export const metadata: Metadata = {
-    title: 'Artikel & Tips Aki Mobil - Panduan Lengkap | Aki Mobil Jogja',
+    title: 'Artikel & Tips Aki Mobil - Panduan Lengkap | Siswanto Aki',
     description: 'Kumpulan artikel informatif seputar perawatan aki mobil, tips otomotif, cara memilih aki yang tepat, dan solusi masalah aki. Update terbaru dari ahlinya.',
     keywords: ['tips aki mobil', 'perawatan aki', 'cara merawat aki', 'artikel otomotif', 'panduan aki mobil'],
     alternates: {
@@ -16,12 +16,12 @@ export const metadata: Metadata = {
         title: 'Artikel & Tips Aki Mobil - Panduan Lengkap',
         description: 'Kumpulan artikel informatif seputar perawatan aki mobil, tips otomotif, dan panduan memilih aki yang tepat untuk kendaraan Anda.',
         url: 'https://akimobiljogja.com/artikel',
-        siteName: 'Aki Mobil Jogja',
+        siteName: 'Siswanto Aki',
         images: [{
             url: 'https://akimobiljogja.com/og-artikel.jpg',
             width: 1200,
             height: 630,
-            alt: 'Artikel & Tips Aki Mobil Jogja',
+            alt: 'Artikel & Tips Siswanto Aki',
         }],
         locale: 'id_ID',
         type: 'website',
@@ -83,7 +83,7 @@ export default async function ArtikelPage() {
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
                             <span>Wawasan Otomotif</span>
                         </div>
-                        <h1 className="text-5xl lg:text-8xl font-extrabold tracking-tighter mb-6 lg:mb-8 text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground to-foreground/50 leading-[1.05]">
+                        <h1 className="text-5xl lg:text-8xl font-extrabold tracking-tighter mb-6 lg:mb-8 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50 leading-[1.05]">
                             Artikel & <br />
                             <span className="text-primary">Tips Terbaru</span>
                         </h1>

@@ -177,7 +177,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                     <aside className="lg:col-span-4 space-y-12">
                         {/* Featured Sidebar CTA */}
                         <div className="relative overflow-hidden bg-card border border-border/50 rounded-[2.5rem] p-8 group">
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="relative z-10 space-y-6">
                                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                                     <MessageSquare size={24} />

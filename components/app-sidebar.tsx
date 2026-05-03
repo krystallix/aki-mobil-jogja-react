@@ -83,7 +83,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="/">
                 <Image src="/logo.svg" alt="logo" width={24} height={24} />
-                <span className="text-base font-semibold">Aki Mobil Jogja</span>
+                <span className="text-base font-semibold">Siswanto Aki</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

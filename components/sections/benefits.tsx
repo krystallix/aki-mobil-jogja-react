@@ -33,7 +33,7 @@ export default function BenefitsSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-60px" }}
                         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                        className="lg:col-span-2 relative overflow-hidden rounded-2xl lg:rounded-3xl bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-800 px-5 py-5 lg:p-8 flex flex-col lg:justify-between"
+                        className="lg:col-span-2 relative overflow-hidden rounded-2xl lg:rounded-3xl bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800 px-5 py-5 lg:p-8 flex flex-col lg:justify-between"
                     >
                         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.10) 0%, transparent 55%)" }} />
                         <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />

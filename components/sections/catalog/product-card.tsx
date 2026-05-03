@@ -68,16 +68,16 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
     return (
         <div className="group border border-border/60 rounded-xl lg:rounded-2xl overflow-hidden hover:border-border transition-all duration-300 bg-card relative">
-            
+
             <Link href={`/katalog/product/${product.id}`} className="absolute inset-0 z-20">
                 <span className="sr-only">Lihat detail {product.nama}</span>
             </Link>
 
-            <div className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-muted/5 h-44 border-b border-border/50 p-4 flex items-center justify-center">
+            <div className="relative overflow-hidden bg-linear-to-br from-primary/5 via-background to-muted/5 h-44 border-b border-border/50 p-4 flex items-center justify-center">
                 {/* Decorative indigo glow */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
                 <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-primary/2 rounded-full blur-2xl pointer-events-none" />
-                
+
                 {/* Mobile Ampere Badge Overlay */}
                 {product.specifications[0]?.kapasitas && (
                     <div className="absolute top-3 left-3 z-10 md:hidden flex items-center h-8">
@@ -87,7 +87,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                         </div>
                     </div>
                 )}
-                
+
                 <img
                     src={product.gambar}
                     alt={product.nama}
@@ -122,7 +122,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                     and give buttons a higher z-index.
                 */}
 
-                <h3 className="text-base font-bold line-clamp-2 leading-tight" title={product.nama}>
+                <h3 className="text-base font-bold line-clamp-1 leading-tight" title={product.nama}>
                     <Link href={`/katalog/product/${product.id}`} className="hover:text-primary transition-colors relative z-30">
                         {product.nama}
                     </Link>
@@ -147,7 +147,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
                 {product.applications && product.applications.length > 0 && (
                     <div className="hidden md:block pointer-events-auto">
-                        <p className="text-xs text-muted-foreground line-clamp-2">
+                        <p className="text-xs text-muted-foreground line-clamp-1">
                             {product.applications.map(app => app.nama_mobil).join(", ")}
                         </p>
                     </div>
@@ -191,7 +191,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                                 e.preventDefault();
                                 handleWhatsApp();
                             }}
-                            className="flex-1 h-9 cursor-pointer rounded-full bg-primary text-primary-foreground hover:scale-105 transition-transform shadow-none"
+                            className="flex-1 h-9 cursor-pointer rounded-full bg-linear-to-r from-indigo-600 to-indigo-700 text-white hover:scale-105 transition-all duration-300 shadow-indigo-500/20 border-none"
                         >
                             <ShoppingCart className="w-4 h-4 mr-1.5" />
                             <span className="hidden md:block font-bold">Pesan WA</span>

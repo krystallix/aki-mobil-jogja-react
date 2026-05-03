@@ -1,4 +1,4 @@
-# 🔋 Aki Mobil Jogja
+# 🔋 Siswanto Aki
 
 Website e-commerce modern untuk toko aki mobil di Yogyakarta dengan fitur manajemen produk dan artikel blog.
 
@@ -249,7 +249,7 @@ MIT License - lihat file [LICENSE](LICENSE) untuk detail
 
 ## 👨‍💻 Developer
 
-Dikembangkan dengan ❤️ untuk Aki Mobil Jogja
+Dikembangkan dengan ❤️ untuk Siswanto Aki
 
 ## 🤝 Kontribusi
 

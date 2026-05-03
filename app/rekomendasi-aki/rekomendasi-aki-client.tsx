@@ -41,9 +41,9 @@ function BatteryBadge({ code, ah, type }: { code: string | null; ah: number | nu
     if (!code) return <span className="text-muted-foreground/50 text-xs lg:text-sm font-medium">—</span>;
 
     const styles: Record<typeof type, string> = {
-        standard: "bg-blue-50 text-blue-700 border-blue-200/60 hover:bg-blue-100 hover:border-blue-300 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-800/50 dark:hover:bg-blue-900/50",
-        upgrade: "bg-amber-50 text-amber-700 border-amber-200/60 hover:bg-amber-100 hover:border-amber-300 dark:bg-amber-950/30 dark:text-amber-300 dark:border-amber-800/50 dark:hover:bg-amber-900/50",
-        calcium: "bg-emerald-50 text-emerald-700 border-emerald-200/60 hover:bg-emerald-100 hover:border-emerald-300 dark:bg-emerald-950/30 dark:text-emerald-300 dark:border-emerald-800/50 dark:hover:bg-emerald-900/50",
+        standard: "bg-indigo-600 text-white border-transparent hover:bg-indigo-700",
+        upgrade: "bg-amber-500 text-white border-transparent hover:bg-amber-600",
+        calcium: "bg-emerald-600 text-white border-transparent hover:bg-emerald-700",
     };
 
     return (
@@ -52,7 +52,7 @@ function BatteryBadge({ code, ah, type }: { code: string | null; ah: number | nu
                 href={`/katalog?q=${encodeURIComponent(code)}`}
                 title={`Cari ${code} di katalog`}
                 className={cn(
-                    "inline-flex items-center rounded-md lg:rounded-lg border px-2 py-0.5 lg:px-2.5 lg:py-1 text-[10px] lg:text-xs font-bold w-fit transition-all duration-300 cursor-pointer shadow-sm",
+                    "inline-flex items-center rounded-md lg:rounded-lg border px-2 py-0.5 lg:px-2.5 lg:py-1 text-[10px] lg:text-xs font-bold w-fit transition-all duration-300 cursor-pointer",
                     styles[type]
                 )}
             >
@@ -220,20 +220,20 @@ export default function RekomendasiAkiClient() {
                                     <th className="px-3 py-2 lg:px-6 lg:py-4 text-left font-bold text-muted-foreground whitespace-nowrap uppercase tracking-wider text-[9px] lg:text-[10px]">Kendaraan</th>
                                     <th className="px-3 py-2 lg:px-6 lg:py-4 text-left font-bold text-muted-foreground whitespace-nowrap uppercase tracking-wider text-[9px] lg:text-[10px]">Tahun</th>
                                     <th className="px-3 py-2 lg:px-6 lg:py-4 text-left font-bold whitespace-nowrap">
-                                        <span className="flex items-center gap-1 lg:gap-1.5 text-blue-600 dark:text-blue-400 uppercase tracking-wider text-[9px] lg:text-[10px]">
-                                            <div className="p-0.5 lg:p-1 rounded bg-blue-100 dark:bg-blue-900/30"><Battery className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5" /></div>
+                                        <span className="flex items-center gap-1 lg:gap-1.5 text-indigo-700 dark:text-indigo-400 uppercase tracking-wider text-[9px] lg:text-[10px]">
+                                            <div className="p-0.5 lg:p-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700"><Battery className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5 text-indigo-600" /></div>
                                             Standar
                                         </span>
                                     </th>
                                     <th className="px-3 py-2 lg:px-6 lg:py-4 text-left font-bold whitespace-nowrap">
-                                        <span className="flex items-center gap-1 lg:gap-1.5 text-amber-600 dark:text-amber-400 uppercase tracking-wider text-[9px] lg:text-[10px]">
-                                            <div className="p-0.5 lg:p-1 rounded bg-amber-100 dark:bg-amber-900/30"><Zap className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5" /></div>
+                                        <span className="flex items-center gap-1 lg:gap-1.5 text-amber-700 dark:text-amber-400 uppercase tracking-wider text-[9px] lg:text-[10px]">
+                                            <div className="p-0.5 lg:p-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700"><Zap className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5 text-amber-600" /></div>
                                             Upgrade
                                         </span>
                                     </th>
                                     <th className="px-3 py-2 lg:px-6 lg:py-4 text-left font-bold whitespace-nowrap">
-                                        <span className="flex items-center gap-1 lg:gap-1.5 text-emerald-600 dark:text-emerald-400 uppercase tracking-wider text-[9px] lg:text-[10px]">
-                                            <div className="p-0.5 lg:p-1 rounded bg-emerald-100 dark:bg-emerald-900/30"><Shield className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5" /></div>
+                                        <span className="flex items-center gap-1 lg:gap-1.5 text-emerald-700 dark:text-emerald-400 uppercase tracking-wider text-[9px] lg:text-[10px]">
+                                            <div className="p-0.5 lg:p-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700"><Shield className="h-2.5 w-2.5 lg:h-3.5 lg:w-3.5 text-emerald-600" /></div>
                                             Upgrade Lanjutan
                                         </span>
                                     </th>

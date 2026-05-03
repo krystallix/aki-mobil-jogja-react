@@ -17,13 +17,13 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
     if (!product) {
         return {
-            title: 'Produk Tidak Ditemukan - Aki Mobil Jogja',
+            title: 'Produk Tidak Ditemukan - Siswanto Aki',
         };
     }
 
     // Optimize title to max 60 characters
-    // Suffix " | Aki Mobil Jogja" is 18 chars. Max product name length = 60 - 18 = 42.
-    const suffix = ' | Aki Mobil Jogja';
+    // Suffix " | Siswanto Aki" is 16 chars. Max product name length = 60 - 16 = 44.
+    const suffix = ' | Siswanto Aki';
     const maxNameLength = 60 - suffix.length; // 42
 
     let pageTitle = product.nama;
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
             title: pageTitle,
             description: metaDescription,
             url: productUrl,
-            siteName: 'Aki Mobil Jogja',
+            siteName: 'Siswanto Aki',
             images: product.gambar ? [{
                 url: product.gambar,
                 width: 800,
@@ -101,12 +101,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
         '@type': 'Product',
         name: product.nama,
         image: product.gambar ? [product.gambar] : ['https://akimobiljogja.com/android-chrome-512x512.png'],
-        description: product.deskripsi || `Jual aki mobil ${product.nama} terbaik di Jogja via Aki Mobil Jogja.`,
+        description: product.deskripsi || `Jual aki mobil ${product.nama} terbaik di Jogja via Siswanto Aki.`,
         sku: product.tipe ? String(product.tipe) : `AMJ-${product.id}`,
         mpn: product.tipe ? String(product.tipe) : `AMJ-${product.id}`,
         brand: {
             '@type': 'Brand',
-            name: product.merek || 'Aki Mobil Jogja'
+            name: product.merek || 'Siswanto Aki'
         },
         review: {
             '@type': 'Review',
@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             },
             author: {
                 '@type': 'Person',
-                name: 'Aki Mobil Jogja'
+                name: 'Siswanto Aki'
             }
         },
         aggregateRating: {
@@ -135,7 +135,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             availability: product.stok > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
             seller: {
                 '@type': 'Organization',
-                name: 'Aki Mobil Jogja'
+                name: 'Siswanto Aki'
             },
             hasMerchantReturnPolicy: {
                 '@type': 'MerchantReturnPolicy',

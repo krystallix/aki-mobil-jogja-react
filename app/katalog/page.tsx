@@ -7,7 +7,7 @@ import JsonLd from '@/components/json-ld';
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
-    title: 'Katalog Aki Mobil - Harga Terbaru | Aki Mobil Jogja',
+    title: 'Katalog Aki Mobil - Harga Terbaru | Siswanto Aki',
     description: 'Jual berbagai merek aki mobil: GS Astra, Yuasa, Incoe, Panasonic. Tersedia aki basah, kering (MF), hybrid untuk segala jenis mobil. Harga bersaing, garansi resmi.',
     keywords: ['katalog aki mobil', 'harga aki mobil', 'aki GS Astra', 'aki Yuasa', 'aki mobil murah jogja'],
     alternates: {
@@ -17,12 +17,12 @@ export const metadata: Metadata = {
         title: 'Katalog Aki Mobil - Harga Terbaru',
         description: 'Jual berbagai merek aki mobil: GS Astra, Yuasa, Incoe, Panasonic. Tersedia aki basah, kering (MF), hybrid untuk segala jenis mobil.',
         url: 'https://akimobiljogja.com/katalog',
-        siteName: 'Aki Mobil Jogja',
+        siteName: 'Siswanto Aki',
         images: [{
             url: 'https://akimobiljogja.com/og-catalog.jpg',
             width: 1200,
             height: 630,
-            alt: 'Katalog Aki Mobil Jogja',
+            alt: 'Katalog Siswanto Aki',
         }],
         locale: 'id_ID',
         type: 'website',
