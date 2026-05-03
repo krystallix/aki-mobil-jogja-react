@@ -80,7 +80,6 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             title: pageTitle,
             description: metaDescription,
             images: article.featured_image ? [article.featured_image] : [],
-            name: 'Siswanto Aki',
         },
     };
 }
