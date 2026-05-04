@@ -238,7 +238,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
             ) : (
                 <>
                     {/* ════ MOBILE: vertical list ════ */}
-                    <div className="flex flex-col divide-y divide-border/40 border border-border/40 rounded-xl overflow-hidden md:hidden">
+                    <div className="flex flex-col gap-3 md:hidden">
                         {paginated.map((battery, i) => {
                             const spec = battery.specifications?.[0]
                             return (
@@ -249,60 +249,63 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                     transition={{ delay: i * 0.03, duration: 0.3 }}
                                     className="relative"
                                 >
-                                    <div className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                                    <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
                                         {/* Main Content (Snap Start) */}
-                                        <div
-                                            className="w-full shrink-0 snap-start flex items-center gap-4 px-4 py-3.5 bg-card hover:bg-muted/30 transition-colors duration-200 cursor-pointer active:bg-muted/50"
-                                            onClick={() => setEditTarget(battery)}
-                                        >
-                                            {/* Thumbnail */}
-                                            <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-border/50 bg-muted/30">
-                                                {battery.gambar ? (
-                                                    <Image
-                                                        src={battery.gambar}
-                                                        alt={battery.nama}
-                                                        fill
-                                                        className="object-contain"
-                                                    />
-                                                ) : (
-                                                    <div className="absolute inset-0 flex items-center justify-center">
-                                                        <Package className="w-6 h-6 text-muted-foreground/30" />
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Info */}
-                                            <div className="flex-1 min-w-0 flex justify-between items-start gap-2">
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-md font-bold text-foreground leading-snug line-clamp-1">{battery.nama}</p>
-                                                    <div className="flex flex-col mt-1.5 space-y-0.5">
-                                                        <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
-                                                        {battery.harga_tukar && (
-                                                            <p className="text-[11px] text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
-                                                        )}
-                                                    </div>
+                                        <div className="w-full shrink-0 snap-center p-1 rounded-2xl border border-border/60 bg-muted/50 shadow-sm transition-all duration-300">
+                                            <div
+                                                className="flex items-center gap-4 px-3 py-3 bg-card rounded-[calc(1rem-4px)] cursor-pointer active:bg-muted/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+                                                onClick={() => setEditTarget(battery)}
+                                            >
+                                                {/* Thumbnail */}
+                                                <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-border/50 bg-muted/30">
+                                                    {battery.gambar ? (
+                                                        <Image
+                                                            src={battery.gambar}
+                                                            alt={battery.nama}
+                                                            fill
+                                                            className="object-contain"
+                                                        />
+                                                    ) : (
+                                                        <div className="absolute inset-0 flex items-center justify-center">
+                                                            <Package className="w-6 h-6 text-muted-foreground/30" />
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <div className="flex flex-col items-end gap-1.5 shrink-0 pt-0.5">
-                                                    <div className="flex items-center gap-1">
-                                                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] capitalize font-bold border ${getKondisiStyle(battery.kondisi)}`}>
-                                                            {battery.kondisi}
-                                                        </span>
-                                                        {spec?.kapasitas && (
-                                                            <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
-                                                                {spec.kapasitas}
-                                                            </span>
-                                                        )}
+
+                                                {/* Info */}
+                                                <div className="flex-1 min-w-0 flex justify-between items-start gap-2">
+                                                    <div className="flex-1 min-w-0">
+
+                                                        <p className="text-md font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
+                                                        <div className="flex flex-col mt-1.5 space-y-0.5">
+                                                            <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
+                                                            {battery.harga_tukar && (
+                                                                <p className="text-[11px] text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
-                                                        {battery.stok} Unit
-                                                    </span>
+                                                    <div className="flex flex-col items-end gap-1.5 shrink-0 pt-0.5">
+                                                        <div className="flex items-center gap-1">
+                                                            <span className={`px-1.5 py-0.5 rounded-full text-[9px] capitalize font-bold border ${getKondisiStyle(battery.kondisi)}`}>
+                                                                {battery.kondisi}
+                                                            </span>
+                                                            {spec?.kapasitas && (
+                                                                <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
+                                                                    {spec.kapasitas}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
+                                                            {battery.stok} Unit
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Swipe Actions (Snap End) */}
                                         <button
-                                            className="w-20 shrink-0 snap-end bg-destructive flex flex-col items-center justify-center text-primary-foreground hover:bg-destructive/90 transition-colors"
+                                            className="w-20 shrink-0 snap-center rounded-2xl border border-destructive/30 bg-destructive flex flex-col items-center justify-center text-white hover:bg-destructive/90 transition-colors shadow-sm"
                                             onClick={() => setDeleteTarget(battery)}
                                             aria-label={`Hapus ${battery.nama}`}
                                         >
@@ -336,7 +339,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                     className="group"
                                 >
                                     {/* Outer bezel */}
-                                    <div className="p-1 rounded-[1.25rem] border border-border/40 bg-muted/30 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-primary/30 group-hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]">
+                                    <div className="p-1 rounded-[1.25rem] border border-border/60 bg-muted/50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-primary/30 group-hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]">
                                         {/* Inner core */}
                                         <div className="bg-card rounded-[calc(1.25rem-4px)] overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)] flex flex-col h-full">
                                             {/* Image */}
@@ -369,10 +372,8 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                             <div className="flex flex-col flex-1 p-3.5 space-y-3">
                                                 {/* Name */}
                                                 <div>
-                                                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground truncate mb-1">
-                                                        {battery.merek} · {battery.tipe}
-                                                    </p>
-                                                    <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
+
+                                                    <p className="text-md font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
                                                 </div>
 
                                                 {/* Tags */}
@@ -415,7 +416,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                         Edit
                                                     </button>
                                                     <button
-                                                        className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all duration-200 active:scale-[0.97]"
+                                                        className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => setDeleteTarget(battery)}
                                                         aria-label={`Hapus ${battery.nama}`}
                                                     >
