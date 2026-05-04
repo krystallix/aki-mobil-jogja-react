@@ -376,15 +376,15 @@ export default function PelangganPage() {
                                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
                                     
                                     {/* MAIN FORM */}
-                                    <div className="xl:col-span-2 flex flex-col gap-4 lg:gap-6">
-                                        <Card className="rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden">
+                                    <div className="xl:col-span-2">
+                                        <Card className="h-full rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden flex flex-col">
                                             <CardHeader className="pb-4 border-b border-border/40 bg-muted/20 px-5 lg:px-6">
                                                 <CardTitle className="text-[11px] lg:text-xs font-extrabold uppercase tracking-widest text-foreground/80 flex items-center gap-2">
                                                     <span className="w-2 h-2 rounded-full bg-primary" />
                                                     Informasi Dasar
                                                 </CardTitle>
                                             </CardHeader>
-                                            <CardContent className="space-y-5 pt-5 lg:pt-6 px-5 lg:px-6 pb-6">
+                                            <CardContent className="flex-1 space-y-5 pt-5 lg:pt-6 px-5 lg:px-6 pb-6">
                                                 <div className="space-y-2">
                                                     <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                                                         Nama Lengkap <span className="text-destructive">*</span>
@@ -445,16 +445,16 @@ export default function PelangganPage() {
                                     </div>
 
                                     {/* ANALYTICS / METADATA SIDEBAR */}
-                                    <div className="flex flex-col gap-4 lg:gap-6">
+                                    <div className="h-full">
                                         {formData.id ? (
-                                            <Card className="rounded-xl lg:rounded-2xl border border-border/60 bg-muted/10 shadow-sm">
+                                            <Card className="h-full rounded-xl lg:rounded-2xl border border-border/60 bg-muted/10 shadow-sm flex flex-col">
                                                 <CardHeader className="pb-4 border-b border-border/40 bg-muted/20 px-5 lg:px-6">
                                                     <CardTitle className="text-[11px] lg:text-xs font-extrabold uppercase tracking-widest text-foreground/80 flex items-center gap-2">
                                                         <span className="w-2 h-2 rounded-full bg-blue-500" />
                                                         Riwayat Transaksi
                                                     </CardTitle>
                                                 </CardHeader>
-                                                <CardContent className="pt-5 lg:pt-6 px-5 lg:px-6 pb-6 space-y-4 lg:space-y-5">
+                                                <CardContent className="flex-1 flex flex-col justify-between pt-5 lg:pt-6 px-5 lg:px-6 pb-6 space-y-4 lg:space-y-5">
                                                     <div className="bg-background rounded-xl p-4 lg:p-5 border border-border/40 shadow-sm">
                                                         <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
                                                             <ShoppingBag className="w-3.5 h-3.5" /> Total Pembelian
@@ -494,7 +494,7 @@ export default function PelangganPage() {
                                                 </CardContent>
                                             </Card>
                                         ) : (
-                                            <Card className="rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm border-dashed flex flex-col items-center justify-center p-8 text-center h-48 lg:h-64">
+                                            <Card className="h-full min-h-[16rem] rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm border-dashed flex flex-col items-center justify-center p-8 text-center">
                                                 <div className="w-14 h-14 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center mb-4">
                                                     <UserCircle className="w-6 h-6 text-muted-foreground/50" />
                                                 </div>
