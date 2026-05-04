@@ -340,10 +340,10 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="md:max-w-5xl max-h-[90vh] overflow-hidden p-0 flex flex-col">
-                <DialogHeader className="p-6 border-b">
-                    <DialogTitle className="text-xl">Edit Produk</DialogTitle>
-                    <DialogDescription>
+            <DialogContent className="w-[calc(100%-1rem)] sm:w-full md:max-w-5xl max-h-[95vh] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden p-0 flex flex-col border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
+                <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
+                    <DialogTitle className="text-2xl font-extrabold tracking-tight">Edit Produk</DialogTitle>
+                    <DialogDescription className="text-[13px] font-medium text-muted-foreground mt-1">
                         Perbarui informasi produk. Field bertanda <span className="text-destructive">*</span>{" "}
                         wajib diisi.
                     </DialogDescription>
@@ -357,7 +357,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                     <div className="sticky top-0 space-y-4">
                                         <FormLabel className="text-sm font-semibold">Gambar Produk</FormLabel>
                                         {imagePreview ? (
-                                            <div className="relative aspect-square w-full border-2 border-muted rounded-xl overflow-hidden bg-muted/20">
+                                            <div className="relative aspect-square w-full border border-border/50 rounded-[1.5rem] overflow-hidden bg-muted/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                                                 <Image
                                                     src={imagePreview}
                                                     alt="Preview"
@@ -375,14 +375,14 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                 </Button>
                                             </div>
                                         ) : (
-                                            <label className="flex flex-col items-center justify-center aspect-square w-full border-2 border-dashed rounded-xl cursor-pointer hover:bg-accent/50 hover:border-primary/50 transition-all group">
+                                            <label className="flex flex-col items-center justify-center aspect-square w-full rounded-[1.5rem] border border-border/60 bg-muted/20 cursor-pointer hover:bg-muted/40 hover:border-primary/40 transition-all duration-300 group shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                                                 <div className="flex flex-col items-center justify-center p-4 text-center">
-                                                    <ImageIcon className="w-10 h-10 mb-2 text-muted-foreground group-hover:text-primary transition-colors" />
-                                                    <p className="text-sm font-medium">Unggah Foto</p>
-                                                    <p className="text-xs text-muted-foreground mt-1">
-                                                        Format 1:1 disarankan
-                                                        <br />
-                                                        (Max 5MB)
+                                                    <div className="w-14 h-14 mb-3 rounded-full bg-background border border-border/50 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+                                                        <ImageIcon className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                                                    </div>
+                                                    <p className="text-[15px] font-bold">Unggah Foto</p>
+                                                    <p className="text-[11px] text-muted-foreground mt-1.5 leading-relaxed">
+                                                        Format 1:1 disarankan<br />(Max 5MB)
                                                     </p>
                                                 </div>
                                                 <input
@@ -404,8 +404,8 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
 
                                 <div className="md:col-span-8 space-y-8">
                                     <div className="space-y-4">
-                                        <h3 className="text-sm flex gap-2 font-bold text-primary uppercase tracking-wider border-b pb-2">
-                                            <div className="w-1 h-5 bg-primary" />
+                                        <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
+                                            <div className="w-1.5 h-4 bg-primary rounded-full" />
                                             Informasi Dasar
                                         </h3>
                                         <FormField
@@ -419,7 +419,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                     <FormControl>
                                                         <Input
                                                             placeholder="Contoh: GS Astra NS60L Maintenance Free"
-                                                            className="h-10"
+                                                            className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                             {...field}
                                                         />
                                                     </FormControl>
@@ -438,7 +438,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <RequiredLabel>Merek</RequiredLabel>
                                                         </FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="GS Astra" className="h-10" {...field} />
+                                                            <Input placeholder="GS Astra" className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30" {...field} />
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
@@ -453,7 +453,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <RequiredLabel>Tipe</RequiredLabel>
                                                         </FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="NS60L" className="h-10" {...field} />
+                                                            <Input placeholder="NS60L" className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30" {...field} />
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
@@ -472,7 +472,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                         </FormLabel>
                                                         <Select onValueChange={field.onChange} value={field.value}>
                                                             <FormControl>
-                                                                <SelectTrigger className="h-10">
+                                                                <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
                                                                     <SelectValue placeholder="Pilih Kategori" />
                                                                 </SelectTrigger>
                                                             </FormControl>
@@ -495,7 +495,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                     <FormItem>
                                                         <FormLabel className="text-xs">Masa Garansi</FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="12 Bulan" className="h-10" {...field} />
+                                                            <Input placeholder="12 Bulan" className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30" {...field} />
                                                         </FormControl>
                                                     </FormItem>
                                                 )}
@@ -504,8 +504,8 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="text-sm flex gap-2 font-bold text-primary uppercase tracking-wider border-b pb-2">
-                                            <div className="w-1 h-5 bg-primary" />
+                                        <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
+                                            <div className="w-1.5 h-4 bg-primary rounded-full" />
                                             Harga & Stok
                                         </h3>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -521,7 +521,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -542,7 +542,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -566,7 +566,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -587,7 +587,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -600,8 +600,8 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="text-sm flex gap-2 font-bold text-primary uppercase tracking-wider border-b pb-2">
-                                            <div className="w-1 h-5 bg-primary" />
+                                        <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
+                                            <div className="w-1.5 h-4 bg-primary rounded-full" />
                                             Spesifikasi
                                         </h3>
                                         <div className="grid grid-cols-3 gap-4">
@@ -616,7 +616,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                         <FormControl>
                                                             <Input
                                                                 placeholder="contoh: 45"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 {...field}
                                                             />
                                                         </FormControl>
@@ -634,7 +634,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                         </FormLabel>
                                                         <Select onValueChange={field.onChange} value={field.value}>
                                                             <FormControl>
-                                                                <SelectTrigger className="h-10">
+                                                                <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
                                                                     <SelectValue placeholder="Pilih" />
                                                                 </SelectTrigger>
                                                             </FormControl>
@@ -655,7 +655,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                         <FormLabel className="text-xs">Polaritas</FormLabel>
                                                         <Select onValueChange={field.onChange} value={field.value}>
                                                             <FormControl>
-                                                                <SelectTrigger className="h-10">
+                                                                <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
                                                                     <SelectValue placeholder="Pilih" />
                                                                 </SelectTrigger>
                                                             </FormControl>
@@ -681,7 +681,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -700,7 +700,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -719,7 +719,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                             <Input
                                                                 type="number"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -739,7 +739,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                                 type="number"
                                                                 step="0.01"
                                                                 placeholder="0"
-                                                                className="h-10"
+                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                                                 value={field.value}
                                                                 onChange={handleNumberChange(field)}
                                                             />
@@ -752,8 +752,8 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                     </div>
 
                                     <div className="space-y-4 pb-4">
-                                        <h3 className="text-sm flex gap-2 font-bold text-primary uppercase tracking-wider border-b pb-2">
-                                            <div className="w-1 h-5 bg-primary" />
+                                        <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
+                                            <div className="w-1.5 h-4 bg-primary rounded-full" />
                                             Kompatibilitas
                                         </h3>
                                         <div className="space-y-3">
@@ -763,7 +763,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                 onChange={(e) => setMobilInput(e.target.value)}
                                                 onKeyDown={handleMobilKeyDown}
                                                 onBlur={handleMobilBlur}
-                                                className="h-10"
+                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                             />
                                             {mobil.length > 0 && (
                                                 <div className="flex flex-wrap gap-2 p-3 border rounded-xl bg-muted/30">
@@ -793,17 +793,17 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                 </div>
                             </div>
 
-                            <DialogFooter className="mt-6 pt-6 border-t flex gap-3">
+                            <DialogFooter className="mt-6 px-6 py-5 border-t border-border/40 bg-muted/10 flex gap-3 sm:rounded-b-[2rem]">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     onClick={() => onOpenChange(false)}
                                     disabled={isSubmitting}
-                                    className="w-full sm:w-auto"
+                                    className="w-full sm:w-auto h-12 rounded-xl font-bold border-border/60 hover:bg-muted/50"
                                 >
                                     Batal
                                 </Button>
-                                <Button type="submit" disabled={isSubmitting}>
+                                <Button type="submit" disabled={isSubmitting} className="h-12 rounded-xl font-bold w-full sm:w-auto shadow-[0_4px_12px_-4px_rgba(0,0,0,0.15)]">
                                     <Save />
                                     {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
                                 </Button>
