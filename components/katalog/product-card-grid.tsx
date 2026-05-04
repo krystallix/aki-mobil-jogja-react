@@ -251,7 +251,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                 >
                                     <div className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                                         {/* Main Content (Snap Start) */}
-                                        <div 
+                                        <div
                                             className="w-full shrink-0 snap-start flex items-center gap-4 px-4 py-3.5 bg-card hover:bg-muted/30 transition-colors duration-200 cursor-pointer active:bg-muted/50"
                                             onClick={() => setEditTarget(battery)}
                                         >
@@ -272,29 +272,30 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                             </div>
 
                                             {/* Info */}
-                                            <div className="flex-1 min-w-0 space-y-0.5">
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground truncate">
-                                                    {battery.merek} · {battery.tipe}
-                                                </p>
-                                                <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
-                                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
-                                                    <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
-                                                    {battery.harga_tukar && (
-                                                        <p className="text-xs text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
-                                                    )}
+                                            <div className="flex-1 min-w-0 flex justify-between items-start gap-2">
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
+                                                    <div className="flex flex-col mt-1.5 space-y-0.5">
+                                                        <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
+                                                        {battery.harga_tukar && (
+                                                            <p className="text-[11px] text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-1.5 pt-0.5">
-                                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${getKondisiStyle(battery.kondisi)}`}>
-                                                        {battery.kondisi}
-                                                    </span>
-                                                    <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
-                                                        {battery.stok} unit
-                                                    </span>
-                                                    {spec?.kapasitas && (
-                                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
-                                                            {spec.kapasitas}
+                                                <div className="flex flex-col items-end gap-1.5 shrink-0 pt-0.5">
+                                                    <div className="flex items-center gap-1">
+                                                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] capitalize font-bold border ${getKondisiStyle(battery.kondisi)}`}>
+                                                            {battery.kondisi}
                                                         </span>
-                                                    )}
+                                                        {spec?.kapasitas && (
+                                                            <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
+                                                                {spec.kapasitas}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
+                                                        {battery.stok} Unit
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -399,7 +400,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                         )}
                                                     </div>
                                                     <span className={`text-[10px] font-bold shrink-0 ${getStokStyle(battery.stok)}`}>
-                                                        {battery.stok}u
+                                                        {battery.stok} Unit
                                                     </span>
                                                 </div>
 
