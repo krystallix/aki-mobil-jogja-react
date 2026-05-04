@@ -208,6 +208,14 @@ export default function PelangganPage() {
         (c.kota && c.kota.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
+    const maskPhoneNumber = (phone: string | null) => {
+        if (!phone) return "";
+        if (phone.length <= 8) return phone;
+        const first4 = phone.substring(0, 4);
+        const last4 = phone.substring(phone.length - 4);
+        return `${first4}xxx${last4}`;
+    };
+
     const formatRupiah = (angka: number) => {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -279,7 +287,7 @@ export default function PelangganPage() {
                                                     {customer.no_hp && (
                                                         <span className="flex items-center text-[10px] lg:text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-md border border-border/40">
                                                             <Phone className="w-2.5 h-2.5 mr-1" />
-                                                            {customer.no_hp}
+                                                            {maskPhoneNumber(customer.no_hp)}
                                                         </span>
                                                     )}
                                                     {customer.kota && (
