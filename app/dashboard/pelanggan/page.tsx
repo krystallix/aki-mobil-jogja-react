@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layouts/dashboard-layout";
-import { 
-    Search, 
-    Plus, 
-    MoreVertical, 
-    Trash2, 
-    Save, 
-    Loader2, 
+import {
+    Search,
+    Plus,
+    MoreVertical,
+    Trash2,
+    Save,
+    Loader2,
     ChevronLeft,
     Phone,
     MapPin,
@@ -76,12 +76,12 @@ export default function PelangganPage() {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
-    
+
     // Editor State
     const [formData, setFormData] = useState<Customer>(DEFAULT_CUSTOMER);
     const [isSaving, setIsSaving] = useState(false);
     const [isMobileListOpen, setIsMobileListOpen] = useState(true);
-    
+
     // Delete Dialog
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
@@ -128,7 +128,7 @@ export default function PelangganPage() {
         try {
             setIsSaving(true);
             const isNew = !formData.id;
-            
+
             const payload = {
                 nama: formData.nama,
                 no_hp: formData.no_hp || null,
@@ -176,7 +176,7 @@ export default function PelangganPage() {
 
     const handleDeleteConfirm = async () => {
         if (!customerToDelete) return;
-        
+
         try {
             setIsDeleting(true);
             const { error } = await supabase
@@ -185,7 +185,7 @@ export default function PelangganPage() {
                 .eq('id', customerToDelete.id);
 
             if (error) throw error;
-            
+
             setCustomers(customers.filter(c => c.id !== customerToDelete.id));
             if (formData.id === customerToDelete.id) {
                 setFormData(DEFAULT_CUSTOMER);
@@ -202,7 +202,7 @@ export default function PelangganPage() {
         }
     };
 
-    const filteredCustomers = customers.filter(c => 
+    const filteredCustomers = customers.filter(c =>
         c.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (c.no_hp && c.no_hp.includes(searchQuery)) ||
         (c.kota && c.kota.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -226,12 +226,12 @@ export default function PelangganPage() {
 
     return (
         <DashboardLayout>
-            <div className="h-[calc(100vh-4rem)]">
+            <div className="h-full">
                 <div className="grid grid-cols-12 gap-0 h-full">
 
                     {/* ── LEFT SIDEBAR: LIST ── */}
-                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full border-r border-border/40 bg-background/50`}>
-                        
+                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full min-h-0 border-r border-border/40 bg-background/50`}>
+
                         <div className="flex-none p-4 md:p-5 border-b border-border/40 bg-background/80 backdrop-blur-xl space-y-4">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl lg:text-2xl font-extrabold tracking-tight text-foreground">Pelanggan</h2>
@@ -262,7 +262,7 @@ export default function PelangganPage() {
                             </div>
                         </div>
 
-                        <ScrollArea className="flex-1">
+                        <ScrollArea className="flex-1 min-h-0">
                             <div className="p-3 lg:p-4 flex flex-col gap-2">
                                 {isLoading ? (
                                     <div className="flex justify-center p-8">
@@ -282,7 +282,7 @@ export default function PelangganPage() {
                                                 <p className={`text-[15px] font-bold leading-tight truncate ${formData.id === customer.id ? 'text-primary' : 'text-foreground'}`}>
                                                     {customer.nama}
                                                 </p>
-                                                
+
                                                 <div className="flex items-center gap-1.5 flex-wrap">
                                                     {customer.no_hp && (
                                                         <span className="flex items-center text-[10px] lg:text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-md border border-border/40">
@@ -339,7 +339,7 @@ export default function PelangganPage() {
 
                     {/* ── RIGHT SIDE: EDITOR ── */}
                     <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col bg-background/50`}>
-                        
+
                         {/* EDITOR HEADER */}
                         <div className="flex-none p-4 md:p-6 border-b border-border/40 bg-background/80 backdrop-blur-xl z-10 relative">
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
@@ -370,7 +370,7 @@ export default function PelangganPage() {
                                         ) : (
                                             <>
                                                 <Save className="w-4 h-4" />
-                                                Simpan Data
+                                                Simpan
                                             </>
                                         )}
                                     </Button>
@@ -382,13 +382,13 @@ export default function PelangganPage() {
                         <ScrollArea className="flex-1">
                             <div className="p-4 md:p-6 lg:p-8 w-full">
                                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
-                                    
+
                                     {/* MAIN FORM */}
                                     <div className="xl:col-span-2">
                                         <Card className="h-full rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden flex flex-col">
                                             <CardHeader className="pb-4 border-b border-border/40 bg-muted/20 px-5 lg:px-6">
                                                 <CardTitle className="text-[11px] lg:text-xs font-extrabold uppercase tracking-widest text-foreground/80 flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full bg-primary" />
+                                                    <span className="w-1 h-5 rounded-full bg-primary text-primary" />
                                                     Informasi Dasar
                                                 </CardTitle>
                                             </CardHeader>
@@ -471,7 +471,7 @@ export default function PelangganPage() {
                                                             {formData.total_pembelian} <span className="text-sm font-medium text-muted-foreground">kali</span>
                                                         </p>
                                                     </div>
-                                                    
+
                                                     <div className="bg-background rounded-xl p-4 lg:p-5 border border-border/40 shadow-sm">
                                                         <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
                                                             <TrendingUp className="w-3.5 h-3.5" /> Nilai Transaksi
@@ -522,12 +522,12 @@ export default function PelangganPage() {
 
             {/* DELETE DIALOG */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-[425px] rounded-2xl lg:rounded-3xl overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
+                <DialogContent className="sm:max-w-[425px] p-0 rounded-2xl lg:rounded-3xl overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
                     <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
                         <DialogTitle className="text-xl font-extrabold tracking-tight">Hapus Pelanggan</DialogTitle>
                     </DialogHeader>
 
-                    <div className="px-6 py-5">
+                    <div className="px-6 py-4">
                         <Alert variant="destructive" className="bg-destructive/10 border-destructive/30 rounded-xl">
                             <TriangleAlert className="h-5 w-5" />
                             <AlertTitle className="font-bold">Perhatian!</AlertTitle>
@@ -537,12 +537,12 @@ export default function PelangganPage() {
                         </Alert>
                     </div>
 
-                    <DialogFooter className="px-6 py-4 border-t border-border/40 bg-muted/20 gap-2 sm:gap-0">
+                    <DialogFooter className="px-6 py-5 border-t border-border/40 bg-muted/20 flex sm:justify-end gap-3 mb-0.5">
                         <Button
                             variant="outline"
                             onClick={() => setDeleteDialogOpen(false)}
                             disabled={isDeleting}
-                            className="h-11 rounded-full font-bold border-border/60 px-6"
+                            className="h-11 rounded-full font-bold border-border/60 px-6 m-0"
                         >
                             Batal
                         </Button>
@@ -550,7 +550,7 @@ export default function PelangganPage() {
                             onClick={handleDeleteConfirm}
                             disabled={isDeleting}
                             variant="destructive"
-                            className="gap-2 h-11 rounded-full font-bold bg-destructive hover:bg-destructive/90 text-destructive-foreground px-6"
+                            className="gap-2 h-11 rounded-full font-bold bg-destructive hover:bg-destructive/90 text-white px-6 m-0"
                         >
                             {isDeleting ? (
                                 <>

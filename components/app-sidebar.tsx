@@ -22,6 +22,7 @@ import {
   Settings2Icon,
   UsersIcon
 } from "lucide-react"
+import Link from "next/link"
 import Image from "next/image"
 
 const data = {
@@ -54,8 +55,8 @@ const data = {
   ],
   navBusiness: [
     {
-      title: "Pesanan",
-      url: "/dashboard/pesanan",
+      title: "Transaksi",
+      url: "/dashboard/transaksi",
       icon: <ShoppingCartIcon />,
     },
     {
@@ -81,12 +82,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="h-12 bg-muted/20 border border-border/40 rounded-[1.25rem] px-3 transition-colors hover:bg-muted/40"
             >
-              <a href="/" className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-background border border-border/60 flex items-center justify-center shadow-sm shrink-0">
                   <Image src="/logo.svg" alt="logo" width={20} height={20} className="object-contain" />
                 </div>
                 <span className="text-lg md:text-base font-bold tracking-tight text-foreground">Siswanto Aki</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

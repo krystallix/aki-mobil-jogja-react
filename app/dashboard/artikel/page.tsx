@@ -327,12 +327,12 @@ export default function ArtikelPage() {
 
     return (
         <DashboardLayout>
-            <div className="h-[calc(100vh-4rem)]">
+            <div className="h-full">
                 <div className="grid grid-cols-12 gap-0 h-full">
 
                     {/* LEFT SIDEBAR */}
-                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full border-r border-border/40 bg-background/50`}>
-                        <div className="flex-none p-4 border-b border-border/40 bg-background/80 backdrop-blur-xl space-y-4">
+                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full min-h-0 border-r border-border/40 bg-background/50`}>
+                        <div className="flex-none p-4 border-b bordper-border/40 bg-background/80 backdrop-blur-xl space-y-4">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-extrabold tracking-tight">Daftar Artikel</h2>
                                 <Button size="sm" onClick={handleCreateNew} className="h-8 pl-2.5 pr-2 rounded-lg gap-1.5 bg-primary text-primary-foreground font-bold text-[11px] hover:bg-primary/90 active:scale-[0.97] transition-all duration-200">
