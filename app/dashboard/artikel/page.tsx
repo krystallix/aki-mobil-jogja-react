@@ -24,6 +24,7 @@ import {
     DropdownMenuTrigger,
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     Dialog,
     DialogContent,
@@ -330,56 +331,67 @@ export default function ArtikelPage() {
                 <div className="grid grid-cols-12 gap-0 h-full">
 
                     {/* LEFT SIDEBAR */}
-                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full border-r bg-background`}>
-                        <div className="flex-none p-4 border-b space-y-4">
+                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full border-r border-border/40 bg-background/50`}>
+                        <div className="flex-none p-4 border-b border-border/40 bg-background/80 backdrop-blur-xl space-y-4">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-bold">Daftar Artikel</h2>
-                                <Button size="sm" onClick={handleCreateNew} variant="outline">
-                                    <Plus className="w-4 h-4 mr-1" /> Baru
+                                <h2 className="text-xl font-extrabold tracking-tight">Daftar Artikel</h2>
+                                <Button size="sm" onClick={handleCreateNew} className="h-8 pl-2.5 pr-2 rounded-lg gap-1.5 bg-primary text-primary-foreground font-bold text-[11px] hover:bg-primary/90 active:scale-[0.97] transition-all duration-200">
+                                    <span>Tambah</span>
+                                    <span className="w-5 h-5 rounded-md bg-white/20 flex items-center justify-center shrink-0">
+                                        <Plus className="w-3 h-3" />
+                                    </span>
                                 </Button>
                             </div>
 
-                            <div className="relative">
-                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <div className="relative group">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
                                 <Input
                                     placeholder="Cari artikel..."
-                                    className="pl-8"
+                                    className="pl-9 h-10 rounded-xl border-border/60 bg-card shadow-none text-sm font-medium focus-visible:ring-1 focus-visible:ring-primary/50"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery("")}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
+                                )}
                             </div>
                         </div>
 
                         <ScrollArea className="flex-1">
-                            <div className="p-2 space-y-1">
+                            <div className="p-3 space-y-2">
                                 {isLoadingList ? (
-                                    <div className="flex justify-center p-4">
-                                        <Loader2 className="animate-spin" />
+                                    <div className="flex justify-center p-8">
+                                        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground/50" />
                                     </div>
-                                ) : filteredArticles.map((article) => (
-                                    <div
+                                ) : filteredArticles.map((article, i) => (
+                                    <motion.div
                                         key={article.id}
-                                        className={`group relative cursor-pointer transition-all duration-300 rounded-xl p-3.5 mb-2 ${formData.id === article.id ? 'bg-primary/10 border-primary/40 shadow-sm' : 'border border-border/40 hover:border-primary/30 hover:bg-muted/30 hover:shadow-sm'}`}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: i * 0.04, duration: 0.3 }}
+                                        className={`group relative cursor-pointer transition-all duration-300 rounded-[1.25rem] p-4 border ${formData.id === article.id ? 'bg-primary/10 border-primary/40 shadow-sm' : 'bg-background border-border/60 hover:border-primary/40 hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]'}`}
                                         onClick={() => handleSelectArticle(article)}
                                     >
-                                        <div className="flex items-start justify-between gap-2">
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <Badge
-                                                        variant={article.status === 'published' ? 'default' : 'secondary'}
-                                                        className="text-[10px] px-1.5 py-0"
-                                                    >
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="flex-1 min-w-0 flex flex-col gap-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border uppercase tracking-widest ${article.status === 'published' ? 'bg-primary text-primary-foreground border-transparent' : 'bg-transparent text-muted-foreground border-border/60'}`}>
                                                         {article.status}
-                                                    </Badge>
-                                                    <span className="text-[10px] text-muted-foreground">
+                                                    </span>
+                                                    <span className="text-[10px] font-bold text-muted-foreground/70">
                                                         {article.created_at ? new Date(article.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : 'Baru'}
                                                     </span>
                                                 </div>
-                                                <h3 className="font-medium line-clamp-2 text-sm mb-1">
+                                                <p className="text-[15px] font-bold text-foreground leading-snug line-clamp-2">
                                                     {article.title || 'Tanpa Judul'}
-                                                </h3>
+                                                </p>
                                                 {article.excerpt && (
-                                                    <p className="text-[11px] text-muted-foreground line-clamp-1">
+                                                    <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
                                                         {article.excerpt}
                                                     </p>
                                                 )}
@@ -390,14 +402,14 @@ export default function ArtikelPage() {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                                                        className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shrink-0 bg-muted/30 border border-border/50 hover:bg-background hover:shadow-sm"
                                                     >
-                                                        <MoreVertical className="h-3.5 w-3.5" />
+                                                        <MoreVertical className="h-4 w-4 text-muted-foreground" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="w-48">
+                                                <DropdownMenuContent align="end" className="w-48 rounded-xl border-border/60 shadow-xl">
                                                     <DropdownMenuItem
-                                                        className="cursor-pointer"
+                                                        className="cursor-pointer text-[13px] font-medium rounded-lg"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleCopyLink(article);
@@ -405,12 +417,12 @@ export default function ArtikelPage() {
                                                     >
                                                         {copiedId === article.id ? (
                                                             <>
-                                                                <Check className="h-4 w-4 mr-2 text-green-600" />
-                                                                <span>Link Tersalin!</span>
+                                                                <Check className="h-4 w-4 mr-2 text-emerald-500" />
+                                                                <span className="text-emerald-500 font-bold">Link Tersalin!</span>
                                                             </>
                                                         ) : (
                                                             <>
-                                                                <Copy className="h-4 w-4 mr-2" />
+                                                                <Copy className="h-4 w-4 mr-2 text-muted-foreground" />
                                                                 <span>Salin Link</span>
                                                             </>
                                                         )}
@@ -418,21 +430,21 @@ export default function ArtikelPage() {
 
                                                     {article.status === 'published' && (
                                                         <DropdownMenuItem
-                                                            className="cursor-pointer"
+                                                            className="cursor-pointer text-[13px] font-medium rounded-lg"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 handleShareClick(article);
                                                             }}
                                                         >
-                                                            <Share2 className="h-4 w-4 mr-2" />
+                                                            <Share2 className="h-4 w-4 mr-2 text-muted-foreground" />
                                                             <span>Bagikan</span>
                                                         </DropdownMenuItem>
                                                     )}
 
-                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuSeparator className="bg-border/40" />
 
                                                     <DropdownMenuItem
-                                                        className="text-destructive focus:text-destructive cursor-pointer"
+                                                        className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer text-[13px] font-bold rounded-lg"
                                                         onClick={(e) => handleDeleteClick(article, e)}
                                                     >
                                                         <Trash2 className="h-4 w-4 mr-2" />
@@ -441,11 +453,17 @@ export default function ArtikelPage() {
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))}
                                 {filteredArticles.length === 0 && !isLoadingList && (
-                                    <div className="text-center text-sm text-muted-foreground py-8">
-                                        Tidak ada artikel ditemukan
+                                    <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
+                                        <div className="w-12 h-12 rounded-xl bg-muted/50 border border-border/50 flex items-center justify-center">
+                                            <Search className="w-5 h-5 text-muted-foreground/40" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold">Tidak ada artikel</p>
+                                            <p className="text-xs text-muted-foreground mt-1">Coba gunakan kata kunci lain.</p>
+                                        </div>
                                     </div>
                                 )}
                             </div>
