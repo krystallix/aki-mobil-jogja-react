@@ -274,7 +274,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                             {/* Info */}
                                             <div className="flex-1 min-w-0 flex justify-between items-start gap-2">
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
+                                                    <p className="text-md font-bold text-foreground leading-snug line-clamp-1">{battery.nama}</p>
                                                     <div className="flex flex-col mt-1.5 space-y-0.5">
                                                         <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
                                                         {battery.harga_tukar && (
@@ -316,7 +316,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                     </div>
 
                     {/* ════ DESKTOP: compact card grid ════ */}
-                    <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+                    <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         {paginated.map((battery, i) => {
                             const spec = battery.specifications?.[0]
                             const margin = battery.harga_modal > 0
@@ -336,17 +336,17 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                     className="group"
                                 >
                                     {/* Outer bezel */}
-                                    <div className="p-[3px] rounded-xl border border-border/40 bg-muted/20 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-primary/30 group-hover:shadow-[0_2px_12px_-2px_rgba(0,0,0,0.07)]">
+                                    <div className="p-1 rounded-[1.25rem] border border-border/40 bg-muted/30 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-primary/30 group-hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]">
                                         {/* Inner core */}
-                                        <div className="bg-card rounded-[calc(0.75rem-3px)] overflow-hidden">
+                                        <div className="bg-card rounded-[calc(1.25rem-4px)] overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)] flex flex-col h-full">
                                             {/* Image */}
-                                            <div className="relative h-28 bg-linear-to-br from-primary/4 to-muted/20 overflow-hidden">
+                                            <div className="relative h-32 bg-linear-to-br from-primary/5 via-background to-muted/10 overflow-hidden group-hover:from-primary/10 transition-colors duration-500">
                                                 {battery.gambar ? (
                                                     <Image
                                                         src={battery.gambar}
                                                         alt={battery.nama}
                                                         fill
-                                                        className="object-contain p-2.5 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
+                                                        className="object-contain p-4 transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
                                                     />
                                                 ) : (
                                                     <div className="absolute inset-0 flex items-center justify-center">
@@ -354,78 +354,79 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                     </div>
                                                 )}
                                                 {/* Kondisi badge */}
-                                                <span className={`absolute top-1.5 left-1.5 px-1.5 py-px rounded-full text-[9px] font-bold uppercase tracking-wide border ${getKondisiStyle(battery.kondisi)}`}>
+                                                <span className={`absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border shadow-sm ${getKondisiStyle(battery.kondisi)}`}>
                                                     {battery.kondisi}
                                                 </span>
                                                 {/* Margin */}
                                                 {margin !== null && (
-                                                    <span className="absolute top-1.5 right-1.5 px-1.5 py-px rounded-full text-[9px] font-bold bg-background/80 border border-border/50 text-muted-foreground">
+                                                    <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-background/90 backdrop-blur-md border border-border/50 shadow-sm text-muted-foreground">
                                                         +{margin}%
                                                     </span>
                                                 )}
                                             </div>
 
                                             {/* Content */}
-                                            <div className="p-2.5 space-y-2">
+                                            <div className="flex flex-col flex-1 p-3.5 space-y-3">
                                                 {/* Name */}
                                                 <div>
-                                                    <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground truncate">
+                                                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground truncate mb-1">
                                                         {battery.merek} · {battery.tipe}
                                                     </p>
-                                                    <p className="text-xs font-bold text-foreground leading-snug line-clamp-2 mt-px">{battery.nama}</p>
+                                                    <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
                                                 </div>
 
                                                 {/* Tags */}
-                                                <div className="flex flex-wrap gap-1">
-                                                    <span className={`px-1.5 py-px rounded-full text-[9px] font-bold border ${getKategoriStyle(battery.kategori)}`}>
+                                                <div className="flex flex-wrap gap-1.5 mt-auto">
+                                                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${getKategoriStyle(battery.kategori)}`}>
                                                         {battery.kategori}
                                                     </span>
                                                     {spec?.kapasitas && (
-                                                        <span className="px-1.5 py-px rounded-full text-[9px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
-                                                            {spec.kapasitas}
+                                                        <span className="px-2 py-0.5 rounded-md text-[10px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
+                                                            {spec.kapasitas} Ah
                                                         </span>
                                                     )}
                                                 </div>
 
                                                 {/* Price + stock */}
-                                                <div className="flex items-center justify-between gap-1">
+                                                <div className="flex items-end justify-between gap-2 pt-1">
                                                     <div className="min-w-0">
-                                                        <p className="text-xs font-extrabold text-foreground tracking-tight truncate">
+                                                        <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Harga Jual</p>
+                                                        <p className="text-sm font-extrabold text-foreground tracking-tight truncate">
                                                             {formatRupiah(battery.harga_jual)}
                                                         </p>
                                                         {battery.harga_tukar && (
-                                                            <p className="text-[9px] text-primary font-semibold truncate">
+                                                            <p className="text-[10px] text-primary font-bold truncate mt-0.5">
                                                                 TT: {formatRupiah(battery.harga_tukar)}
                                                             </p>
                                                         )}
                                                     </div>
-                                                    <span className={`text-[10px] font-bold shrink-0 ${getStokStyle(battery.stok)}`}>
+                                                    <span className={`px-2 py-1 rounded-lg text-[10px] font-bold border shrink-0 ${getStokStyle(battery.stok)}`}>
                                                         {battery.stok} Unit
                                                     </span>
                                                 </div>
 
                                                 {/* Actions */}
-                                                <div className="flex gap-1 pt-0.5 border-t border-border/40">
+                                                <div className="flex gap-1.5 pt-2 border-t border-border/40">
                                                     <button
-                                                        className="flex-1 h-6 rounded-md border border-border/60 flex items-center justify-center gap-1 text-[10px] font-bold text-muted-foreground hover:text-primary hover:border-primary/50 transition-all duration-150 active:scale-[0.96]"
+                                                        className="flex-1 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center gap-1.5 text-[11px] font-bold shadow-[0_2px_8px_-2px_rgba(0,0,0,0.12)] hover:bg-primary/90 transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => setEditTarget(battery)}
                                                     >
-                                                        <Pencil className="w-2.5 h-2.5" />
+                                                        <Pencil className="w-3 h-3" />
                                                         Edit
                                                     </button>
                                                     <button
-                                                        className="w-6 h-6 rounded-md border border-border/60 flex items-center justify-center text-muted-foreground hover:text-destructive hover:border-destructive/40 transition-all duration-150 active:scale-[0.96]"
+                                                        className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => setDeleteTarget(battery)}
                                                         aria-label={`Hapus ${battery.nama}`}
                                                     >
-                                                        <Trash2 className="w-2.5 h-2.5" />
+                                                        <Trash2 className="w-3.5 h-3.5" />
                                                     </button>
                                                     <button
-                                                        className="w-6 h-6 rounded-md border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border transition-all duration-150 active:scale-[0.96]"
+                                                        className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => window.open(`/katalog/product/${battery.id}`, "_blank")}
                                                         aria-label={`Lihat ${battery.nama}`}
                                                     >
-                                                        <Eye className="w-2.5 h-2.5" />
+                                                        <Eye className="w-3.5 h-3.5" />
                                                     </button>
                                                 </div>
                                             </div>
