@@ -41,9 +41,9 @@ const getKondisiStyle = (kondisi: string) => {
 
 const getKategoriStyle = (kategori: string) => {
     const k = kategori.toLowerCase()
-    if (k.includes("basah")) return "bg-transparent text-foreground border-border/80"
-    if (k.includes("mf") || k.includes("kering")) return "bg-transparent text-primary border-primary/50"
-    return "bg-transparent text-muted-foreground border-border/50"
+    if (k.includes("basah")) return "bg-transparent text-blue-500 border-blue-500/50"
+    if (k.includes("hybrid")) return "bg-transparent text-emerald-500 border-emerald-500/50"
+    return "bg-transparent text-foreground border-foreground/50"
 }
 
 const getStokStyle = (stok: number) => {
@@ -409,7 +409,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                 {/* Actions */}
                                                 <div className="flex gap-1.5 pt-2 border-t border-border/40">
                                                     <button
-                                                        className="flex-1 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center gap-1.5 text-[11px] font-bold shadow-[0_2px_8px_-2px_rgba(0,0,0,0.12)] hover:bg-primary/90 transition-all duration-200 active:scale-[0.97]"
+                                                        className="flex-1 h-8 rounded-lg bg-transparent border border-border/60 text-foreground flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => setEditTarget(battery)}
                                                     >
                                                         <Pencil className="w-3 h-3" />
