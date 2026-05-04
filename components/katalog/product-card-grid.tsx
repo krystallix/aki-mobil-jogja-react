@@ -35,21 +35,21 @@ const formatRupiah = (amount: number) =>
     }).format(amount)
 
 const getKondisiStyle = (kondisi: string) => {
-    if (kondisi === "baru") return "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
-    return "bg-amber-500/10 text-amber-600 border-amber-500/20"
+    if (kondisi.toLowerCase() === "baru") return "bg-foreground text-background border-transparent shadow-[0_2px_8px_-2px_rgba(0,0,0,0.2)]"
+    return "bg-muted/60 text-muted-foreground border-border/60"
 }
 
 const getKategoriStyle = (kategori: string) => {
     const k = kategori.toLowerCase()
-    if (k.includes("basah")) return "bg-blue-500/10 text-blue-600 border-blue-500/20"
-    if (k.includes("mf") || k.includes("kering")) return "bg-lime-500/10 text-lime-700 border-lime-500/20"
-    return "bg-primary/10 text-primary border-primary/20"
+    if (k.includes("basah")) return "bg-background text-foreground border-border/80 shadow-sm"
+    if (k.includes("mf") || k.includes("kering")) return "bg-primary text-primary-foreground border-transparent shadow-[0_2px_10px_-2px_rgba(37,99,235,0.3)]"
+    return "bg-muted/30 text-muted-foreground border-border/50"
 }
 
 const getStokStyle = (stok: number) => {
-    if (stok > 10) return "text-emerald-600"
-    if (stok > 0) return "text-amber-600"
-    return "text-destructive"
+    if (stok > 10) return "text-foreground border-border/50 bg-background"
+    if (stok > 0) return "text-muted-foreground border-border/40 bg-muted/20"
+    return "text-destructive border-destructive/30 bg-destructive/10"
 }
 
 type SortKey = "nama" | "harga_jual" | "stok" | "merek"
@@ -295,7 +295,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
+                                                        <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-bold border ${getStokStyle(battery.stok)}`}>
                                                             {battery.stok} Unit
                                                         </span>
                                                     </div>
@@ -401,7 +401,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                             </p>
                                                         )}
                                                     </div>
-                                                    <span className={`px-2 py-1 rounded-lg text-[10px] font-bold border shrink-0 ${getStokStyle(battery.stok)}`}>
+                                                    <span className={`px-2 py-1 rounded-md text-[10px] font-bold border shrink-0 ${getStokStyle(battery.stok)}`}>
                                                         {battery.stok} Unit
                                                     </span>
                                                 </div>
