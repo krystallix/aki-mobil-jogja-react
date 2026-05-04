@@ -41,9 +41,9 @@ const getKondisiStyle = (kondisi: string) => {
 
 const getKategoriStyle = (kategori: string) => {
     const k = kategori.toLowerCase()
-    if (k.includes("basah")) return "bg-background text-foreground border-border/80 shadow-sm"
-    if (k.includes("mf") || k.includes("kering")) return "bg-primary text-primary-foreground border-transparent shadow-[0_2px_10px_-2px_rgba(37,99,235,0.3)]"
-    return "bg-muted/30 text-muted-foreground border-border/50"
+    if (k.includes("basah")) return "bg-transparent text-foreground border-border/80"
+    if (k.includes("mf") || k.includes("kering")) return "bg-transparent text-primary border-primary/50"
+    return "bg-transparent text-muted-foreground border-border/50"
 }
 
 const getStokStyle = (stok: number) => {
