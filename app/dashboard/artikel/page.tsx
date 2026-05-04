@@ -359,7 +359,7 @@ export default function ArtikelPage() {
                                 ) : filteredArticles.map((article) => (
                                     <div
                                         key={article.id}
-                                        className={`group relative cursor-pointer transition-colors hover:bg-accent rounded-md p-3 ${formData.id === article.id ? 'bg-accent border border-primary' : 'border border-transparent'}`}
+                                        className={`group relative cursor-pointer transition-all duration-300 rounded-xl p-3.5 mb-2 ${formData.id === article.id ? 'bg-primary/10 border-primary/40 shadow-sm' : 'border border-border/40 hover:border-primary/30 hover:bg-muted/30 hover:shadow-sm'}`}
                                         onClick={() => handleSelectArticle(article)}
                                     >
                                         <div className="flex items-start justify-between gap-2">
@@ -475,7 +475,7 @@ export default function ArtikelPage() {
                                         variant="outline"
                                         onClick={() => handleSave(false)}
                                         disabled={isSaving || !formData.title.trim()}
-                                        className="gap-2"
+                                        className="gap-2 h-10 rounded-xl font-bold"
                                     >
                                         <Save className="w-4 h-4" />
                                         {isSaving ? (
@@ -490,7 +490,7 @@ export default function ArtikelPage() {
                                     <Button
                                         onClick={() => handleSave(true)}
                                         disabled={isSaving || !formData.title.trim()}
-                                        className="gap-2 bg-blue-600 hover:bg-blue-700"
+                                        className="gap-2 h-10 rounded-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground"
                                     >
                                         <Send className="w-4 h-4" />
                                         {formData.status === 'published' ? 'Update' : 'Publikasikan'}
@@ -504,37 +504,37 @@ export default function ArtikelPage() {
                                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                                     <div className="xl:col-span-2 space-y-6">
                                         <div className="space-y-2">
-                                            <Label>
+                                            <Label className="text-sm font-semibold">
                                                 Judul <span className="text-destructive">*</span>
                                             </Label>
                                             <Input
                                                 value={formData.title}
                                                 onChange={handleTitleChange}
                                                 placeholder="Judul artikel yang menarik..."
-                                                className="text-lg font-medium"
+                                                className="text-lg font-bold h-12 rounded-xl border-border/60"
                                             />
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label>
+                                            <Label className="text-sm font-semibold">
                                                 Slug URL <span className="text-destructive">*</span>
                                             </Label>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md whitespace-nowrap">
+                                                <span className="text-[13px] font-bold text-muted-foreground bg-muted/50 border border-border/40 px-3 py-0 h-10 rounded-lg whitespace-nowrap flex items-center justify-center">
                                                     /artikel/
                                                 </span>
                                                 <Input
                                                     value={formData.slug}
                                                     onChange={(e) => setFormData(p => ({ ...p, slug: e.target.value }))}
-                                                    className="font-mono text-sm"
+                                                    className="font-mono text-sm h-10 rounded-lg border-border/60"
                                                     placeholder="url-slug-artikel"
                                                 />
                                             </div>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label>Konten</Label>
-                                            <div className="border rounded-lg overflow-hidden">
+                                            <Label className="text-sm font-semibold">Konten</Label>
+                                            <div className="border border-border/60 rounded-[1.25rem] overflow-hidden bg-muted/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                                                 <TipTapEditor
                                                     content={formData.content}
                                                     onChange={(c) => setFormData(p => ({ ...p, content: c }))}
@@ -544,18 +544,18 @@ export default function ArtikelPage() {
                                     </div>
 
                                     <div className="space-y-6">
-                                        <Card>
-                                            <CardHeader className="pb-3">
-                                                <CardTitle className="text-sm font-medium">Pengaturan</CardTitle>
+                                        <Card className="rounded-[1.25rem] border border-border/60 bg-muted/20 shadow-none">
+                                            <CardHeader className="pb-3 border-b border-border/40 bg-background/50 rounded-t-[1.25rem]">
+                                                <CardTitle className="text-[13px] font-extrabold uppercase tracking-wide">Pengaturan</CardTitle>
                                             </CardHeader>
-                                            <CardContent className="space-y-4">
+                                            <CardContent className="space-y-4 pt-4">
                                                 <div className="space-y-2">
-                                                    <Label>Status</Label>
+                                                    <Label className="text-xs font-semibold">Status</Label>
                                                     <Select
                                                         value={formData.status}
                                                         onValueChange={(v: any) => setFormData(p => ({ ...p, status: v }))}
                                                     >
-                                                        <SelectTrigger>
+                                                        <SelectTrigger className="h-10 rounded-lg border-border/60">
                                                             <SelectValue />
                                                         </SelectTrigger>
                                                         <SelectContent>
@@ -567,27 +567,27 @@ export default function ArtikelPage() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label>Excerpt</Label>
+                                                    <Label className="text-xs font-semibold">Excerpt</Label>
                                                     <Textarea
                                                         value={formData.excerpt || ''}
                                                         onChange={(e) => setFormData(p => ({ ...p, excerpt: e.target.value }))}
                                                         placeholder="Deskripsi singkat untuk SEO..."
-                                                        className="h-24 resize-none"
+                                                        className="h-24 resize-none rounded-lg border-border/60"
                                                     />
-                                                    <p className="text-xs text-muted-foreground">
+                                                    <p className="text-[11px] text-muted-foreground font-medium">
                                                         {formData.excerpt?.length || 0}/160 karakter
                                                     </p>
                                                 </div>
                                             </CardContent>
                                         </Card>
 
-                                        <Card>
-                                            <CardHeader className="pb-3">
-                                                <CardTitle className="text-sm font-medium">Media & Tags</CardTitle>
+                                        <Card className="rounded-[1.25rem] border border-border/60 bg-muted/20 shadow-none">
+                                            <CardHeader className="pb-3 border-b border-border/40 bg-background/50 rounded-t-[1.25rem]">
+                                                <CardTitle className="text-[13px] font-extrabold uppercase tracking-wide">Media & Tags</CardTitle>
                                             </CardHeader>
-                                            <CardContent className="space-y-4">
+                                            <CardContent className="space-y-4 pt-4">
                                                 <div className="space-y-2">
-                                                    <Label>Featured Image</Label>
+                                                    <Label className="text-xs font-semibold">Featured Image</Label>
 
                                                     <Tabs defaultValue="upload" className="w-full">
                                                         <TabsList className="grid w-full grid-cols-2">
@@ -606,7 +606,7 @@ export default function ArtikelPage() {
                                                             <Button
                                                                 type="button"
                                                                 variant="outline"
-                                                                className="w-full"
+                                                                className="w-full h-10 rounded-lg border-border/60 border-dashed"
                                                                 onClick={() => fileInputRef.current?.click()}
                                                                 disabled={isUploadingImage || !formData.slug.trim()}
                                                             >
@@ -637,11 +637,12 @@ export default function ArtikelPage() {
                                                                 value={imageUrl}
                                                                 onChange={(e) => setImageUrl(e.target.value)}
                                                                 placeholder="https://example.com/image.jpg"
+                                                                className="h-10 rounded-lg border-border/60"
                                                             />
                                                             <Button
                                                                 type="button"
                                                                 variant="outline"
-                                                                className="w-full"
+                                                                className="w-full h-10 rounded-lg border-border/60"
                                                                 onClick={() => {
                                                                     if (imageUrl.trim()) {
                                                                         setFormData(p => ({ ...p, featured_image: imageUrl }));
@@ -678,12 +679,13 @@ export default function ArtikelPage() {
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <Label>Tags</Label>
+                                                    <Label className="text-xs font-semibold">Tags</Label>
                                                     <Input
                                                         value={tagInput}
                                                         onChange={(e) => setTagInput(e.target.value)}
                                                         onKeyDown={handleAddTag}
                                                         placeholder="Ketik tag, tekan Enter..."
+                                                        className="h-10 rounded-lg border-border/60"
                                                     />
                                                     {formData.tags && formData.tags.length > 0 && (
                                                         <div className="flex flex-wrap gap-2 mt-2">
@@ -714,24 +716,27 @@ export default function ArtikelPage() {
             </div>
 
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Konfirmasi Hapus</DialogTitle>
+                <DialogContent className="sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
+                    <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
+                        <DialogTitle className="text-xl font-extrabold tracking-tight">Konfirmasi Hapus</DialogTitle>
                     </DialogHeader>
 
-                    <Alert variant="destructive" className="bg-destructive/10 border-destructive/30">
-                        <TriangleAlert className="h-4 w-4" />
-                        <AlertTitle>Peringatan!</AlertTitle>
-                        <AlertDescription className="text-sm">
-                            Artikel <strong className="font-semibold">&quot;{articleToDelete?.title}&quot;</strong> akan dihapus permanen beserta semua gambar di dalamnya. Tindakan ini tidak dapat dibatalkan.
-                        </AlertDescription>
-                    </Alert>
+                    <div className="px-6 py-4">
+                        <Alert variant="destructive" className="bg-destructive/10 border-destructive/30 rounded-xl">
+                            <TriangleAlert className="h-4 w-4" />
+                            <AlertTitle className="font-bold">Peringatan!</AlertTitle>
+                            <AlertDescription className="text-sm font-medium mt-1">
+                                Artikel <strong className="font-semibold">&quot;{articleToDelete?.title}&quot;</strong> akan dihapus permanen beserta semua gambar di dalamnya. Tindakan ini tidak dapat dibatalkan.
+                            </AlertDescription>
+                        </Alert>
+                    </div>
 
-                    <DialogFooter className="mt-4 gap-2 sm:gap-0">
+                    <DialogFooter className="px-6 py-4 border-t border-border/40 bg-muted/20 gap-2 sm:gap-0">
                         <Button
                             variant="outline"
                             onClick={() => setDeleteDialogOpen(false)}
                             disabled={isDeleting}
+                            className="h-11 rounded-xl font-bold"
                         >
                             Batal
                         </Button>
@@ -739,7 +744,7 @@ export default function ArtikelPage() {
                             onClick={handleDeleteConfirm}
                             disabled={isDeleting}
                             variant="destructive"
-                            className="gap-2"
+                            className="gap-2 h-11 rounded-xl font-bold"
                         >
                             {isDeleting ? (
                                 <>
