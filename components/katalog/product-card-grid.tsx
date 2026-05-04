@@ -238,7 +238,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
             ) : (
                 <>
                     {/* ════ MOBILE: vertical list ════ */}
-                    <div className="flex flex-col gap-3 md:hidden">
+                    <div className="flex flex-col gap-2 md:hidden">
                         {paginated.map((battery, i) => {
                             const spec = battery.specifications?.[0]
                             return (
@@ -249,11 +249,11 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                     transition={{ delay: i * 0.03, duration: 0.3 }}
                                     className="relative"
                                 >
-                                    <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pb-1">
+                                    <div className="flex gap-1.5 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                                         {/* Main Content (Snap Start) */}
-                                        <div className="w-full shrink-0 snap-center p-1 rounded-2xl border border-border/60 bg-muted/50 shadow-sm transition-all duration-300">
+                                        <div className="w-full shrink-0 snap-center p-[3px] rounded-2xl border border-border/60 bg-muted/50 transition-all duration-300">
                                             <div
-                                                className="flex items-center gap-4 px-3 py-3 bg-card rounded-[calc(1rem-4px)] cursor-pointer active:bg-muted/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
+                                                className="flex items-center gap-3 px-3 py-2.5 bg-card rounded-[calc(1rem-3px)] cursor-pointer active:bg-muted/50"
                                                 onClick={() => setEditTarget(battery)}
                                             >
                                                 {/* Thumbnail */}
@@ -305,7 +305,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
 
                                         {/* Swipe Actions (Snap End) */}
                                         <button
-                                            className="w-20 shrink-0 snap-center rounded-2xl border border-destructive/30 bg-destructive flex flex-col items-center justify-center text-white hover:bg-destructive/90 transition-colors shadow-sm"
+                                            className="w-20 shrink-0 snap-center rounded-2xl border border-destructive/30 bg-destructive flex flex-col items-center justify-center text-white hover:bg-destructive/90 transition-colors"
                                             onClick={() => setDeleteTarget(battery)}
                                             aria-label={`Hapus ${battery.nama}`}
                                         >
