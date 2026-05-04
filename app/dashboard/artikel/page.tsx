@@ -473,33 +473,33 @@ export default function ArtikelPage() {
                     {/* RIGHT SIDE: EDITOR */}
                     <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col`}>
 
-                        <div className="flex-none p-6 border-b bg-background">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
+                        <div className="flex-none p-4 md:p-6 border-b bg-background">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
+                                <div className="flex items-center gap-3 min-w-0">
                                     <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setIsMobileListOpen(true)}>
                                         <ChevronLeft className="h-5 w-5" />
                                     </Button>
-                                    <div>
-                                        <h1 className="text-2xl font-bold">
-                                            {formData.id ? 'Edit Artikel' : 'Buat Artikel Baru'}
+                                    <div className="min-w-0">
+                                        <h1 className="text-xl md:text-2xl font-bold line-clamp-1">
+                                            {formData.title || (formData.id ? 'Edit Artikel' : 'Buat Artikel Baru')}
                                         </h1>
-                                        <p className="text-muted-foreground text-sm">
+                                        <p className="text-muted-foreground text-xs md:text-sm truncate">
                                             {formData.id ? `ID: ${formData.id}` : 'Draft belum disimpan'}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 w-full md:w-auto">
                                     <Button
                                         variant="outline"
                                         onClick={() => handleSave(false)}
                                         disabled={isSaving || !formData.title.trim()}
-                                        className="gap-2 h-10 rounded-xl font-bold"
+                                        className="gap-2 h-10 rounded-xl font-bold flex-1 md:flex-none"
                                     >
                                         <Save className="w-4 h-4" />
                                         {isSaving ? (
                                             <>
                                                 <Loader2 className="w-4 h-4 animate-spin" />
-                                                Menyimpan...
+                                                Menyimpan
                                             </>
                                         ) : (
                                             'Simpan Draft'
@@ -508,7 +508,7 @@ export default function ArtikelPage() {
                                     <Button
                                         onClick={() => handleSave(true)}
                                         disabled={isSaving || !formData.title.trim()}
-                                        className="gap-2 h-10 rounded-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground"
+                                        className="gap-2 h-10 rounded-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground flex-1 md:flex-none"
                                     >
                                         <Send className="w-4 h-4" />
                                         {formData.status === 'published' ? 'Update' : 'Publikasikan'}
