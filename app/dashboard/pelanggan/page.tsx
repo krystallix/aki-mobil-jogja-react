@@ -372,7 +372,7 @@ export default function PelangganPage() {
 
                         {/* EDITOR BODY */}
                         <ScrollArea className="flex-1">
-                            <div className="p-4 md:p-6 lg:p-8 max-w-6xl mx-auto w-full">
+                            <div className="p-4 md:p-6 lg:p-8 w-full">
                                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
                                     
                                     {/* MAIN FORM */}
