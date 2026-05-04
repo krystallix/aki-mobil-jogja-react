@@ -13,7 +13,7 @@ export default async function KatalogPage() {
 
                     <h1 className="text-4xl text-indigo-800 font-extrabold tracking-tight">Katalog Produk</h1>
                     <p className="text-md text-muted-foreground font-light mt-0.5">
-                        Kelola inventaris aki kendaraan {batteries.length} produk tersedia
+                        Kelola produk
                     </p>
                 </div>
 

@@ -85,7 +85,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <div className="w-8 h-8 rounded-lg bg-background border border-border/60 flex items-center justify-center shadow-sm shrink-0">
                   <Image src="/logo.svg" alt="logo" width={20} height={20} className="object-contain" />
                 </div>
-                <span className="text-base font-bold tracking-tight text-foreground">Siswanto Aki</span>
+                <span className="text-lg font-bold tracking-tight text-foreground">Siswanto Aki</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

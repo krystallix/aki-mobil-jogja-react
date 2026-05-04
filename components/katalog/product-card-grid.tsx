@@ -276,26 +276,26 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                 <div className="flex-1 min-w-0 flex justify-between items-start gap-2">
                                                     <div className="flex-1 min-w-0">
 
-                                                        <p className="text-[15px] font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
+                                                        <p className="text-md font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
                                                         <div className="flex flex-col mt-1.5 space-y-0.5">
-                                                            <p className="text-[15px] font-extrabold text-foreground tracking-tight">{formatRupiah(battery.harga_jual)}</p>
+                                                            <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
                                                             {battery.harga_tukar && (
-                                                                <p className="text-[12px] text-primary font-bold">TT: {formatRupiah(battery.harga_tukar)}</p>
+                                                                <p className="text-[11px] text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
                                                             )}
                                                         </div>
                                                     </div>
                                                     <div className="flex flex-col items-end gap-1.5 shrink-0 pt-0.5">
                                                         <div className="flex items-center gap-1">
-                                                            <span className={`px-2 py-0.5 rounded-md text-[10px] capitalize font-bold border ${getKondisiStyle(battery.kondisi)}`}>
+                                                            <span className={`px-1.5 py-0.5 rounded-full text-[9px] capitalize font-bold border ${getKondisiStyle(battery.kondisi)}`}>
                                                                 {battery.kondisi}
                                                             </span>
                                                             {spec?.kapasitas && (
-                                                                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
+                                                                <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
                                                                     {spec.kapasitas}
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <span className={`text-[12px] font-bold mt-0.5 ${getStokStyle(battery.stok)}`}>
+                                                        <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
                                                             {battery.stok} Unit
                                                         </span>
                                                     </div>
