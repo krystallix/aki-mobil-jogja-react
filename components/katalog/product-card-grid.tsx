@@ -251,9 +251,9 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                 >
                                     <div className="flex gap-1.5 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                                         {/* Main Content (Snap Start) */}
-                                        <div className="w-full shrink-0 snap-center p-[3px] rounded-2xl border border-border/60 bg-muted/50 transition-all duration-300">
+                                        <div className="w-full shrink-0 snap-center p-[3px] rounded-2xl border border-border/60 bg-background transition-all duration-300">
                                             <div
-                                                className="flex items-center gap-3 px-3 py-2.5 bg-card rounded-[calc(1rem-3px)] cursor-pointer active:bg-muted/50"
+                                                className="flex items-center gap-3 px-3 py-2.5 bg-background rounded-[calc(1rem-3px)] cursor-pointer active:bg-muted/50"
                                                 onClick={() => setEditTarget(battery)}
                                             >
                                                 {/* Thumbnail */}
@@ -339,9 +339,9 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                     className="group"
                                 >
                                     {/* Outer bezel */}
-                                    <div className="p-1 rounded-[1.25rem] border border-border/60 bg-muted/50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-primary/30 group-hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]">
+                                    <div className="p-1 rounded-[1.25rem] border border-border/60 bg-background transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-primary/30 group-hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]">
                                         {/* Inner core */}
-                                        <div className="bg-card rounded-[calc(1.25rem-4px)] overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)] flex flex-col h-full">
+                                        <div className="bg-background rounded-[calc(1.25rem-4px)] overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)] flex flex-col h-full">
                                             {/* Image */}
                                             <div className="relative h-32 bg-linear-to-br from-primary/5 via-background to-muted/10 overflow-hidden group-hover:from-primary/10 transition-colors duration-500">
                                                 {battery.gambar ? (
