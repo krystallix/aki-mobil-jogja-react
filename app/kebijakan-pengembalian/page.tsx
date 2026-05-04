@@ -76,36 +76,43 @@ const sections = [
 export default function KebijakanPengembalianPage() {
     return (
         <HomeLayout>
-            <div className="max-w-3xl mx-auto px-4 py-12 md:py-16">
-                {/* Header */}
-                <div className="mb-10">
-                    <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-                        Kebijakan Pengembalian
-                    </h1>
-                    <p className="text-muted-foreground text-base leading-relaxed">
-                        Kepuasan pelanggan adalah prioritas kami. Berikut adalah ketentuan lengkap
-                        terkait pengembalian, penukaran, dan klaim garansi produk Siswanto Aki.
-                    </p>
-                    <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
-                        <Clock className="h-3.5 w-3.5" />
-                        <span>Terakhir diperbarui: Maret 2025</span>
+            <div className="max-w-5xl mx-auto px-6 py-10 lg:py-16">
+                {/* Header - Styled like Homepage Panel */}
+                <div className="mb-10 lg:mb-12 rounded-3xl bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800 p-6 lg:p-10 text-white relative overflow-hidden">
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.15) 0%, transparent 55%)" }} />
+                    <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+                    <div className="relative z-10 max-w-2xl">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 border border-white/15 text-white/80">
+                            <span>Informasi Layanan</span>
+                        </div>
+                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter text-white mb-4 leading-tight">
+                            Kebijakan Pengembalian
+                        </h1>
+                        <p className="text-base lg:text-lg text-white/70 font-light leading-relaxed">
+                            Kepuasan pelanggan adalah prioritas kami. Berikut adalah ketentuan lengkap terkait pengembalian, penukaran, dan klaim garansi produk Siswanto Aki.
+                        </p>
+                        <div className="flex items-center gap-2 mt-6 text-xs font-medium text-white/50">
+                            <Clock className="h-3.5 w-3.5 text-indigo-300" />
+                            <span>Terakhir diperbarui: Maret 2025</span>
+                        </div>
                     </div>
                 </div>
 
-                {/* Sections */}
-                <div className="space-y-6">
+                {/* Sections - Grid style */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
                     {sections.map(({ icon: Icon, color, bg, title, items }) => (
-                        <div key={title} className="rounded-xl border p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className={`p-2 rounded-lg ${bg}`}>
+                        <div key={title} className="relative rounded-2xl border border-border/50 bg-card p-6 lg:p-8 hover:border-primary/20 transition-all shadow-sm overflow-hidden">
+                            <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ backgroundImage: "linear-gradient(rgba(100,100,100,1) 1px, transparent 1px), linear-gradient(90deg, rgba(100,100,100,1) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
+                            <div className="relative z-10 flex items-center gap-3 mb-5">
+                                <div className={`p-2.5 rounded-xl ${bg}`}>
                                     <Icon className={`h-5 w-5 ${color}`} />
                                 </div>
-                                <h2 className="text-base font-semibold text-foreground">{title}</h2>
+                                <h2 className="text-lg font-extrabold tracking-tight text-foreground">{title}</h2>
                             </div>
-                            <ul className="space-y-2.5">
+                            <ul className="relative z-10 space-y-2.5">
                                 {items.map((item, i) => (
-                                    <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground">
-                                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-muted-foreground/50 shrink-0" />
+                                    <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground leading-relaxed">
+                                        <span className="mt-1.5 h-1 w-1 rounded-full bg-primary shrink-0" />
                                         {item}
                                     </li>
                                 ))}
@@ -114,25 +121,30 @@ export default function KebijakanPengembalianPage() {
                     ))}
                 </div>
 
-                {/* CTA */}
-                <div className="mt-10 rounded-xl bg-primary p-6 text-white">
-                    <div className="flex items-start gap-3">
-                        <Phone className="h-5 w-5 mt-0.5 shrink-0" />
-                        <div>
-                            <p className="font-semibold mb-1">Ada pertanyaan tentang pengembalian?</p>
-                            <p className="text-sm text-blue-100 mb-4">
-                                Tim kami siap membantu Anda setiap hari. Hubungi langsung via WhatsApp
-                                untuk proses klaim yang lebih cepat.
-                            </p>
-                            <a
-                                href="https://wa.me/6281354007400?text=Halo%2C+saya+ingin+menanyakan+tentang+kebijakan+pengembalian+produk."
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-white text-primary px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-100 transition-colors"
-                            >
-                                Hubungi via WhatsApp
-                            </a>
+                {/* CTA - Gradient style */}
+                <div className="mt-10 lg:mt-12 rounded-3xl p-8 lg:p-10 text-white relative overflow-hidden" style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.25) 0%, transparent 65%), rgb(55,48,163)" }}>
+                    <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20" />
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="flex items-start gap-4">
+                            <div className="p-3 bg-white/20 rounded-xl shrink-0">
+                                <Phone className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl lg:text-2xl font-extrabold mb-1">Ada pertanyaan?</h3>
+                                <p className="text-white/80 font-light text-sm max-w-sm leading-relaxed">
+                                    Tim kami siap membantu setiap hari. Hubungi via WhatsApp untuk proses klaim lebih cepat.
+                                </p>
+                            </div>
                         </div>
+                        <a
+                            href="https://wa.me/6281354007400?text=Halo%2C+saya+ingin+menanyakan+tentang+kebijakan+pengembalian+produk."
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 bg-white text-primary px-6 py-3 rounded-full text-sm font-bold hover:scale-105 transition-transform shrink-0"
+                        >
+                            Hubungi WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>

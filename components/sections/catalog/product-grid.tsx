@@ -290,16 +290,27 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                     animate={{ opacity: 1, scale: 1 }}
                     className="p-12 text-center border rounded-lg"
                 >
-                    <div className="space-y-2">
-                        <p className="text-lg font-medium text-muted-foreground">
-                            Tidak ada produk yang sesuai dengan filter
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            Coba ubah kriteria pencarian Anda
-                        </p>
-                        <Button variant="default" onClick={onReset} className="mt-4 rounded-full px-6 shadow-none hover:scale-105 transition-transform">
-                            Reset Filter
-                        </Button>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <p className="text-lg font-medium text-foreground">
+                                Tidak menemukan aki?
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                Produk yang Anda cari mungkin tidak tersedia di katalog kami saat ini. Silahkan hubungi kami melalui WhatsApp untuk bantuan lebih lanjut.
+                            </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+                            <Button variant="default" onClick={onReset} className="rounded-full px-6 shadow-none hover:scale-105 transition-transform">
+                                Reset Filter
+                            </Button>
+                            <Button 
+                                variant="outline" 
+                                className="rounded-full px-6 shadow-none hover:scale-105 transition-transform"
+                                onClick={() => window.open("https://wa.me/6281354007400", "_blank")}
+                            >
+                                Hubungi Kami via WhatsApp
+                            </Button>
+                        </div>
                     </div>
                 </motion.div>
             )}

@@ -82,7 +82,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
             <div className="relative pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden">
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
                 
-                <div className="container mx-auto px-6 max-w-4xl relative z-10">
+                <div className="container mx-auto px-6 max-w-7xl relative z-10">
                     <Link
                         href="/artikel"
                         className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-primary transition-all mb-8 group"
@@ -91,7 +91,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                         <span>KEMBALI KE ARTIKEL</span>
                     </Link>
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 max-w-4xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
                             <span>{category}</span>
                         </div>

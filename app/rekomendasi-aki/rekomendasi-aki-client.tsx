@@ -4,10 +4,11 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronLeft, ChevronRight, Battery, Zap, Shield } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Battery, Zap, Shield, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -70,6 +71,8 @@ export default function RekomendasiAkiClient() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [searchBrand, setSearchBrand] = useState("");
     const [search, setSearch] = useState("");
     const [selectedBrand, setSelectedBrand] = useState("ALL");
     const [page, setPage] = useState(1);
@@ -95,10 +98,19 @@ export default function RekomendasiAkiClient() {
         })();
     }, []);
 
-    const brands = useMemo(() => {
+    const sortedBrands = useMemo(() => {
         const unique = Array.from(new Set(data.map((r) => r.brand))).sort();
-        return ["ALL", ...unique];
+        return unique;
     }, [data]);
+
+    const displayList = useMemo(() => {
+        let list = ["ALL", ...sortedBrands];
+        if (selectedBrand !== "ALL") {
+            list = list.filter(b => b !== selectedBrand);
+            list.splice(1, 0, selectedBrand);
+        }
+        return list;
+    }, [sortedBrands, selectedBrand]);
 
     const filtered = useMemo(() => {
         let rows = data;
@@ -125,6 +137,9 @@ export default function RekomendasiAkiClient() {
     const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
     const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+    const mobileVisibleBrands = displayList.slice(0, 9);
+    const remainingBrands = displayList.slice(9);
+
     const handleSearch = (val: string) => {
         startTransition(() => {
             setSearch(val);
@@ -136,8 +151,14 @@ export default function RekomendasiAkiClient() {
         startTransition(() => {
             setSelectedBrand(brand);
             setPage(1);
+            setIsDialogOpen(false);
+            setSearchBrand("");
         });
     };
+
+    const filteredBrandList = useMemo(() => {
+        return sortedBrands.filter(b => b.toLowerCase().includes(searchBrand.toLowerCase()));
+    }, [sortedBrands, searchBrand]);
 
     return (
         <div className="space-y-4 lg:space-y-6">
@@ -164,7 +185,7 @@ export default function RekomendasiAkiClient() {
                 transition={{ duration: 0.4, delay: 0.2 }}
                 className="flex flex-wrap gap-1.5 lg:gap-2 mb-6 lg:mb-10"
             >
-                {brands.map((brand) => (
+                {mobileVisibleBrands.map((brand) => (
                     <Button
                         key={brand}
                         variant={selectedBrand === brand ? "default" : "outline"}
@@ -178,6 +199,56 @@ export default function RekomendasiAkiClient() {
                         {brand === "ALL" ? "Semua Merek" : brand}
                     </Button>
                 ))}
+                {remainingBrands.length > 0 && (
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="rounded-md lg:rounded-full text-[10px] lg:text-xs h-7 lg:h-9 px-2.5 lg:px-4 transition-all duration-300 font-medium border-border/50 bg-card hover:border-primary/40 shadow-none text-muted-foreground hover:text-foreground font-normal"
+                            >
+                                <Plus size={14} className="mr-1" />
+                                {remainingBrands.length} lainnya
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                                <DialogTitle>Pilih Merek Kendaraan</DialogTitle>
+                            </DialogHeader>
+                            <Input
+                                placeholder="Cari merek..."
+                                value={searchBrand}
+                                onChange={(e) => setSearchBrand(e.target.value)}
+                                className="mb-4"
+                            />
+                            <div className="flex flex-wrap gap-2 max-h-[60vh] overflow-y-auto">
+                                <Button
+                                    variant={selectedBrand === "ALL" ? "default" : "outline"}
+                                    onClick={() => handleBrand("ALL")}
+                                    className={cn(
+                                        "rounded-full text-xs transition-all duration-300",
+                                        selectedBrand !== "ALL" && "border-border/50 bg-card hover:border-primary/40 shadow-none text-muted-foreground hover:text-foreground font-normal"
+                                    )}
+                                >
+                                    Semua Merek
+                                </Button>
+                                {filteredBrandList.map((brand) => (
+                                    <Button
+                                        key={brand}
+                                        variant={selectedBrand === brand ? "default" : "outline"}
+                                        onClick={() => handleBrand(brand)}
+                                        className={cn(
+                                            "rounded-full text-xs transition-all duration-300",
+                                            selectedBrand !== brand && "border-border/50 bg-card hover:border-primary/40 shadow-none text-muted-foreground hover:text-foreground font-normal"
+                                        )}
+                                    >
+                                        {brand}
+                                    </Button>
+                                ))}
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                )}
             </motion.div>
 
             {/* Result count */}
