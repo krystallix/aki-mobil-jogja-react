@@ -16,7 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Plus, X, Search, Loader2, MoreVertical, Trash2, Share2, Send, Save, TriangleAlert, Copy, Check, Upload, Image as ImageIcon } from "lucide-react";
+import { Plus, X, Search, Loader2, MoreVertical, Trash2, Share2, Send, Save, TriangleAlert, Copy, Check, Upload, Image as ImageIcon, ChevronLeft } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -69,6 +69,7 @@ export default function ArtikelPage() {
     const [formData, setFormData] = useState<ArticleData>(DEFAULT_FORM);
     const [isSaving, setIsSaving] = useState(false);
     const [tagInput, setTagInput] = useState('');
+    const [isMobileListOpen, setIsMobileListOpen] = useState(true);
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [articleToDelete, setArticleToDelete] = useState<ArticleData | null>(null);
@@ -228,11 +229,13 @@ export default function ArtikelPage() {
             tags: article.tags || []
         });
         setImageUrl('');
+        setIsMobileListOpen(false);
     };
 
     const handleCreateNew = () => {
         setFormData(DEFAULT_FORM);
         setImageUrl('');
+        setIsMobileListOpen(false);
     };
 
     const handleSave = async (publishNow: boolean = false) => {
@@ -327,7 +330,7 @@ export default function ArtikelPage() {
                 <div className="grid grid-cols-12 gap-0 h-full">
 
                     {/* LEFT SIDEBAR */}
-                    <div className="col-span-12 lg:col-span-4 xl:col-span-3 flex flex-col h-full border-r bg-background">
+                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full border-r bg-background`}>
                         <div className="flex-none p-4 border-b space-y-4">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-bold">Daftar Artikel</h2>
@@ -450,17 +453,22 @@ export default function ArtikelPage() {
                     </div>
 
                     {/* RIGHT SIDE: EDITOR */}
-                    <div className="col-span-12 lg:col-span-8 xl:col-span-9 h-full flex flex-col">
+                    <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col`}>
 
                         <div className="flex-none p-6 border-b bg-background">
                             <div className="flex items-center justify-between">
-                                <div>
-                                    <h1 className="text-2xl font-bold">
-                                        {formData.id ? 'Edit Artikel' : 'Buat Artikel Baru'}
-                                    </h1>
-                                    <p className="text-muted-foreground text-sm">
-                                        {formData.id ? `ID: ${formData.id}` : 'Draft belum disimpan'}
-                                    </p>
+                                <div className="flex items-center gap-3">
+                                    <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setIsMobileListOpen(true)}>
+                                        <ChevronLeft className="h-5 w-5" />
+                                    </Button>
+                                    <div>
+                                        <h1 className="text-2xl font-bold">
+                                            {formData.id ? 'Edit Artikel' : 'Buat Artikel Baru'}
+                                        </h1>
+                                        <p className="text-muted-foreground text-sm">
+                                            {formData.id ? `ID: ${formData.id}` : 'Draft belum disimpan'}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div className="flex gap-2">
                                     <Button
