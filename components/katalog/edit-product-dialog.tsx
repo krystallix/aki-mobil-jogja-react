@@ -191,6 +191,22 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
         }
     }
 
+    const handleMobilPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+        const pasted = e.clipboardData.getData("text")
+        if (!pasted.includes(",")) return
+        e.preventDefault()
+        const parts = pasted
+            .split(",")
+            .map((s) => s.trim())
+            .filter((s) => s.length > 0)
+        setMobil((prev) => {
+            const merged = [...prev]
+            parts.forEach((p) => { if (!merged.includes(p)) merged.push(p) })
+            return merged
+        })
+        setMobilInput("")
+    }
+
     const removeMobil = (item: string) => {
         setMobil(mobil.filter((m) => m !== item))
     }
@@ -758,11 +774,12 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                         </h3>
                                         <div className="space-y-3">
                                             <Input
-                                                placeholder="Ketik nama mobil (misal: Avanza), lalu tekan Enter"
+                                                placeholder="Ketik nama mobil atau paste daftar (pisah koma)"
                                                 value={mobilInput}
                                                 onChange={(e) => setMobilInput(e.target.value)}
                                                 onKeyDown={handleMobilKeyDown}
                                                 onBlur={handleMobilBlur}
+                                                onPaste={handleMobilPaste}
                                                 className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
                                             />
                                             {mobil.length > 0 && (
