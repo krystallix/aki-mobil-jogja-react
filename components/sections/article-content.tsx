@@ -66,7 +66,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                     text: article.excerpt || article.title,
                     url: url,
                 });
-            } catch (err) {}
+            } catch (err) { }
         } else {
             navigator.clipboard.writeText(url);
             setCopied(true);
@@ -81,7 +81,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
             {/* Immersive Header Section */}
             <div className="relative pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden">
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-                
+
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">
                     <Link
                         href="/artikel"
@@ -95,7 +95,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
                             <span>{category}</span>
                         </div>
-                        
+
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-foreground leading-[1.05]">
                             {article.title}
                         </h1>
@@ -128,7 +128,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                     <div className="lg:col-span-8">
                         {/* Featured Image */}
                         {article.featured_image && (
-                            <div className="relative w-full aspect-[21/9] rounded-[2rem] lg:rounded-[3rem] overflow-hidden mb-12 border border-border/50">
+                            <div className="relative w-full aspect-21/9 rounded-[2rem] lg:rounded-[3rem] overflow-hidden mb-12 border border-border/50">
                                 <Image
                                     src={article.featured_image}
                                     alt={article.title}
@@ -213,18 +213,18 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                                             href={`/artikel/${rel.slug}`}
                                             className="flex gap-4 group items-center p-2 rounded-2xl hover:bg-card transition-colors"
                                         >
-                                                <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-border/50">
-                                                    {rel.featured_image ? (
-                                                        <>
-                                                            <Image
-                                                                src={rel.featured_image}
-                                                                alt={rel.title}
-                                                                fill
-                                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                                            />
-                                                            <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-40" />
-                                                        </>
-                                                    ) : (
+                                            <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-border/50">
+                                                {rel.featured_image ? (
+                                                    <>
+                                                        <Image
+                                                            src={rel.featured_image}
+                                                            alt={rel.title}
+                                                            fill
+                                                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                        />
+                                                        <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent opacity-40" />
+                                                    </>
+                                                ) : (
                                                     <div className="w-full h-full bg-muted flex items-center justify-center">
                                                         <Tag className="w-6 h-6 text-primary opacity-20" />
                                                     </div>

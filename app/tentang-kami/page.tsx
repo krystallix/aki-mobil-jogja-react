@@ -166,7 +166,7 @@ export default function TentangKamiPage() {
                             <motion.div
                                 {...fadeInUp}
                                 transition={{ delay: 0.1, duration: 0.5 }}
-                                className="lg:col-span-2 relative aspect-[4/3] lg:aspect-auto rounded-2xl lg:rounded-3xl overflow-hidden group border border-border/60"
+                                className="lg:col-span-2 relative aspect-4/3 lg:aspect-auto rounded-2xl lg:rounded-3xl overflow-hidden group border border-border/60"
                             >
                                 <Image
                                     src="/about.webp"
@@ -195,7 +195,7 @@ export default function TentangKamiPage() {
                                         <p className="text-3xl lg:text-4xl font-extrabold text-primary tracking-tighter mb-1 group-hover:scale-110 transition-transform origin-left">
                                             {stat.number}
                                         </p>
-                                        <p className="text-[10px] lg:text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
+                                        <p className="text-[10px] lg:text-xs font-bold uppercase tracking-widest text-muted-foreground">
                                             {stat.label}
                                         </p>
                                     </motion.div>
