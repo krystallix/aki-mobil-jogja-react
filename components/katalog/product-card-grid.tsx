@@ -247,66 +247,66 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ delay: i * 0.03, duration: 0.3 }}
-                                    className="flex items-center gap-4 px-4 py-3.5 bg-card hover:bg-muted/30 transition-colors duration-200"
+                                    className="relative"
                                 >
-                                    {/* Thumbnail */}
-                                    <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-border/50 bg-muted/30">
-                                        {battery.gambar ? (
-                                            <Image
-                                                src={battery.gambar}
-                                                alt={battery.nama}
-                                                fill
-                                                className="object-contain p-1.5"
-                                            />
-                                        ) : (
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <Package className="w-6 h-6 text-muted-foreground/30" />
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Info */}
-                                    <div className="flex-1 min-w-0 space-y-0.5">
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground truncate">
-                                            {battery.merek} · {battery.tipe}
-                                        </p>
-                                        <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
-                                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
-                                            <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
-                                            {battery.harga_tukar && (
-                                                <p className="text-xs text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
-                                            )}
-                                        </div>
-                                        <div className="flex items-center gap-1.5 pt-0.5">
-                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${getKondisiStyle(battery.kondisi)}`}>
-                                                {battery.kondisi}
-                                            </span>
-                                            <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
-                                                {battery.stok} unit
-                                            </span>
-                                            {spec?.kapasitas && (
-                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
-                                                    {spec.kapasitas}Ah
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Actions */}
-                                    <div className="flex flex-col gap-1.5 shrink-0">
-                                        <button
-                                            className="w-8 h-8 rounded-xl border border-border/60 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all duration-150 active:scale-[0.94]"
+                                    <div className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                                        {/* Main Content (Snap Start) */}
+                                        <div 
+                                            className="w-full shrink-0 snap-start flex items-center gap-4 px-4 py-3.5 bg-card hover:bg-muted/30 transition-colors duration-200 cursor-pointer active:bg-muted/50"
                                             onClick={() => setEditTarget(battery)}
-                                            aria-label={`Edit ${battery.nama}`}
                                         >
-                                            <Pencil className="w-3.5 h-3.5" />
-                                        </button>
+                                            {/* Thumbnail */}
+                                            <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-border/50 bg-muted/30">
+                                                {battery.gambar ? (
+                                                    <Image
+                                                        src={battery.gambar}
+                                                        alt={battery.nama}
+                                                        fill
+                                                        className="object-contain"
+                                                    />
+                                                ) : (
+                                                    <div className="absolute inset-0 flex items-center justify-center">
+                                                        <Package className="w-6 h-6 text-muted-foreground/30" />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Info */}
+                                            <div className="flex-1 min-w-0 space-y-0.5">
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground truncate">
+                                                    {battery.merek} · {battery.tipe}
+                                                </p>
+                                                <p className="text-sm font-bold text-foreground leading-snug line-clamp-2">{battery.nama}</p>
+                                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
+                                                    <p className="text-sm font-extrabold text-foreground">{formatRupiah(battery.harga_jual)}</p>
+                                                    {battery.harga_tukar && (
+                                                        <p className="text-xs text-primary font-semibold">TT: {formatRupiah(battery.harga_tukar)}</p>
+                                                    )}
+                                                </div>
+                                                <div className="flex items-center gap-1.5 pt-0.5">
+                                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${getKondisiStyle(battery.kondisi)}`}>
+                                                        {battery.kondisi}
+                                                    </span>
+                                                    <span className={`text-[11px] font-bold ${getStokStyle(battery.stok)}`}>
+                                                        {battery.stok} unit
+                                                    </span>
+                                                    {spec?.kapasitas && (
+                                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
+                                                            {spec.kapasitas}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Swipe Actions (Snap End) */}
                                         <button
-                                            className="w-8 h-8 rounded-xl border border-border/60 flex items-center justify-center text-muted-foreground hover:text-destructive hover:border-destructive/40 transition-all duration-150 active:scale-[0.94]"
+                                            className="w-20 shrink-0 snap-end bg-destructive flex flex-col items-center justify-center text-primary-foreground hover:bg-destructive/90 transition-colors"
                                             onClick={() => setDeleteTarget(battery)}
                                             aria-label={`Hapus ${battery.nama}`}
                                         >
-                                            <Trash2 className="w-3.5 h-3.5" />
+                                            <Trash2 className="w-6 h-6 mb-1" />
+                                            <span className="text-[10px] font-bold uppercase tracking-widest">Hapus</span>
                                         </button>
                                     </div>
                                 </motion.div>
