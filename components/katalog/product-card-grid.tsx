@@ -383,7 +383,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                     </span>
                                                     {spec?.kapasitas && (
                                                         <span className="px-2 py-0.5 rounded-md text-[10px] font-bold border border-border/60 bg-muted/50 text-muted-foreground">
-                                                            {spec.kapasitas} Ah
+                                                            {spec.kapasitas}
                                                         </span>
                                                     )}
                                                 </div>
@@ -409,7 +409,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                 {/* Actions */}
                                                 <div className="flex gap-1.5 pt-2 border-t border-border/40">
                                                     <button
-                                                        className="flex-1 h-8 rounded-lg bg-transparent border border-border/60 text-foreground flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
+                                                        className="flex-1 h-8 rounded-lg bg-transparent border border-primary/60 text-primary flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => setEditTarget(battery)}
                                                     >
                                                         <Pencil className="w-3 h-3" />

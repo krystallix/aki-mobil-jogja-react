@@ -7,7 +7,7 @@ export default async function KatalogPage() {
 
     return (
         <DashboardLayout>
-            <div className="flex flex-1 flex-col gap-5 p-4 lg:p-6">
+            <div className="flex flex-1 flex-col gap-5 p-4 lg:p-6 mt-3">
                 {/* Page Header */}
                 <div>
 
