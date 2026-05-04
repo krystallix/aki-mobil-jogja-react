@@ -74,16 +74,18 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="pt-4 pb-2 px-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
+              className="h-12 bg-muted/20 border border-border/40 rounded-[1.25rem] px-3 transition-colors hover:bg-muted/40"
             >
-              <a href="/">
-                <Image src="/logo.svg" alt="logo" width={24} height={24} />
-                <span className="text-base font-semibold">Siswanto Aki</span>
+              <a href="/" className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-background border border-border/60 flex items-center justify-center shadow-sm shrink-0">
+                  <Image src="/logo.svg" alt="logo" width={20} height={20} className="object-contain" />
+                </div>
+                <span className="text-base font-bold tracking-tight text-foreground">Siswanto Aki</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
