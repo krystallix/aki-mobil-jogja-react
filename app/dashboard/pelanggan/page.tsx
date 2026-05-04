@@ -212,33 +212,33 @@ export default function PelangganPage() {
 
     return (
         <DashboardLayout>
-            <div className="flex flex-col gap-6 p-4 md:p-8 max-w-[1400px] mx-auto w-full min-h-[calc(100vh-4rem)]">
+            <div className="flex flex-col gap-3 lg:gap-4 p-4 lg:p-6 max-w-[1400px] mx-auto w-full min-h-[calc(100vh-4rem)]">
                 
                 {/* ── HEADER & TOOLBAR ── */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-background/80 backdrop-blur-xl p-4 rounded-[1.5rem] border border-border/40 shadow-sm sticky top-4 z-20">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 lg:gap-4 bg-background/80 backdrop-blur-xl p-4 lg:p-5 rounded-2xl lg:rounded-3xl border border-border/60 shadow-sm sticky top-4 z-20">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                            <UserCircle className="w-5 h-5" />
+                        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                            <UserCircle className="w-5 h-5 lg:w-6 lg:h-6" />
                         </div>
                         <div>
-                            <h1 className="text-xl md:text-2xl font-extrabold tracking-tight">Manajemen Pelanggan</h1>
-                            <p className="text-sm font-medium text-muted-foreground">{customers.length} Pelanggan Terdaftar</p>
+                            <h1 className="text-xl lg:text-3xl font-extrabold tracking-tight text-foreground">Manajemen Pelanggan</h1>
+                            <p className="text-xs lg:text-sm font-medium text-muted-foreground">{customers.length} Pelanggan Terdaftar</p>
                         </div>
                     </div>
                     
-                    <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="flex items-center gap-2 lg:gap-3 w-full md:w-auto">
                         <div className="relative flex-1 md:w-64 group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
+                            <Search className="absolute left-4 lg:left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
                             <Input
                                 placeholder="Cari pelanggan..."
-                                className="pl-9 pr-9 h-11 rounded-xl border-border/60 bg-card shadow-none text-sm font-medium focus-visible:ring-1 focus-visible:ring-primary/50"
+                                className="pl-11 pr-11 h-11 lg:h-12 rounded-full border-border/60 bg-card shadow-none text-sm font-medium focus-visible:ring-1 focus-visible:ring-primary/50 transition-all hover:border-primary/50"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                                 >
                                     <X className="w-4 h-4" />
                                 </button>
@@ -246,10 +246,10 @@ export default function PelangganPage() {
                         </div>
                         <Button 
                             onClick={handleCreateNew} 
-                            className="h-11 pl-4 pr-3 rounded-xl gap-2 bg-primary text-primary-foreground font-bold hover:bg-primary/90 active:scale-[0.97] transition-all duration-200 shrink-0"
+                            className="h-11 lg:h-12 pl-5 pr-4 rounded-full gap-2 bg-primary text-primary-foreground font-bold hover:bg-primary/90 active:scale-[0.97] transition-all duration-200 shrink-0"
                         >
                             <span className="hidden sm:inline">Tambah Data</span>
-                            <span className="w-6 h-6 rounded-md bg-white/20 flex items-center justify-center shrink-0">
+                            <span className="w-6 h-6 lg:w-7 lg:h-7 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                                 <Plus className="w-4 h-4" />
                             </span>
                         </Button>
@@ -259,24 +259,24 @@ export default function PelangganPage() {
                 {/* ── GRID CONTENT ── */}
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center flex-1 min-h-[400px] gap-4">
-                        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground/50" />
+                        <Loader2 className="w-8 h-8 lg:w-10 lg:h-10 animate-spin text-primary" />
                         <p className="text-sm font-bold text-muted-foreground">Memuat data pelanggan...</p>
                     </div>
                 ) : filteredCustomers.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center flex-1 min-h-[400px] gap-4 bg-muted/10 rounded-[2rem] border border-dashed border-border/60">
-                        <div className="w-16 h-16 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center">
-                            <UserCircle className="w-8 h-8 text-muted-foreground/40" />
+                    <div className="flex flex-col items-center justify-center flex-1 min-h-[400px] gap-4 bg-card rounded-2xl lg:rounded-3xl border border-dashed border-border/60 p-8">
+                        <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center">
+                            <UserCircle className="w-8 h-8 lg:w-10 lg:h-10 text-muted-foreground/40" />
                         </div>
                         <div className="text-center">
-                            <p className="text-lg font-bold">Tidak ada data pelanggan</p>
-                            <p className="text-sm font-medium text-muted-foreground mt-1">Coba gunakan kata kunci pencarian lain atau tambahkan data baru.</p>
+                            <p className="text-lg lg:text-xl font-bold">Tidak ada data pelanggan</p>
+                            <p className="text-sm font-medium text-muted-foreground mt-1 max-w-sm mx-auto">Coba gunakan kata kunci pencarian lain atau tambahkan data pelanggan baru.</p>
                         </div>
-                        <Button onClick={handleCreateNew} variant="outline" className="mt-2 h-10 rounded-xl font-bold">
+                        <Button onClick={handleCreateNew} variant="outline" className="mt-2 h-11 lg:h-12 rounded-full font-bold px-6">
                             <Plus className="w-4 h-4 mr-2" /> Tambah Pelanggan
                         </Button>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 pb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 pb-8">
                         <AnimatePresence>
                             {filteredCustomers.map((customer, i) => (
                                 <motion.div
@@ -288,12 +288,12 @@ export default function PelangganPage() {
                                     transition={{ delay: i * 0.03, duration: 0.3 }}
                                 >
                                     <Card 
-                                        className="h-full rounded-[1.5rem] border border-border/60 bg-card hover:border-primary/40 hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col"
+                                        className="h-full rounded-xl lg:rounded-2xl border border-border/60 bg-card hover:border-border hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 cursor-pointer overflow-hidden group flex flex-col"
                                         onClick={() => handleSelectCustomer(customer)}
                                     >
-                                        <CardHeader className="p-5 pb-0 flex flex-row items-start justify-between">
+                                        <CardHeader className="p-4 lg:p-5 pb-0 flex flex-row items-start justify-between">
                                             <div className="flex-1 min-w-0 pr-2">
-                                                <h3 className="text-lg font-extrabold truncate text-foreground/90 group-hover:text-primary transition-colors">
+                                                <h3 className="text-base lg:text-lg font-extrabold truncate text-foreground/90 group-hover:text-primary transition-colors">
                                                     {customer.nama}
                                                 </h3>
                                                 <div className="flex items-center gap-2 mt-1.5 flex-wrap">
@@ -333,7 +333,7 @@ export default function PelangganPage() {
                                             </DropdownMenu>
                                         </CardHeader>
                                         
-                                        <CardContent className="p-5 pt-4 flex-1">
+                                        <CardContent className="p-4 lg:p-5 pt-3 lg:pt-4 flex-1">
                                             <div className="grid grid-cols-2 gap-3 bg-muted/20 p-3.5 rounded-xl border border-border/40">
                                                 <div>
                                                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Total Order</p>
@@ -348,7 +348,7 @@ export default function PelangganPage() {
                                             </div>
                                         </CardContent>
                                         
-                                        <CardFooter className="p-5 pt-0 mt-auto">
+                                        <CardFooter className="p-4 lg:p-5 pt-0 mt-auto">
                                             <div className="w-full flex items-center justify-between text-[11px] font-medium text-muted-foreground border-t border-border/40 pt-3">
                                                 <span className="flex items-center">
                                                     <Calendar className="w-3 h-3 mr-1" />
@@ -369,7 +369,7 @@ export default function PelangganPage() {
 
             {/* ── DIALOG EDITOR ── */}
             <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-                <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden rounded-[2rem] border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
+                <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden rounded-2xl lg:rounded-3xl border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
                     <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
                         <DialogTitle className="text-xl font-extrabold tracking-tight flex items-center gap-2">
                             <UserCircle className="w-6 h-6 text-primary" />
@@ -447,7 +447,7 @@ export default function PelangganPage() {
                             </div>
 
                             {/* Analytics Section */}
-                            <div className="bg-muted/10 rounded-[1.5rem] p-5 border border-border/40">
+                            <div className="bg-muted/10 rounded-xl lg:rounded-2xl p-5 border border-border/40">
                                 <h4 className="text-[11px] font-extrabold text-muted-foreground uppercase tracking-widest mb-4 flex items-center gap-1.5">
                                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                                     Statistik Transaksi
@@ -507,14 +507,14 @@ export default function PelangganPage() {
                         <Button
                             variant="outline"
                             onClick={() => setEditDialogOpen(false)}
-                            className="h-11 rounded-xl font-bold border-border/60"
+                            className="h-11 rounded-full font-bold border-border/60 px-6"
                         >
                             Batal
                         </Button>
                         <Button
                             onClick={handleSave}
                             disabled={isSaving || !formData.nama.trim()}
-                            className="gap-2 h-11 rounded-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground px-6"
+                            className="gap-2 h-11 rounded-full font-bold bg-primary hover:bg-primary/90 text-primary-foreground px-6"
                         >
                             {isSaving ? (
                                 <>
@@ -534,7 +534,7 @@ export default function PelangganPage() {
 
             {/* ── DELETE DIALOG ── */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
+                <DialogContent className="sm:max-w-[425px] rounded-2xl lg:rounded-3xl overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
                     <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
                         <DialogTitle className="text-xl font-extrabold tracking-tight">Hapus Pelanggan</DialogTitle>
                     </DialogHeader>
@@ -554,7 +554,7 @@ export default function PelangganPage() {
                             variant="outline"
                             onClick={() => setDeleteDialogOpen(false)}
                             disabled={isDeleting}
-                            className="h-11 rounded-xl font-bold border-border/60"
+                            className="h-11 rounded-full font-bold border-border/60 px-6"
                         >
                             Batal
                         </Button>
@@ -562,7 +562,7 @@ export default function PelangganPage() {
                             onClick={handleDeleteConfirm}
                             disabled={isDeleting}
                             variant="destructive"
-                            className="gap-2 h-11 rounded-xl font-bold bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+                            className="gap-2 h-11 rounded-full font-bold bg-destructive hover:bg-destructive/90 text-destructive-foreground px-6"
                         >
                             {isDeleting ? (
                                 <>
