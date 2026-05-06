@@ -54,6 +54,7 @@ type TransactionItem = {
     harga_modal: number;
     harga_jual: number;
     harga_tukar: number | null;
+    nilai_aki_lama?: number | null;
     subtotal: number;
     garansi: string | null;
     kondisi?: 'baru' | 'bekas';
@@ -207,6 +208,7 @@ export default function TransaksiPage() {
             harga_modal: prod.harga_modal,
             harga_jual: prod.harga_jual,
             harga_tukar: prod.harga_tukar,
+            nilai_aki_lama: formData.tipe === 'tukar_tambah' ? 0 : null,
             subtotal: priceToUse,
             garansi: prod.garansi,
             kondisi: (prod as any).kondisi || 'baru'
@@ -242,6 +244,18 @@ export default function TransaksiPage() {
     const handleUpdateItemGaransi = (index: number, newGaransi: string) => {
         const updated = [...formItems];
         updated[index].garansi = newGaransi;
+        setFormItems(updated);
+    };
+
+    const handleUpdateItemModal = (index: number, newModal: number) => {
+        const updated = [...formItems];
+        updated[index].harga_modal = newModal;
+        setFormItems(updated);
+    };
+
+    const handleUpdateItemNilaiAkiLama = (index: number, newNilai: number) => {
+        const updated = [...formItems];
+        updated[index].nilai_aki_lama = newNilai;
         setFormItems(updated);
     };
 
@@ -383,6 +397,7 @@ export default function TransaksiPage() {
                     harga_modal: item.harga_modal,
                     harga_jual: item.harga_jual,
                     harga_tukar: item.harga_tukar,
+                    nilai_aki_lama: item.nilai_aki_lama || 0,
                     subtotal: item.subtotal,
                     garansi: item.garansi,
                     kondisi: item.kondisi || 'baru'
@@ -938,41 +953,51 @@ export default function TransaksiPage() {
                                                                 <p className="text-sm font-bold leading-tight">{item.nama_produk}</p>
                                                                 <button onClick={() => handleRemoveItem(idx)} className="absolute top-3 right-3 text-muted-foreground hover:text-destructive"><X className="w-4 h-4" /></button>
                                                             </div>
-                                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-4 mt-3 bg-muted/20 p-3 rounded-lg">
-                                                                <div className="col-span-1">
-                                                                    <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Qty</Label>
-                                                                    <Input type="number" value={item.qty} onChange={(e) => handleUpdateItemQty(idx, parseInt(e.target.value) || 1)} className="h-10 text-center text-sm font-black px-1 bg-background" />
-                                                                </div>
-                                                                <div className="col-span-1">
-                                                                    <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Garansi</Label>
-                                                                    <Input value={item.garansi || ''} onChange={(e) => handleUpdateItemGaransi(idx, e.target.value)} className="h-10 text-sm font-bold bg-background" placeholder="Mis. 6 Bln" />
-                                                                </div>
-                                                                <div className="col-span-2 md:col-span-1">
-                                                                    <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Kondisi</Label>
-                                                                    <div className="flex bg-muted rounded-md p-0.5 h-10">
-                                                                        <button
-                                                                            onClick={() => handleUpdateItemKondisi(idx, 'baru')}
-                                                                            className={`flex-1 text-[10px] font-black rounded uppercase transition-all ${item.kondisi === 'baru' || !item.kondisi ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                                                                        >
-                                                                            Baru
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() => handleUpdateItemKondisi(idx, 'bekas')}
-                                                                            className={`flex-1 text-[10px] font-black rounded uppercase transition-all ${item.kondisi === 'bekas' ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-                                                                        >
-                                                                            Bekas
-                                                                        </button>
+                                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4 mt-3 bg-muted/20 p-3 rounded-lg">
+                                                                    <div className="col-span-1">
+                                                                        <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Qty</Label>
+                                                                        <Input type="number" value={item.qty} onChange={(e) => handleUpdateItemQty(idx, parseInt(e.target.value) || 1)} className="h-10 text-center text-sm font-black px-1 bg-background" />
+                                                                    </div>
+                                                                    <div className="col-span-1">
+                                                                        <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Garansi</Label>
+                                                                        <Input value={item.garansi || ''} onChange={(e) => handleUpdateItemGaransi(idx, e.target.value)} className="h-10 text-sm font-bold bg-background" placeholder="Mis. 6 Bln" />
+                                                                    </div>
+                                                                    <div className="col-span-2 md:col-span-2">
+                                                                        <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Kondisi</Label>
+                                                                        <div className="flex bg-muted rounded-md p-0.5 h-10">
+                                                                            <button
+                                                                                onClick={() => handleUpdateItemKondisi(idx, 'baru')}
+                                                                                className={`flex-1 text-[10px] font-black rounded uppercase transition-all ${item.kondisi === 'baru' || !item.kondisi ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                                                                            >
+                                                                                Baru
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => handleUpdateItemKondisi(idx, 'bekas')}
+                                                                                className={`flex-1 text-[10px] font-black rounded uppercase transition-all ${item.kondisi === 'bekas' ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                                                                            >
+                                                                                Bekas
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-span-2 md:col-span-1 flex flex-col">
+                                                                        <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Harga Modal Satuan (Rp)</Label>
+                                                                        <Input type="number" value={item.harga_modal} onChange={(e) => handleUpdateItemModal(idx, parseInt(e.target.value) || 0)} className="h-10 font-mono text-sm font-bold bg-background text-orange-600" />
+                                                                    </div>
+                                                                    {formData.tipe === 'tukar_tambah' && (
+                                                                        <div className="col-span-2 md:col-span-1 flex flex-col">
+                                                                            <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Nilai Aki Lama (Rp)</Label>
+                                                                            <Input type="number" value={item.nilai_aki_lama || 0} onChange={(e) => handleUpdateItemNilaiAkiLama(idx, parseInt(e.target.value) || 0)} className="h-10 font-mono text-sm font-bold bg-background text-emerald-600" />
+                                                                        </div>
+                                                                    )}
+                                                                    <div className={`col-span-2 ${formData.tipe === 'tukar_tambah' ? 'md:col-span-1' : 'md:col-span-2'}`}>
+                                                                        <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Harga Jual/Tukar (Rp)</Label>
+                                                                        <Input type="number" value={(item.subtotal / (item.qty || 1))} onChange={(e) => handleUpdateItemPrice(idx, parseInt(e.target.value) || 0)} className="h-10 font-mono text-sm font-bold bg-background" />
+                                                                    </div>
+                                                                    <div className="col-span-2 md:col-span-1 flex flex-col justify-end items-end pb-1">
+                                                                        <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1 block">Subtotal</Label>
+                                                                        <p className="text-lg font-black text-primary">{formatRupiah(item.subtotal)}</p>
                                                                     </div>
                                                                 </div>
-                                                                <div className="col-span-2 md:col-span-2">
-                                                                    <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1.5 block">Harga Satuan (Rp)</Label>
-                                                                    <Input type="number" value={(item.subtotal / (item.qty || 1))} onChange={(e) => handleUpdateItemPrice(idx, parseInt(e.target.value) || 0)} className="h-10 font-mono text-sm font-bold bg-background" />
-                                                                </div>
-                                                                <div className="col-span-2 md:col-span-1 flex flex-col justify-end items-end pb-1">
-                                                                    <Label className="text-[10px] font-bold uppercase text-muted-foreground mb-1 block">Subtotal</Label>
-                                                                    <p className="text-lg font-black text-primary">{formatRupiah(item.subtotal)}</p>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                     ))
                                                 )}

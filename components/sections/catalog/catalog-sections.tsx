@@ -44,7 +44,7 @@ export default function CatalogSections({
     const loading = false;
 
     const filteredProducts = useMemo(() => {
-        return allProducts.filter(item => {
+        let filtered = allProducts.filter(item => {
             // Price Filter
             if (item.harga_jual > priceRange[0]) return false;
 
@@ -79,6 +79,25 @@ export default function CatalogSections({
 
             return true;
         });
+
+        if (searchQuery) {
+            const queryLower = searchQuery.toLowerCase();
+            filtered = filtered.map(item => {
+                if (item.applications && item.applications.length > 0) {
+                    const newApps = [...item.applications];
+                    newApps.sort((a, b) => {
+                        const aMatches = a.nama_mobil?.toLowerCase().includes(queryLower) ? 1 : 0;
+                        const bMatches = b.nama_mobil?.toLowerCase().includes(queryLower) ? 1 : 0;
+                        // if both match or both don't match, keep original order. Otherwise, matched comes first.
+                        return bMatches - aMatches;
+                    });
+                    return { ...item, applications: newApps };
+                }
+                return item;
+            });
+        }
+
+        return filtered;
     }, [allProducts, selectedCategories, selectedMereks, selectedKondisis, selectedAmperes, priceRange, searchQuery]);
 
     const handleSearch = useCallback((value: string) => {
@@ -143,13 +162,11 @@ export default function CatalogSections({
             </div>
 
             <div className="py-10 lg:py-20 bg-background border-b border-border/50 relative overflow-hidden">
-                
+
                 <div className="container mx-auto px-6 max-w-7xl mb-8 lg:mb-12 relative z-10">
                     <div className="flex justify-between items-end">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-border/60 bg-card text-muted-foreground">
-                                <span>Pilihan Terbaik</span>
-                            </div>
+
                             <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50">
                                 Katalog Produk
                             </h2>
@@ -160,92 +177,92 @@ export default function CatalogSections({
                     </div>
                 </div>
 
-            <div className="container mx-auto px-4 lg:px-6 max-w-7xl mb-10 relative z-10">
-                {/* Search Bar */}
-                <motion.div
-                    className="my-4 lg:my-6 flex flex-row w-full gap-3"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="flex-1 w-full group">
-                        <div className="relative">
-                            <Search className="absolute left-4 lg:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-foreground transition-colors" />
-                            <Input
-                                id="search"
-                                type="text"
-                                placeholder="Cari nama, tipe baterai, atau kendaraan..."
-                                value={searchQuery}
-                                onChange={(e) => handleSearch(e.target.value)}
-                                className="pl-12 lg:pl-14 h-12 lg:h-14 rounded-full border-border/60 bg-card shadow-none hover:border-border focus:border-border focus:ring-0 transition-all text-sm lg:text-base"
-                            />
+                <div className="container mx-auto px-4 lg:px-6 max-w-7xl mb-10 relative z-10">
+                    {/* Search Bar */}
+                    <motion.div
+                        className="my-4 lg:my-6 flex flex-row w-full gap-3"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <div className="flex-1 w-full group">
+                            <div className="relative">
+                                <Search className="absolute left-4 lg:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-foreground transition-colors" />
+                                <Input
+                                    id="search"
+                                    type="text"
+                                    placeholder="Cari nama, tipe baterai, atau kendaraan..."
+                                    value={searchQuery}
+                                    onChange={(e) => handleSearch(e.target.value)}
+                                    className="pl-12 lg:pl-14 h-12 lg:h-14 rounded-full border-border/60 bg-card shadow-none hover:border-border focus:border-border focus:ring-0 transition-all text-sm lg:text-base"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="md:hidden">
-                        <Button 
-                            variant="outline" 
-                            size="icon" 
-                            onClick={() => setSheetOpen(true)}
-                            className="relative h-12 w-12 rounded-full border-border/60 bg-card shadow-none hover:border-border hover:bg-muted transition-all"
-                        >
-                            <Funnel className="size-5" />
-                            {activeFiltersCount > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-none">
-                                    {activeFiltersCount}
-                                </span>
-                            )}
-                        </Button>
+                        <div className="md:hidden">
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => setSheetOpen(true)}
+                                className="relative h-12 w-12 rounded-full border-border/60 bg-card shadow-none hover:border-border hover:bg-muted transition-all"
+                            >
+                                <Funnel className="size-5" />
+                                {activeFiltersCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-none">
+                                        {activeFiltersCount}
+                                    </span>
+                                )}
+                            </Button>
 
-                    </div>
-                </motion.div>
+                        </div>
+                    </motion.div>
 
-                {/* Mobile Filter Button */}
+                    {/* Mobile Filter Button */}
 
 
-                {/* Desktop & Mobile Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    {/* Desktop Filter - Hidden on Mobile */}
-                    <div className="hidden md:block">
+                    {/* Desktop & Mobile Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        {/* Desktop Filter - Hidden on Mobile */}
+                        <div className="hidden md:block">
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                            >
+                                <FilterSection
+                                    selectedCategories={selectedCategories}
+                                    setSelectedCategories={setSelectedCategories}
+                                    selectedMereks={selectedMereks}
+                                    setSelectedMereks={setSelectedMereks}
+                                    selectedKondisis={selectedKondisis}
+                                    setSelectedKondisis={setSelectedKondisis}
+                                    selectedAmperes={selectedAmperes}
+                                    setSelectedAmperes={setSelectedAmperes}
+                                    priceRange={priceRange}
+                                    setPriceRange={setPriceRange}
+                                    categories={categories}
+                                    brands={brands}
+                                    amperes={amperes}
+                                    onReset={handleReset}
+                                />
+                            </motion.div>
+                        </div>
+
+                        {/* Product Grid */}
                         <motion.div
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="md:col-span-3"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            <FilterSection
-                                selectedCategories={selectedCategories}
-                                setSelectedCategories={setSelectedCategories}
-                                selectedMereks={selectedMereks}
-                                setSelectedMereks={setSelectedMereks}
-                                selectedKondisis={selectedKondisis}
-                                setSelectedKondisis={setSelectedKondisis}
-                                selectedAmperes={selectedAmperes}
-                                setSelectedAmperes={setSelectedAmperes}
-                                priceRange={priceRange}
-                                setPriceRange={setPriceRange}
-                                categories={categories}
-                                brands={brands}
-                                amperes={amperes}
+                            <ProductGrid
+                                products={filteredProducts}
+                                onAddToCart={handleAddToCart}
                                 onReset={handleReset}
                             />
                         </motion.div>
                     </div>
-
-                    {/* Product Grid */}
-                    <motion.div
-                        className="md:col-span-3"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                    >
-                        <ProductGrid
-                            products={filteredProducts}
-                            onAddToCart={handleAddToCart}
-                            onReset={handleReset}
-                        />
-                    </motion.div>
                 </div>
-            </div>
             </div>
             <AnimatePresence>
                 {sheetOpen && (

@@ -74,15 +74,13 @@ export default async function ArtikelPage() {
                 <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="container mx-auto px-6 max-w-7xl relative z-10">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                         className="max-w-3xl"
                     >
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 text-[10px] lg:text-xs font-bold tracking-widest uppercase border rounded-full border-primary/30 bg-primary/5 text-primary">
-                            <span>Wawasan Otomotif</span>
-                        </div>
+
                         <h1 className="text-5xl lg:text-8xl font-extrabold tracking-tighter mb-6 lg:mb-8 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50 leading-[1.05]">
                             Artikel & <br />
                             <span className="text-primary">Tips Terbaru</span>

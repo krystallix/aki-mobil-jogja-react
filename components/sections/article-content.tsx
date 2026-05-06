@@ -171,43 +171,56 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                                 </div>
                             </div>
                         )}
-                    </div>
 
-                    {/* Right Column - Sidebar */}
-                    <aside className="lg:col-span-4 space-y-12">
-                        {/* Featured Sidebar CTA */}
-                        <div className="relative overflow-hidden bg-card border border-border/50 rounded-[2.5rem] p-8 group">
-                            <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative z-10 space-y-6">
-                                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                                    <MessageSquare size={24} />
+                        {/* CTA Banner */}
+                        <div className="mt-8 w-full relative overflow-hidden bg-primary rounded-2xl p-4 md:px-6 shadow-xl shadow-primary/20">
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-linear-to-r from-primary via-primary/80 to-indigo-600/80 pointer-events-none" />
+                            {/* Grid Overlay */}
+                            <div 
+                                className="absolute inset-0 opacity-[0.15] pointer-events-none"
+                                style={{
+                                    backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.4) 1px, transparent 1px)`,
+                                    backgroundSize: `24px 24px`,
+                                }}
+                            />
+
+                            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="flex items-center gap-3 w-full sm:w-auto">
+                                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0 hidden sm:flex">
+                                        <MessageSquare size={18} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-white">
+                                            Butuh Konsultasi Aki?
+                                        </h3>
+                                        <p className="text-xs text-white/80 hidden sm:block">Tanya ahlinya langsung via WhatsApp, gratis!</p>
+                                    </div>
                                 </div>
-                                <h3 className="text-2xl font-extrabold tracking-tight">
-                                    Butuh Konsultasi Aki?
-                                </h3>
-                                <p className="text-muted-foreground font-light text-sm leading-relaxed">
-                                    Tanyakan langsung pada ahlinya mengenai masalah aki kendaraan Anda. Gratis konsultasi via WhatsApp!
-                                </p>
+                                
                                 <a
                                     href="https://wa.me/6281354007400"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-2 w-full h-12 rounded-full bg-primary text-primary-foreground font-bold hover:scale-105 transition-transform"
+                                    className="inline-flex items-center justify-center gap-2 shrink-0 px-6 h-10 rounded-full bg-white text-primary font-bold hover:scale-105 hover:bg-white/90 transition-all text-sm w-full sm:w-auto shadow-lg"
                                 >
-                                    <FaWhatsapp size={18} />
+                                    <FaWhatsapp size={16} />
                                     Chat Sekarang
                                 </a>
                             </div>
                         </div>
+                    </div>
 
+                    {/* Right Column - Sidebar */}
+                    <aside className="lg:col-span-4 space-y-12">
                         {/* Related Articles */}
                         {relatedArticles.length > 0 && (
-                            <div className="space-y-6">
+                            <div className="space-y-6 sticky top-24">
                                 <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest px-2">
                                     Baca Juga
                                 </h3>
                                 <div className="space-y-4">
-                                    {relatedArticles.slice(0, 3).map((rel) => (
+                                    {relatedArticles.slice(0, 5).map((rel) => (
                                         <Link
                                             key={rel.id}
                                             href={`/artikel/${rel.slug}`}

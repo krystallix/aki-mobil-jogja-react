@@ -91,8 +91,8 @@ export default function Footer() {
                                 <div className="flex items-start gap-3">
                                     <Clock className="w-5 h-5 shrink-0 mt-0.5 text-primary" />
                                     <div className="text-sm lg:text-base">
-                                        <p>Senin - Sabtu: 08.00 - 21.00 WIB</p>
-                                        <p>Minggu: 10.00 - 21.00 WIB</p>
+                                        <p>Senin - Sabtu: 00.00 - 00.00 WIB</p>
+                                        <p>Minggu: 00.00 - 00.00 WIB</p>
                                     </div>
                                 </div>
                             </div>

@@ -368,7 +368,7 @@ export default function TentangKamiPage() {
                                             <ArrowRight className="w-4 h-4" />
                                         </span>
                                     </Link>
-                                    <Link href="/kontak" className="w-full sm:w-auto">
+                                    <Link href="https://wa.me/6281354007400" target="_blank" className="w-full sm:w-auto">
                                         <span className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white font-bold text-sm lg:text-base hover:bg-white/10 active:scale-95 transition-all w-full backdrop-blur-sm">
                                             Hubungi Kami
                                         </span>

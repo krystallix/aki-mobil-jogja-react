@@ -73,7 +73,7 @@ export default function DashboardPage() {
                 supabase.from("transactions").select("id, customer_nama, tipe, status, subtotal, diskon, total, created_at, paid_at"),
                 supabase.from("customers").select("id, created_at"),
                 supabase.from("products").select("id, nama, merek, stok, harga_jual, harga_modal"),
-                supabase.from("transaction_items").select("product_id, nama_produk, merek, qty, harga_modal, subtotal, transaction_id"),
+                supabase.from("transaction_items").select("product_id, nama_produk, merek, qty, harga_modal, nilai_aki_lama, subtotal, transaction_id"),
             ]);
 
             const txs = txRes.data || [];
@@ -93,16 +93,16 @@ export default function DashboardPage() {
                 .filter(t => t.paid_at && t.paid_at >= startOfLastMonth && t.paid_at <= endOfLastMonth)
                 .reduce((s, t) => s + (t.total || 0), 0);
 
-            // Profit (revenue - modal dari items paid)
+            // Profit (revenue - (modal - nilai_aki_lama) dari items paid)
             const paidItems = items.filter(i => paidIds.has(i.transaction_id));
-            const totalModal = paidItems.reduce((s, i) => s + (i.harga_modal || 0) * (i.qty || 1), 0);
+            const totalModal = paidItems.reduce((s, i) => s + ((i.harga_modal || 0) * (i.qty || 1)) - (i.nilai_aki_lama || 0), 0);
             const totalProfit = totalRevenue - totalModal;
 
             const paidItemsThisMonth = paidItems.filter(i => {
                 const tx = paidTxs.find(t => t.id === i.transaction_id);
                 return tx && tx.paid_at && tx.paid_at >= startOfMonth;
             });
-            const modalThisMonth = paidItemsThisMonth.reduce((s, i) => s + (i.harga_modal || 0) * (i.qty || 1), 0);
+            const modalThisMonth = paidItemsThisMonth.reduce((s, i) => s + ((i.harga_modal || 0) * (i.qty || 1)) - (i.nilai_aki_lama || 0), 0);
             const profitThisMonth = revenueThisMonth - modalThisMonth;
 
             // Transaction counts
@@ -147,7 +147,7 @@ export default function DashboardPage() {
                     const tx = paidTxs.find(t => t.id === it.transaction_id);
                     return tx && tx.paid_at && tx.paid_at >= start && tx.paid_at <= end;
                 });
-                const modal = monthPaidItems.reduce((s, it) => s + (it.harga_modal || 0) * (it.qty || 1), 0);
+                const modal = monthPaidItems.reduce((s, it) => s + ((it.harga_modal || 0) * (it.qty || 1)) - (it.nilai_aki_lama || 0), 0);
                 monthlyRevenue.push({
                     month: d.toLocaleDateString("id-ID", { month: "short", year: "2-digit" }),
                     revenue: rev,
