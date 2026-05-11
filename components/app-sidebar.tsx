@@ -17,7 +17,7 @@ import {
   LayoutDashboardIcon,
   BatteryFullIcon,
   FileTextIcon,
-  WrenchIcon,
+  ImagePlusIcon,
   ShoppingCartIcon,
   Settings2Icon,
   UsersIcon
@@ -48,9 +48,9 @@ const data = {
       icon: <FileTextIcon />,
     },
     {
-      title: "Layanan",
+      title: "Generator Konten",
       url: "/dashboard/layanan",
-      icon: <WrenchIcon />,
+      icon: <ImagePlusIcon />,
     },
   ],
   navBusiness: [
