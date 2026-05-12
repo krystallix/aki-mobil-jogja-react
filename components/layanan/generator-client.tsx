@@ -221,7 +221,8 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
       minimumFractionDigits: 0,
     }).format(amount)
 
-  const spec = selectedProduct?.specifications?.[0] || {}
+  const rawSpec = selectedProduct?.specifications
+  const spec = (Array.isArray(rawSpec) ? rawSpec[0] : rawSpec) || {}
   const cleanName = selectedProduct?.nama ? selectedProduct.nama.replace(/\s*\(.*?\)\s*/g, '').trim() : ""
   const capacityValue = spec.kapasitas ? spec.kapasitas.replace(/ah/gi, 'AH').trim() : ""
 
@@ -280,14 +281,6 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
 
     // Default fallback (Slate / Hitam)
     return createTheme("#334155", "#0f172a")
-  }
-
-  const getCategoryStyles = (kategori: string) => {
-    const k = kategori?.toLowerCase() || ""
-    if (k.includes("kering")) return "bg-slate-100 text-slate-900"
-    if (k.includes("basah")) return "bg-blue-400 text-blue-950"
-    if (k.includes("hybrid")) return "bg-green-400 text-green-950"
-    return "bg-slate-200 text-slate-700"
   }
 
   return (
@@ -395,8 +388,8 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
                     key={i}
                     onClick={() => setSelectedAiTitle(title)}
                     className={`w-full text-left text-xs px-3 py-2 rounded-lg border transition-all leading-snug ${selectedAiTitle === title
-                        ? "border-violet-500 bg-white text-violet-800 font-semibold shadow-sm"
-                        : "border-violet-100 bg-white/60 text-slate-700 hover:border-violet-300 hover:bg-white"
+                      ? "border-violet-500 bg-white text-violet-800 font-semibold shadow-sm"
+                      : "border-violet-100 bg-white/60 text-slate-700 hover:border-violet-300 hover:bg-white"
                       }`}
                   >
                     {selectedAiTitle === title && <span className="text-violet-500 mr-1">✓</span>}

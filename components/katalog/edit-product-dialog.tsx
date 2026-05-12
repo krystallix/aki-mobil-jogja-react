@@ -108,9 +108,13 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
 
     useEffect(() => {
         if (product && open) {
-            const spec = product.specifications?.[0]
-            const apps = product.applications?.map((app) => app.nama_mobil) || []
+            // Supabase bisa return specifications sebagai object atau array
+            const rawSpec = product.specifications
+            const spec = Array.isArray(rawSpec) ? rawSpec[0] : rawSpec
+            const apps = product.applications?.map((app: any) => app.nama_mobil) || []
 
+            console.log("[EDIT DIALOG] spec resolved:", spec)
+            console.log("[EDIT DIALOG] kapasitas:", spec?.kapasitas)
             form.reset({
                 nama: product.nama || "",
                 merek: product.merek || "",
