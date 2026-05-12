@@ -2,6 +2,9 @@ import DashboardLayout from "@/components/layouts/dashboard-layout"
 import GeneratorClient from "@/components/layanan/generator-client"
 import { fetchAllProducts } from "@/lib/supabase/queries"
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata = {
   title: "Generator Konten - Siswanto Aki",
   description: "Generator gambar konten sosial media",

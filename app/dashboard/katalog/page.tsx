@@ -2,6 +2,9 @@ import DashboardLayout from "@/components/layouts/dashboard-layout"
 import { fetchAllProducts } from "@/lib/supabase/queries"
 import { ProductCardGrid } from "@/components/katalog/product-card-grid"
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function KatalogPage() {
     const batteries = await fetchAllProducts()
 

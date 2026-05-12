@@ -70,6 +70,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
     const [filterOpen, setFilterOpen] = React.useState(false)
     const [filterKategori, setFilterKategori] = React.useState<string>("all")
     const router = useRouter()
+    const editTargetId = React.useRef<string | null>(null)
 
     const kategoriList = React.useMemo(() => {
         const set = new Set(data.map((b) => b.kategori).filter(Boolean))
@@ -106,7 +107,8 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
     }
 
     const handleSuccess = async (id?: string) => {
-        if (id) await revalidateProducts(id)
+        const targetId = id || editTargetId.current || undefined
+        if (targetId) await revalidateProducts(targetId)
         router.refresh()
     }
 
@@ -254,7 +256,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                         <div className="w-full shrink-0 snap-center p-[3px] rounded-2xl border border-border/60 bg-background transition-all duration-300">
                                             <div
                                                 className="flex items-center gap-3 px-3 py-2.5 bg-background rounded-[calc(1rem-3px)] cursor-pointer active:bg-muted/50"
-                                                onClick={() => setEditTarget(battery)}
+                                                onClick={() => { editTargetId.current = battery.id; setEditTarget(battery) }}
                                             >
                                                 {/* Thumbnail */}
                                                 <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-border/50 bg-muted/30">
@@ -410,7 +412,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                 <div className="flex gap-1.5 pt-2 border-t border-border/40">
                                                     <button
                                                         className="flex-1 h-8 rounded-lg bg-transparent border border-primary/60 text-primary flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
-                                                        onClick={() => setEditTarget(battery)}
+                                                        onClick={() => { editTargetId.current = battery.id; setEditTarget(battery) }}
                                                     >
                                                         <Pencil className="w-3 h-3" />
                                                         Edit
@@ -489,8 +491,12 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
             <EditProductDialog
                 product={editTarget}
                 open={!!editTarget}
-                onOpenChange={(open) => { if (!open) setEditTarget(null) }}
-                onSuccess={() => handleSuccess(editTarget?.id)}
+                onOpenChange={(open) => { if (!open) { editTargetId.current = null; setEditTarget(null) } }}
+                onSuccess={() => {
+                    const id = editTargetId.current || undefined
+                    editTargetId.current = null
+                    handleSuccess(id)
+                }}
             />
             <DeleteProductDialog
                 product={deleteTarget}

@@ -33,7 +33,6 @@ import { Badge } from "@/components/ui/badge"
 import { createClient } from "@/lib/supabase/client"
 import {
     uploadProductImage,
-    updateProductWithTransaction,
     deleteProductImage,
 } from "@/lib/supabase/queries"
 import { revalidateProducts } from "@/app/actions/revalidate"
@@ -296,7 +295,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                 merek: values.merek,
                 tipe: values.tipe,
                 harga_modal: values.harga_modal === "" ? 0 : Number(values.harga_modal),
-                harga_tukar: values.harga_tukar === "" ? null : Number(values.harga_tukar) || null,
+                harga_tukar: values.harga_tukar === "" ? null : Number(values.harga_tukar),
                 harga_jual: values.harga_jual === "" ? 0 : Number(values.harga_jual),
                 stok: values.stok === "" ? 0 : Number(values.stok),
                 garansi: values.garansi || null,
@@ -307,14 +306,75 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
             const specData = {
                 kapasitas: values.kapasitas,
                 voltase: values.voltase,
-                panjang: values.panjang === "" ? null : Number(values.panjang) || null,
-                lebar: values.lebar === "" ? null : Number(values.lebar) || null,
-                tinggi: values.tinggi === "" ? null : Number(values.tinggi) || null,
-                berat: values.berat === "" ? null : Number(values.berat) || null,
+                panjang: values.panjang === "" ? null : Number(values.panjang),
+                lebar: values.lebar === "" ? null : Number(values.lebar),
+                tinggi: values.tinggi === "" ? null : Number(values.tinggi),
+                berat: values.berat === "" ? null : Number(values.berat),
                 polaritas: values.polaritas || null,
             }
 
-            await updateProductWithTransaction(supabase, product.id, productData, specData, mobil)
+            // 1. Update tabel products langsung
+            console.log("[EDIT] Updating product:", product.id, productData)
+            const { error: productError } = await supabase
+                .from("products")
+                .update(productData)
+                .eq("id", product.id)
+
+            if (productError) {
+                console.error("[EDIT] Product update error:", productError)
+                throw productError
+            }
+            console.log("[EDIT] Product updated ✅")
+
+            // 2. Upsert spesifikasi (insert jika belum ada, update jika sudah ada)
+            const specPayload = {
+                product_id: product.id,
+                kapasitas: specData.kapasitas || "",
+                voltase: specData.voltase || "",
+                panjang: specData.panjang,
+                lebar: specData.lebar,
+                tinggi: specData.tinggi,
+                berat: specData.berat,
+                polaritas: specData.polaritas,
+            }
+            console.log("[EDIT] Upserting specifications:", specPayload)
+            const { data: specResult, error: specError } = await supabase
+                .from("specifications")
+                .upsert(specPayload, { onConflict: "product_id" })
+                .select()
+
+            console.log("[EDIT] Spec upsert result:", specResult)
+            console.log("[EDIT] Spec upsert error:", specError)
+
+            if (specError) throw specError
+            console.log("[EDIT] Specifications upserted ✅")
+
+            // 3. Hapus dan re-insert daftar kendaraan
+            console.log("[EDIT] Deleting old applications for:", product.id)
+            const { error: deleteAppError } = await supabase
+                .from("applications")
+                .delete()
+                .eq("product_id", product.id)
+
+            if (deleteAppError) {
+                console.error("[EDIT] Delete applications error:", deleteAppError)
+                throw deleteAppError
+            }
+            console.log("[EDIT] Old applications deleted ✅")
+
+            if (mobil.length > 0) {
+                const appRows = mobil.map((nama) => ({ product_id: product.id, nama_mobil: nama }))
+                console.log("[EDIT] Inserting applications:", appRows.length, "items")
+                const { error: insertAppError } = await supabase
+                    .from("applications")
+                    .insert(appRows)
+
+                if (insertAppError) {
+                    console.error("[EDIT] Insert applications error:", insertAppError)
+                    throw insertAppError
+                }
+                console.log("[EDIT] Applications inserted ✅")
+            }
 
             const shouldDeleteOld = imageWasUploaded || imageWasRemoved || imageShouldBeMoved
 

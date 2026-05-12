@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import html2canvas from "html2canvas-pro"
-import { DownloadIcon, RefreshCwIcon, PaletteIcon, Search, Package, Zap, ShieldCheck, Globe, Check, ClipboardList, Facebook } from "lucide-react"
+import { DownloadIcon, RefreshCwIcon, PaletteIcon, Search, Package, Zap, ShieldCheck, Globe, Check, ClipboardList, Facebook, Sparkles, ChevronDown } from "lucide-react"
 import Image from "next/image"
 import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -25,6 +25,10 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
   const [isPosting, setIsPosting] = useState(false)
   const [activeSlide, setActiveSlide] = useState<1 | 2>(1)
   const [isCopied, setIsCopied] = useState(false)
+  const [aiTitles, setAiTitles] = useState<string[]>([])
+  const [selectedAiTitle, setSelectedAiTitle] = useState<string>("")
+  const [isGeneratingTitle, setIsGeneratingTitle] = useState(false)
+  const [showTitlePanel, setShowTitlePanel] = useState(false)
 
   // Handle responsive scale for the preview
   useEffect(() => {
@@ -59,7 +63,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
     const apps = selectedProduct.applications?.slice(0, 15).map((app: any) => `- ${app.nama_mobil}`).join('\n') || '-'
     const moreApps = selectedProduct.applications?.length > 15 ? '\n- ... dan lainnya' : ''
     return [
-      `🌟 ${selectedProduct.merek} ${cleanName} 🌟`,
+      `🌟 ${cleanName} 🌟`,
       ``,
       `📊 SPESIFIKASI:`,
       `- Merek: ${selectedProduct.merek}`,
@@ -84,6 +88,38 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
       `WhatsApp: 0813 5400 7400`,
       `Website: akimobiljogja.com`,
     ].join('\n')
+  }
+
+  const generateAiTitle = async () => {
+    if (!selectedProduct || isGeneratingTitle) return
+    setIsGeneratingTitle(true)
+    setShowTitlePanel(true)
+    setAiTitles([])
+    setSelectedAiTitle("")
+    try {
+      const apps = selectedProduct.applications?.slice(0, 8).map((a: any) => a.nama_mobil) || []
+      const spec = selectedProduct.specifications?.[0] || {}
+      const res = await fetch("/api/ai-title", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          merek: selectedProduct.merek,
+          nama: cleanName,
+          kapasitas: spec.kapasitas || "",
+          kategori: selectedProduct.kategori,
+          aplikasi: apps,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Gagal generate judul")
+      const titles: string[] = data.titles || []
+      setAiTitles(titles)
+      if (titles.length > 0) setSelectedAiTitle(titles[0])
+    } catch (err: any) {
+      toast.error(`Gagal generate judul AI: ${err.message}`)
+    } finally {
+      setIsGeneratingTitle(false)
+    }
   }
 
   const postToFacebook = () => {
@@ -116,7 +152,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
       const images: string[] = rawBase64 ? [rawBase64] : []
 
       const payload = {
-        title: `AKI ${cleanName} BARU BERGARANSI`,
+        title: selectedAiTitle || `AKI ${cleanName} BARU BERGARANSI`,
         price: String(selectedProduct.harga_tukar),
         category: "Auto Parts",
         condition: selectedProduct.kondisi?.toLowerCase() === "baru" ? "new" : "used",
@@ -199,11 +235,58 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
     setIsCopied(true)
   }
 
+  const getTheme = (merek: string, kategori: string) => {
+    const m = merek?.toLowerCase() || ""
+    const k = kategori?.toLowerCase() || ""
+
+    // Helper to generate consistent light theme structure
+    const createTheme = (primary: string, secondary: string, gradient?: string) => ({
+      slideBg: `linear-gradient(to top right, #ffffff, #f1f5f9)`, // Selalu putih ke slate
+      accent: primary, accentBright: secondary,
+      titleColor: secondary, subtitleColor: primary,
+      titleGradient: gradient,
+      badgeBg: primary, badgeText: "#ffffff",
+      zapColor: primary, shieldColor: primary,
+      divider: `${secondary}20`, // 20% opacity hex
+      footerColor: primary,
+      urlColor: primary, dotColor: primary,
+      watermarkColor: `${secondary}08`, // 8% opacity hex
+      accentBar: primary, labelColor: primary,
+      newBadgeBg: secondary, newBadgeText: "#ffffff",
+      slide2Accent: primary,
+    })
+
+    if (m.includes("incoe")) {
+      return createTheme("#1d4ed8", "#1e3a8a") // Biru
+    }
+    if (m.includes("msb")) {
+      return createTheme("#b91c1c", "#7f1d1d", "linear-gradient(to right, #000000, #b91c1c)") // Merah (Hitam ke Merah Solid)
+    }
+    if (m.includes("gs") && (m.includes("hybrid") || k.includes("hybrid"))) {
+      return createTheme("#16a34a", "#166534", "linear-gradient(to right, #064e3b, #16a34a)") // Hijau (GS Hybrid)
+    }
+    if (m.includes("gs")) { // GS MF (kering) atau GS lainnya
+      return createTheme("#166534", "#052e16") // Hijau Tua
+    }
+    if (m.includes("aspira") && (m.includes("hybrid") || k.includes("hybrid"))) {
+      return createTheme("#d97706", "#7c2d12") // Kuning Merah Gelap (Amber/Rust)
+    }
+    if (m.includes("aspira")) { // Aspira MF (kering)
+      return createTheme("#334155", "#0f172a") // Hitam / Slate
+    }
+    if (m.includes("chilwee")) {
+      return createTheme("#15803d", "#064e3b", "linear-gradient(to right, #0f172a, #16a34a)") // Hijau Tua
+    }
+
+    // Default fallback (Slate / Hitam)
+    return createTheme("#334155", "#0f172a")
+  }
+
   const getCategoryStyles = (kategori: string) => {
     const k = kategori?.toLowerCase() || ""
-    if (k.includes("kering")) return "bg-slate-900 text-white"
-    if (k.includes("basah")) return "bg-indigo-600 text-white"
-    if (k.includes("hybrid")) return "bg-emerald-600 text-white"
+    if (k.includes("kering")) return "bg-slate-100 text-slate-900"
+    if (k.includes("basah")) return "bg-blue-400 text-blue-950"
+    if (k.includes("hybrid")) return "bg-green-400 text-green-950"
     return "bg-slate-200 text-slate-700"
   }
 
@@ -265,11 +348,73 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
           <CardHeader className="pb-3 bg-slate-50/50 border-b">
             <CardTitle className="text-lg flex justify-between items-center gap-2">
               <span>Deskripsi</span>
-              <Button size="icon" variant="outline" onClick={copyToClipboard} className="bg-background">
-                {isCopied ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardList className="w-4 h-4" />}
-              </Button>
-
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={generateAiTitle}
+                  disabled={!selectedProduct || isGeneratingTitle}
+                  className="h-8 px-3 gap-1.5 text-xs font-semibold border-violet-200 text-violet-700 hover:bg-violet-50 hover:border-violet-400 transition-all"
+                  title="Generate judul AI yang menarik untuk posting"
+                >
+                  {isGeneratingTitle
+                    ? <RefreshCwIcon className="w-3 h-3 animate-spin" />
+                    : <Sparkles className="w-3 h-3" />}
+                  AI Title
+                </Button>
+                <Button size="icon" variant="outline" onClick={copyToClipboard} className="bg-background h-8 w-8">
+                  {isCopied ? <Check className="w-4 h-4 text-green-500" /> : <ClipboardList className="w-4 h-4" />}
+                </Button>
+              </div>
             </CardTitle>
+
+            {/* AI Title Panel */}
+            {showTitlePanel && (
+              <div className="mt-3 rounded-xl border border-violet-200 bg-violet-50/70 p-3 space-y-2">
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[11px] font-bold text-violet-600 uppercase tracking-widest flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> Judul AI — Pilih yang terbaik
+                  </p>
+                  <button
+                    onClick={() => setShowTitlePanel(false)}
+                    className="text-[10px] text-violet-400 hover:text-violet-700 transition-colors"
+                  >
+                    tutup
+                  </button>
+                </div>
+
+                {isGeneratingTitle && (
+                  <div className="flex items-center gap-2 text-violet-500 text-xs py-2">
+                    <RefreshCwIcon className="w-3 h-3 animate-spin" />
+                    <span>Generating dengan NVIDIA AI...</span>
+                  </div>
+                )}
+
+                {aiTitles.map((title, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedAiTitle(title)}
+                    className={`w-full text-left text-xs px-3 py-2 rounded-lg border transition-all leading-snug ${selectedAiTitle === title
+                        ? "border-violet-500 bg-white text-violet-800 font-semibold shadow-sm"
+                        : "border-violet-100 bg-white/60 text-slate-700 hover:border-violet-300 hover:bg-white"
+                      }`}
+                  >
+                    {selectedAiTitle === title && <span className="text-violet-500 mr-1">✓</span>}
+                    {title}
+                  </button>
+                ))}
+
+                {!isGeneratingTitle && aiTitles.length === 0 && (
+                  <p className="text-xs text-slate-400 text-center py-2">Belum ada judul. Klik AI Title untuk generate.</p>
+                )}
+
+                {selectedAiTitle && (
+                  <div className="pt-1 border-t border-violet-200 mt-1">
+                    <p className="text-[10px] text-violet-500 font-medium">✅ Judul ini akan dipakai saat post ke Facebook Marketplace</p>
+                  </div>
+                )}
+              </div>
+            )}
           </CardHeader>
           <CardContent className="flex-1 p-0 flex flex-col">
             {selectedProduct ? (
@@ -338,172 +483,177 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
           {selectedProduct ? (
             <div className="w-full h-full relative">
 
-              {/* SLIDE 1 - New Clean Layout from Image */}
-              <div
-                ref={printRef1}
-                className={`w-[1080px] h-[1080px] absolute top-0 origin-top-left flex flex-col bg-linear-to-tr from-white to-slate-300 text-slate-900 overflow-hidden px-16 py-14 transition-opacity duration-300}`}
-                style={{ transform: `scale(${scale})` }}
-              >
-                {/* Background Patterns (BEHIND CONTENT) */}
-                <div className="absolute inset-0 z-0 pointer-events-none">
-                  <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0)_0%,rgba(255,255,255,1)_100%)]" />
-                  {/* Repeated Watermark Pattern */}
-                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none z-0 overflow-hidden">
-                    <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
-                      {Array.from({ length: 400 }).map((_, i) => (
-                        <span key={i} className="text-lg font-black uppercase whitespace-nowrap text-indigo-700">Siswanto Aki</span>
-                      ))}
+              {/* SLIDE 1 - Themed by battery type */}
+              {(() => {
+                const t = getTheme(selectedProduct.merek, selectedProduct.kategori)
+                const whatsappPath = "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.894-5.335 11.897-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                return (
+                  <div
+                    ref={printRef1}
+                    className="w-[1080px] h-[1080px] absolute top-0 origin-top-left flex flex-col overflow-hidden px-16 py-14 transition-opacity duration-300"
+                    style={{ transform: `scale(${scale})`, background: t.slideBg }}
+                  >
+                    {/* Background grid + watermark */}
+                    <div className="absolute inset-0 z-0 pointer-events-none">
+                      <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(${t.watermarkColor} 1px, transparent 1px), linear-gradient(90deg, ${t.watermarkColor} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+                      <div className="absolute inset-0 pointer-events-none flex items-center justify-center select-none overflow-hidden">
+                        <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
+                          {Array.from({ length: 300 }).map((_, i) => (
+                            <span key={i} className="text-lg font-black uppercase whitespace-nowrap" style={{ color: t.watermarkColor }}>Siswanto Aki</span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>                </div>
 
-                <div className="relative z-10 flex flex-col h-full w-full">
-                  {/* Header Row */}
-                  <div className="flex justify-between items-start w-full mb-2">
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center gap-2 text-indigo-500 font-black text-3xl tracking-tight mb-2">
-                        {isBaru && (
-                          <div className="bg-indigo-600 text-white px-8 py-1 rounded-full font-black text-3xl">
-                            NEW!!!
+                    <div className="relative z-10 flex flex-col h-full w-full">
+                      {/* Header */}
+                      <div className="flex justify-between items-start w-full mb-2">
+                        <div className="flex flex-col gap-4">
+                          <div className="flex items-center gap-4 mb-2">
+                            {isBaru && (
+                              <div className="px-8 py-1 rounded-full font-black text-3xl" style={{ background: t.newBadgeBg, color: t.newBadgeText }}>NEW!!!</div>
+                            )}
+                            <div className="px-8 py-1 rounded-full font-black text-3xl" style={{ background: t.newBadgeBg, color: t.newBadgeText }}>
+                              GRATIS ANTAR PASANG
+                            </div>
+                          </div>
+                          <h1 className="text-[72px] leading-none font-black tracking-tighter uppercase max-w-[800px]" style={t.titleGradient ? { backgroundImage: t.titleGradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: t.titleColor }}>
+                            {cleanName}
+                          </h1>
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="w-full mt-4 mb-4" style={{ borderTop: `3px dotted ${t.divider}` }} />
+
+                      {/* Product image */}
+                      <div className="flex-1 flex items-center justify-center relative w-full my-4">
+                        {selectedProduct.gambar ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={selectedProduct.gambar} alt={selectedProduct.nama}
+                            className="w-full max-w-[850px] max-h-[600px] object-contain relative z-10"
+                            style={{ filter: "drop-shadow(0 40px 60px rgba(0,0,0,0.5))" }}
+                            crossOrigin="anonymous"
+                          />
+                        ) : (
+                          <Package className="w-48 h-48" style={{ color: t.accent }} />
+                        )}
+                      </div>
+
+                      {/* Footer badges */}
+                      <div className="mt-auto pt-4">
+                        <div className="flex justify-start gap-10 items-center mb-10 px-2">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm font-bold uppercase tracking-widest ml-1" style={{ color: t.labelColor }}>Kategori</span>
+                            <div className="px-6 py-1 rounded-full text-2xl font-black uppercase tracking-tighter" style={{ background: t.badgeBg, color: t.badgeText }}>
+                              {selectedProduct.kategori}
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm font-bold uppercase tracking-widest ml-1" style={{ color: t.labelColor }}>Kapasitas</span>
+                            <div className="text-4xl font-black uppercase tracking-tighter flex items-center gap-2" style={{ color: t.titleColor }}>
+                              <Zap className="w-7 h-7" style={{ color: t.zapColor }} />
+                              {capacityValue}
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm font-bold uppercase tracking-widest ml-1" style={{ color: t.labelColor }}>Garansi</span>
+                            <div className="text-4xl font-black uppercase tracking-tighter flex items-center gap-2" style={{ color: t.titleColor }}>
+                              <ShieldCheck className="w-7 h-7" style={{ color: t.shieldColor }} />
+                              {selectedProduct.garansi || "Garansi"}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-full mb-4" style={{ borderTop: `1px solid ${t.divider}` }} />
+                        <div className="flex justify-between items-center px-2">
+                          <div className="flex items-center gap-2 text-2xl font-bold" style={{ color: t.footerColor }}>
+                            <svg className="w-7 h-7" style={{ fill: t.footerColor }} viewBox="0 0 24 24"><path d={whatsappPath} /></svg>
+                            <span>0813 5400 7400</span>
+                          </div>
+                          <div className="text-2xl font-bold flex gap-2 items-center lowercase" style={{ color: t.urlColor }}>
+                            <Globe className="w-8 h-8" style={{ color: t.urlColor }} />
+                            <span>akimobiljogja.com</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
+
+              {/* SLIDE 2 - Themed by battery type */}
+              {(() => {
+                const t = getTheme(selectedProduct.merek, selectedProduct.kategori)
+                const whatsappPath = "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.894-5.335 11.897-11.893a11.821 11.821 0 00-3.48-8.413Z"
+                return (
+                  <div
+                    ref={printRef2}
+                    className={`w-[1080px] h-[1080px] absolute top-0 origin-top-left flex flex-col overflow-hidden px-16 py-14 transition-opacity duration-300 ${activeSlide === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                    style={{ transform: `scale(${scale})`, background: t.slideBg }}
+                  >
+                    {/* Background grid + watermark */}
+                    <div className="absolute inset-0 z-0 pointer-events-none">
+                      <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(${t.watermarkColor} 1px, transparent 1px), linear-gradient(90deg, ${t.watermarkColor} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
+                      <div className="absolute inset-0 pointer-events-none flex items-center justify-center select-none overflow-hidden">
+                        <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
+                          {Array.from({ length: 300 }).map((_, i) => (
+                            <span key={i} className="text-lg font-black uppercase whitespace-nowrap" style={{ color: t.watermarkColor }}>Siswanto Aki</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="relative z-10 flex flex-col h-full w-full">
+                      {/* Header */}
+                      <div className="flex flex-col items-center text-center w-full pt-4 mb-12">
+                        <h2 className="text-[64px] leading-none font-black tracking-tighter uppercase mb-2" style={t.titleGradient ? { backgroundImage: t.titleGradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: t.titleColor }}>
+                          APLIKASI KENDARAAN
+                        </h2>
+                        <div className="w-[400px] h-1.5 rounded-full mt-4" style={{ background: t.slide2Accent }} />
+                      </div>
+
+                      {/* Vehicle list */}
+                      <div className="flex-1 w-full flex flex-col items-center">
+                        {selectedProduct.applications && selectedProduct.applications.length > 0 ? (
+                          <div className="grid grid-cols-2 gap-x-16 gap-y-4 max-w-[950px] w-full mt-4">
+                            {selectedProduct.applications.slice(0, 23).map((app: any, i: number) => (
+                              <div key={i} className="flex items-center gap-4 font-bold text-[24px] tracking-tight" style={{ color: t.accentBright }}>
+                                <div className="w-4 h-4 rounded-full shrink-0" style={{ background: t.dotColor }} />
+                                <span className="truncate">{app.nama_mobil}</span>
+                              </div>
+                            ))}
+                            {selectedProduct.applications.length > 23 && (
+                              <div className="flex items-center gap-4 font-bold text-[24px] tracking-tight italic" style={{ color: t.subtitleColor }}>
+                                <div className="w-4 h-4 rounded-full shrink-0" style={{ background: t.dotColor, opacity: 0.4 }} />
+                                <span>Dan lainnya...</span>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full opacity-30" style={{ color: t.titleColor }}>
+                            <Package className="w-32 h-32 mb-4" />
+                            <p className="text-3xl font-bold">Daftar mobil tidak tersedia</p>
                           </div>
                         )}
                       </div>
-                      <h1 className="text-[72px] leading-none font-black text-slate-900 tracking-tighter uppercase max-w-[800px]">
-                        {cleanName}
-                      </h1>
-                    </div>
-                  </div>
 
-                  {/* Dotted Divider Top */}
-                  <div className="w-full border-t-[3px] border-dotted border-slate-200 mt-4 mb-4" />
-
-                  {/* Main Content Area */}
-                  <div className="flex-1 flex items-center justify-center relative w-full my-4">
-                    {selectedProduct.gambar ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={selectedProduct.gambar}
-                        alt={selectedProduct.nama}
-                        className="w-full max-w-[850px] max-h-[600px] object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.15)] relative z-10"
-                        crossOrigin="anonymous"
-                      />
-                    ) : (
-                      <Package className="w-48 h-48 text-slate-200" />
-                    )}
-                  </div>
-
-                  {/* Footer Section */}
-                  <div className="mt-auto pt-4">
-                    <div className="flex justify-start gap-10 items-center mb-10 px-2">
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest ml-1">Kategori</span>
-                        <div className={`px-6 py-1 rounded-full text-2xl font-black uppercase tracking-tighter ${getCategoryStyles(selectedProduct.kategori)}`}>
-                          {selectedProduct.kategori}
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest ml-1">Kapasitas</span>
-                        <div className="text-4xl font-black uppercase text-slate-900 tracking-tighter flex items-center gap-2">
-                          <Zap className="w-7 h-7 text-indigo-600" />
-                          {capacityValue}
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <span className="text-sm font-bold text-slate-400 uppercase tracking-widest ml-1">Garansi</span>
-                        <div className="text-4xl font-black uppercase text-slate-900 tracking-tighter flex items-center gap-2">
-                          <ShieldCheck className="w-7 h-7 text-indigo-600" />
-                          {selectedProduct.garansi || "Garansi"}
-                        </div>
-                      </div>
-                    </div>
-                    {/* Dotted Divider Bottom */}
-                    <div className="w-full border-t border border-slate-200 mb-4" />
-                    <div className="flex justify-between items-center px-2">
-                      <div className="flex items-center gap-2 text-2xl font-bold text-slate-500">
-                        <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24">
-                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.894-5.335 11.897-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                        </svg>
-                        <span>0813 5400 7400</span>
-                      </div>
-                      <div className="text-2xl font-bold text-slate-500 flex gap-2 items-center lowercase">
-                        <Globe className="w-8 h-8 text-indigo-600" />
-                        <span className="text-indigo-600">akimobiljogja.com</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* SLIDE 2 - Vehicle Applications (Clean Style) */}
-              <div
-                ref={printRef2}
-                className={`w-[1080px] h-[1080px] absolute top-0 origin-top-left flex flex-col bg-linear-to-br from-white to-slate-200 text-slate-900 overflow-hidden px-16 py-14 transition-opacity duration-300 ${activeSlide === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
-                style={{ transform: `scale(${scale})` }}
-              >
-                {/* Background Patterns (BEHIND CONTENT) */}
-                <div className="absolute inset-0 z-0 pointer-events-none">
-                  <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: "linear-gradient(rgba(0,0,0,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,1) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0)_0%,rgba(255,255,255,1)_100%)]" />
-                  {/* Repeated Watermark Pattern */}
-                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none z-0 overflow-hidden">
-                    <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
-                      {Array.from({ length: 400 }).map((_, i) => (
-                        <span key={i} className="text-lg font-black uppercase whitespace-nowrap text-indigo-700">Siswanto Aki</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 flex flex-col h-full w-full">
-                  <div className="flex flex-col items-center text-center w-full pt-4 mb-12">
-
-                    <h2 className="text-[64px] leading-none font-black text-slate-900 tracking-tighter uppercase mb-2">
-                      APLIKASI KENDARAAN
-                    </h2>
-                    <div className="w-100 h-1.5 bg-indigo-500 rounded-full mt-4"></div>
-                  </div>
-
-                  <div className="flex-1 w-full flex flex-col items-center">
-                    {selectedProduct.applications && selectedProduct.applications.length > 0 ? (
-                      <div className="grid grid-cols-2 gap-x-16 gap-y-4 max-w-[950px] w-full mt-4">
-                        {selectedProduct.applications.slice(0, 23).map((app: any, i: number) => (
-                          <div key={i} className="flex items-center gap-4 text-slate-800 font-bold text-[24px] tracking-tight">
-                            <div className="w-4 h-4 bg-indigo-500 rounded-full shrink-0"></div>
-                            <span className="truncate">{app.nama_mobil}</span>
+                      {/* Footer */}
+                      <div className="mt-auto pt-4" style={{ borderTop: `1px solid ${t.divider}` }}>
+                        <div className="flex justify-between items-center px-2 pb-2">
+                          <div className="flex items-center gap-2 text-2xl font-bold" style={{ color: t.footerColor }}>
+                            <svg className="w-7 h-7" style={{ fill: t.footerColor }} viewBox="0 0 24 24"><path d={whatsappPath} /></svg>
+                            <span>0813 5400 7400</span>
                           </div>
-                        ))}
-                        {selectedProduct.applications.length > 23 && (
-                          <div className="flex items-center gap-4 text-slate-500 font-bold text-[24px] tracking-tight italic">
-                            <div className="w-4 h-4 bg-slate-300 rounded-full shrink-0"></div>
-                            <span>Dan lainnya...</span>
+                          <div className="text-2xl font-bold flex gap-2 items-center lowercase" style={{ color: t.urlColor }}>
+                            <Globe className="w-8 h-8" style={{ color: t.urlColor }} />
+                            <span>akimobiljogja.com</span>
                           </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center h-full opacity-30">
-                        <Package className="w-32 h-32 mb-4" />
-                        <p className="text-3xl font-bold">Daftar mobil tidak tersedia</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Footer Section */}
-                  <div className="mt-auto pt-4 border-t border-slate-200">
-                    <div className="flex justify-between items-center px-2 pb-2">
-                      <div className="flex items-center gap-2 text-2xl font-bold text-slate-500">
-                        <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24">
-                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.894-5.335 11.897-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                        </svg>
-                        <span>0813 5400 7400</span>
-                      </div>
-                      <div className="text-2xl font-bold text-slate-500 flex gap-2 items-center lowercase">
-                        <Globe className="w-8 h-8 text-indigo-600" />
-                        <span className="text-indigo-600">akimobiljogja.com</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                )
+              })()}
 
             </div>
           ) : (
