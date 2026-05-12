@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/client"
+import { createClient, createNoStoreClient } from "@/lib/supabase/client"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { ProductData, SpecificationData, ProductFilters } from "./types"
 import { deleteProductImage } from "./storage"
@@ -73,7 +73,7 @@ export const fetchCapacities = async () => {
 }
 
 export const fetchAllProducts = async () => {
-    const supabase = createClient()
+    const supabase = createNoStoreClient()
     const { data, error } = await supabase
         .from("products")
         .select(

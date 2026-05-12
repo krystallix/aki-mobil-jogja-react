@@ -9,3 +9,16 @@ export const createClient = () =>
         supabaseUrl!,
         supabaseKey!,
     );
+
+// Client khusus server-side yang tidak di-cache oleh Next.js
+export const createNoStoreClient = () =>
+    createBrowserClient(
+        supabaseUrl!,
+        supabaseKey!,
+        {
+            global: {
+                fetch: (url: RequestInfo | URL, options?: RequestInit) =>
+                    fetch(url, { ...options, cache: "no-store" }),
+            },
+        }
+    );
