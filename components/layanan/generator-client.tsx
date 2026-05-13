@@ -161,7 +161,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
         images,
       }
 
-      const res = await fetch("http://192.168.232.115:8080/api/listing", {
+      const res = await fetch("https://fbm.arkane.my.id/api/listing", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -174,9 +174,9 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
     }
 
     toast.promise(doPost().finally(() => setIsPosting(false)), {
-      loading: "⏳ Sedang memposting ke Facebook Marketplace...",
-      success: "✅ Berhasil diposting ke Facebook Marketplace!",
-      error: (err: any) => `❌ Gagal posting: ${err?.message ?? "Coba lagi nanti"}`,
+      loading: "Sedang memposting ke Facebook Marketplace...",
+      success: "Berhasil diposting ke Facebook Marketplace!",
+      error: (err: any) => `Gagal posting: ${err?.message ?? "Coba lagi nanti"}`,
     })
   }
 
@@ -241,45 +241,29 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
     const k = kategori?.toLowerCase() || ""
 
     // Helper to generate consistent light theme structure
-    const createTheme = (primary: string, secondary: string, gradient?: string) => ({
-      slideBg: `linear-gradient(to top right, #ffffff, #f1f5f9)`, // Selalu putih ke slate
+    const createTheme = (primary: string, secondary: string) => ({
+      slideBg: `linear-gradient(to top right, #ffffff, #f1f5f9)`,
       accent: primary, accentBright: secondary,
       titleColor: secondary, subtitleColor: primary,
-      titleGradient: gradient,
       badgeBg: primary, badgeText: "#ffffff",
       zapColor: primary, shieldColor: primary,
-      divider: `${secondary}20`, // 20% opacity hex
+      divider: `${secondary}20`,
       footerColor: primary,
       urlColor: primary, dotColor: primary,
-      watermarkColor: `${secondary}08`, // 8% opacity hex
+      watermarkColor: `${secondary}08`,
       accentBar: primary, labelColor: primary,
       newBadgeBg: secondary, newBadgeText: "#ffffff",
       slide2Accent: primary,
     })
 
-    if (m.includes("incoe")) {
-      return createTheme("#1d4ed8", "#1e3a8a") // Biru
-    }
-    if (m.includes("msb")) {
-      return createTheme("#b91c1c", "#7f1d1d", "linear-gradient(to right, #000000, #b91c1c)") // Merah (Hitam ke Merah Solid)
-    }
-    if (m.includes("gs") && (m.includes("hybrid") || k.includes("hybrid"))) {
-      return createTheme("#16a34a", "#166534", "linear-gradient(to right, #064e3b, #16a34a)") // Hijau (GS Hybrid)
-    }
-    if (m.includes("gs")) { // GS MF (kering) atau GS lainnya
-      return createTheme("#166534", "#052e16") // Hijau Tua
-    }
-    if (m.includes("aspira") && (m.includes("hybrid") || k.includes("hybrid"))) {
-      return createTheme("#d97706", "#7c2d12") // Kuning Merah Gelap (Amber/Rust)
-    }
-    if (m.includes("aspira")) { // Aspira MF (kering)
-      return createTheme("#334155", "#0f172a") // Hitam / Slate
-    }
-    if (m.includes("chilwee")) {
-      return createTheme("#15803d", "#064e3b", "linear-gradient(to right, #0f172a, #16a34a)") // Hijau Tua
-    }
+    if (m.includes("incoe")) return createTheme("#1d4ed8", "#1e3a8a")
+    if (m.includes("msb")) return createTheme("#b91c1c", "#7f1d1d")
+    if (m.includes("gs") && (m.includes("hybrid") || k.includes("hybrid"))) return createTheme("#16a34a", "#166534")
+    if (m.includes("gs")) return createTheme("#166534", "#052e16")
+    if (m.includes("aspira") && (m.includes("hybrid") || k.includes("hybrid"))) return createTheme("#d97706", "#7c2d12")
+    if (m.includes("aspira")) return createTheme("#334155", "#0f172a")
+    if (m.includes("chilwee")) return createTheme("#15803d", "#064e3b")
 
-    // Default fallback (Slate / Hitam)
     return createTheme("#334155", "#0f172a")
   }
 
@@ -491,8 +475,8 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
                       <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(${t.watermarkColor} 1px, transparent 1px), linear-gradient(90deg, ${t.watermarkColor} 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
                       <div className="absolute inset-0 pointer-events-none flex items-center justify-center select-none overflow-hidden">
                         <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
-                          {Array.from({ length: 300 }).map((_, i) => (
-                            <span key={i} className="text-lg font-black uppercase whitespace-nowrap" style={{ color: t.watermarkColor }}>Siswanto Aki</span>
+                          {Array.from({ length: 500 }).map((_, i) => (
+                            <span key={i} className="text-4xl font-black uppercase whitespace-nowrap" style={{ color: t.watermarkColor }}>Siswanto Aki</span>
                           ))}
                         </div>
                       </div>
@@ -510,7 +494,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
                               GRATIS ANTAR PASANG
                             </div>
                           </div>
-                          <h1 className="text-[72px] leading-none font-black tracking-tighter uppercase max-w-[800px]" style={t.titleGradient ? { backgroundImage: t.titleGradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: t.titleColor }}>
+                          <h1 className="text-[72px] leading-none font-black tracking-tighter uppercase max-w-[800px]" style={{ color: t.titleColor }}>
                             {cleanName}
                           </h1>
                         </div>
@@ -599,7 +583,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
                     <div className="relative z-10 flex flex-col h-full w-full">
                       {/* Header */}
                       <div className="flex flex-col items-center text-center w-full pt-4 mb-12">
-                        <h2 className="text-[64px] leading-none font-black tracking-tighter uppercase mb-2" style={t.titleGradient ? { backgroundImage: t.titleGradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: t.titleColor }}>
+                        <h2 className="text-[64px] leading-none font-black tracking-tighter uppercase mb-2" style={{ color: t.titleColor }}>
                           APLIKASI KENDARAAN
                         </h2>
                         <div className="w-[400px] h-1.5 rounded-full mt-4" style={{ background: t.slide2Accent }} />
