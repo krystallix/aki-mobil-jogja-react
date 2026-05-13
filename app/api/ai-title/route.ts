@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "NVIDIA_KEY not configured" }, { status: 500 })
   }
 
+  // test
   // Build context about the product
   const appsSnippet = (aplikasi as string[] | undefined)?.slice(0, 5).join(", ") || ""
 
@@ -19,6 +20,7 @@ Buat 5 judul produk yang menarik dan SEO-friendly untuk posting produk aki (bate
 - Kapasitas: ${kapasitas}
 - Kategori: ${kategori}
 - Cocok untuk kendaraan: ${appsSnippet}
+- Tipe Kendaraan : tentukan misal ( Aki Mobil / Aki Motor / Aki Sepeda Listrik / Dll)
 
 Aturan judul:
 1. Panjang 40–80 karakter
