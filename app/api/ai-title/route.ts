@@ -8,6 +8,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "NVIDIA_KEY not configured" }, { status: 500 })
   }
 
+  function getTipeKendaraan(kapasitas: string) {
+    if (!kapasitas) return 'Tidak diketahui'
+
+    const ah = parseFloat(kapasitas) // "32 Ah" -> 32, "3,5 Ah" -> 3.5
+
+    if (isNaN(ah)) return ''
+    if (ah > 32) return 'Aki Mobil'
+    if (ah >= 20) return 'Aki Motor Listrik'
+    if (ah >= 12) return 'Aki Sepeda Listrik'
+    return 'Aki Motor'
+  }
+  const tipeKendaraan = getTipeKendaraan(kapasitas)
+
   // test
   // Build context about the product
   const appsSnippet = (aplikasi as string[] | undefined)?.slice(0, 5).join(", ") || ""
@@ -20,15 +33,17 @@ Buat 5 judul produk yang menarik dan SEO-friendly untuk posting produk aki (bate
 - Kapasitas: ${kapasitas}
 - Kategori: ${kategori}
 - Cocok untuk kendaraan: ${appsSnippet}
-- Tipe Kendaraan : tentukan misal ( Aki Mobil / Aki Motor / Aki Sepeda Listrik / Dll)
+- Tipe Kendaraan : ${tipeKendaraan}
 
 Aturan judul:
-1. Panjang 40–80 karakter
-2. Gunakan kata kunci yang orang cari: merk, kapasitas, tipe mobil, harga murah, bergaransi, dll
+1. Panjang 40-80 karakter
+2. Gunakan kata kunci yang orang cari: merk, kapasitas, tipe kendaraan, bergaransi, dll
 3. Boleh pakai huruf kapital parsial untuk penekanan
 4. JANGAN pakai emoji
 5. Formatnya natural seperti orang mengetik di search bar
-6. Contoh bagus: "Aki Mobil Incoe NS60 40AH Baru Bergaransi Murah Jogja"
+6. WAJIB: Tulis kapasitas PERSIS seperti yang diberikan, JANGAN ubah angkanya
+7. WAJIB: Gunakan tipe kendaraan PERSIS seperti yang diberikan, JANGAN ubah
+8. Contoh bagus: "Aki Mobil Incoe NS40 40Ah Baru Bergaransi Avanza, Xenia"
 
 Balas HANYA dengan 5 judul, satu per baris, tanpa nomor atau bullet point.`
 
