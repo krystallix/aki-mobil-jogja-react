@@ -134,13 +134,11 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
         selectedProduct.merek?.toLowerCase(),
         selectedProduct.nama?.toLowerCase().replace(/\s+/g, "-"),
         "aki",
-        "aki-mobil",
-        "aki-motor",
-        "auto-parts",
-        "sparepart",
-        "tukar-tambah",
-        "siswanto-aki",
-        "jogja",
+        "aki mobil",
+        "aki motor",
+        "aki sepeda listrik",
+        "servis aki",
+        "siswantoaki",
         "akimobiljogja",
       ].filter(Boolean) as string[]
 

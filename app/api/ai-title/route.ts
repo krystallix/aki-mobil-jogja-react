@@ -9,10 +9,7 @@ export async function POST(req: NextRequest) {
   }
 
   function getTipeKendaraan(kapasitas: string) {
-    if (!kapasitas) return 'Tidak diketahui'
-
-    const ah = parseFloat(kapasitas) // "32 Ah" -> 32, "3,5 Ah" -> 3.5
-
+    const ah = parseFloat(kapasitas.split(' ')[0].replace(',', '.')) // "32 Ah" -> 32, "3,5 Ah" -> 3.5
     if (isNaN(ah)) return ''
     if (ah > 32) return 'Aki Mobil'
     if (ah >= 20) return 'Aki Motor Listrik'
