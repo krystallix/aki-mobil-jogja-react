@@ -6,6 +6,9 @@ import JsonLd from '@/components/json-ld';
 
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
     title: 'Katalog Aki Mobil - Harga Terbaru | Siswanto Aki',
     description: 'Jual berbagai merek aki mobil: GS Astra, Yuasa, Incoe, Panasonic. Tersedia aki basah, kering (MF), hybrid untuk segala jenis mobil. Harga bersaing, garansi resmi.',

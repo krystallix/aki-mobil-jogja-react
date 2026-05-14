@@ -11,6 +11,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
     title: "Siswanto Aki Jogja - Servis Aki & Tukar Tambah Aki Mobil Bantul 24 Jam",
     description: "Siswanto Aki Jogja (@siswantoaki.jogja) — servis aki, reparasi & tukar tambah aki mobil terpercaya di Bantul, Yogyakarta. Layanan antar pasang 24 jam, teknisi berpengalaman, harga transparan, garansi resmi.",
