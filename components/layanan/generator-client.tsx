@@ -154,7 +154,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
 
       const payload = {
         title: selectedAiTitle || `AKI ${cleanName} BARU BERGARANSI`,
-        price: String(selectedProduct.harga_tukar),
+        price: String(Math.floor((selectedProduct.harga_tukar || 0) / 1000)),
         category: "Auto Parts",
         condition: selectedProduct.kondisi?.toLowerCase() === "baru" ? "new" : "used",
         description: getDescText(),
