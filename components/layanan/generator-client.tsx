@@ -98,7 +98,8 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
     setSelectedAiTitle("")
     try {
       const apps = selectedProduct.applications?.slice(0, 8).map((a: any) => a.nama_mobil) || []
-      const spec = selectedProduct.specifications?.[0] || {}
+      const rawSpec = selectedProduct.specifications
+      const spec = (Array.isArray(rawSpec) ? rawSpec[0] : rawSpec) || {}
       const res = await fetch("/api/ai-title", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

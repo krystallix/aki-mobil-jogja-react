@@ -242,7 +242,8 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                     {/* ════ MOBILE: vertical list ════ */}
                     <div className="flex flex-col gap-2 md:hidden">
                         {paginated.map((battery, i) => {
-                            const spec = battery.specifications?.[0]
+                            const rawSpec = battery.specifications
+                            const spec = (Array.isArray(rawSpec) ? rawSpec[0] : rawSpec)
                             return (
                                 <motion.div
                                     key={battery.id}
@@ -323,7 +324,8 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                     {/* ════ DESKTOP: compact card grid ════ */}
                     <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                         {paginated.map((battery, i) => {
-                            const spec = battery.specifications?.[0]
+                            const rawSpec = battery.specifications
+                            const spec = (Array.isArray(rawSpec) ? rawSpec[0] : rawSpec)
                             const margin = battery.harga_modal > 0
                                 ? Math.round(((battery.harga_jual - battery.harga_modal) / battery.harga_modal) * 100)
                                 : null
