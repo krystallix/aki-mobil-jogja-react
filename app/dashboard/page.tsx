@@ -5,11 +5,12 @@ import DashboardLayout from "@/components/layouts/dashboard-layout";
 import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import {
     TrendingUp, TrendingDown, ShoppingCart, Users, Package,
     ArrowUpRight, ArrowDownRight, Repeat2, Loader2,
     Banknote, BarChart3, Clock, CheckCircle2, XCircle,
-    AlertCircle, Star
+    AlertCircle, Star, ChevronLeft, ChevronRight
 } from "lucide-react";
 
 const formatRupiah = (n: number) =>
@@ -49,69 +50,82 @@ type Stats = {
     recentTx: { id: string; customer_nama: string; total: number; status: string; tipe: string; created_at: string }[];
     // Monthly revenue (last 6 months)
     monthlyRevenue: { month: string; revenue: number; profit: number }[];
+    // Aki Lama
+    totalAkiLamaValue: number;
+    totalAkiLamaCount: number;
 };
 
 export default function DashboardPage() {
     const supabase = createClient();
     const [stats, setStats] = useState<Stats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     useEffect(() => {
         fetchStats();
-    }, []);
+    }, [selectedDate]);
 
     const fetchStats = async () => {
         try {
             setIsLoading(true);
 
-            const now = new Date();
+            const now = selectedDate;
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59).toISOString();
             const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
             const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59).toISOString();
 
-            const [txRes, customersRes, productsRes, txItemsRes] = await Promise.all([
+            const [txRes, customersRes, productsRes, txItemsRes, akiLamaRes] = await Promise.all([
                 supabase.from("transactions").select("id, customer_nama, tipe, status, subtotal, diskon, total, created_at, paid_at"),
                 supabase.from("customers").select("id, created_at"),
                 supabase.from("products").select("id, nama, merek, stok, harga_jual, harga_modal"),
                 supabase.from("transaction_items").select("product_id, nama_produk, merek, qty, harga_modal, nilai_aki_lama, subtotal, transaction_id"),
+                supabase.from("aki_lama").select("nilai").eq("status", "belum_dijual"),
             ]);
 
             const txs = txRes.data || [];
             const customers = customersRes.data || [];
             const products = productsRes.data || [];
             const items = txItemsRes.data || [];
+            const unsoldAkiLama = akiLamaRes.data || [];
+
+            const totalAkiLamaCount = unsoldAkiLama.length;
+            const totalAkiLamaValue = unsoldAkiLama.reduce((s, a) => s + (a.nilai || 0), 0);
 
             const paidTxs = txs.filter(t => t.status === "paid");
             const paidIds = new Set(paidTxs.map(t => t.id));
+            
+            const txsThisMonth = txs.filter(t => t.created_at && t.created_at >= startOfMonth && t.created_at <= endOfMonth);
+            const paidTxsThisMonth = txsThisMonth.filter(t => t.status === "paid");
+            
+            const txsLastMonth = txs.filter(t => t.created_at && t.created_at >= startOfLastMonth && t.created_at <= endOfLastMonth);
+            const paidTxsLastMonth = txsLastMonth.filter(t => t.status === "paid");
 
             // Revenue
             const totalRevenue = paidTxs.reduce((s, t) => s + (t.total || 0), 0);
-            const revenueThisMonth = paidTxs
-                .filter(t => t.paid_at && t.paid_at >= startOfMonth)
-                .reduce((s, t) => s + (t.total || 0), 0);
-            const revenueLastMonth = paidTxs
-                .filter(t => t.paid_at && t.paid_at >= startOfLastMonth && t.paid_at <= endOfLastMonth)
-                .reduce((s, t) => s + (t.total || 0), 0);
+            const revenueThisMonth = paidTxsThisMonth.reduce((s, t) => s + (t.total || 0), 0);
+            const revenueLastMonth = paidTxsLastMonth.reduce((s, t) => s + (t.total || 0), 0);
 
             // Profit (revenue - (modal - nilai_aki_lama) dari items paid)
             const paidItems = items.filter(i => paidIds.has(i.transaction_id));
             const totalModal = paidItems.reduce((s, i) => s + ((i.harga_modal || 0) * (i.qty || 1)) - (i.nilai_aki_lama || 0), 0);
             const totalProfit = totalRevenue - totalModal;
 
-            const paidItemsThisMonth = paidItems.filter(i => {
-                const tx = paidTxs.find(t => t.id === i.transaction_id);
-                return tx && tx.paid_at && tx.paid_at >= startOfMonth;
+            // Profit This Month
+            const paidItemsThisMonth = items.filter(i => {
+                const tx = paidTxsThisMonth.find(t => t.id === i.transaction_id);
+                return !!tx;
             });
             const modalThisMonth = paidItemsThisMonth.reduce((s, i) => s + ((i.harga_modal || 0) * (i.qty || 1)) - (i.nilai_aki_lama || 0), 0);
             const profitThisMonth = revenueThisMonth - modalThisMonth;
 
-            // Transaction counts
-            const txJual = txs.filter(t => t.tipe === "jual").length;
-            const txBeli = txs.filter(t => t.tipe === "beli").length;
-            const txTukar = txs.filter(t => t.tipe === "tukar_tambah").length;
+            // Transaction counts (Berdasarkan Bulan Terpilih)
+            const txJual = txsThisMonth.filter(t => t.tipe === "jual").length;
+            const txBeli = txsThisMonth.filter(t => t.tipe === "beli").length;
+            const txTukar = txsThisMonth.filter(t => t.tipe === "tukar_tambah").length;
 
             // Customers
-            const newCustomersThisMonth = customers.filter(c => c.created_at && c.created_at >= startOfMonth).length;
+            const newCustomersThisMonth = customers.filter(c => c.created_at && c.created_at >= startOfMonth && c.created_at <= endOfMonth).length;
 
             // Products
             const lowStockProducts = products.filter(p => p.stok !== null && p.stok <= 3).length;
@@ -141,13 +155,14 @@ export default function DashboardPage() {
                 const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
                 const start = new Date(d.getFullYear(), d.getMonth(), 1).toISOString();
                 const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59).toISOString();
-                const monthPaidTxs = paidTxs.filter(t => t.paid_at && t.paid_at >= start && t.paid_at <= end);
+                
+                const monthTxs = txs.filter(t => t.created_at && t.created_at >= start && t.created_at <= end);
+                const monthPaidTxs = monthTxs.filter(t => t.status === "paid");
                 const rev = monthPaidTxs.reduce((s, t) => s + (t.total || 0), 0);
-                const monthPaidItems = paidItems.filter(it => {
-                    const tx = paidTxs.find(t => t.id === it.transaction_id);
-                    return tx && tx.paid_at && tx.paid_at >= start && tx.paid_at <= end;
-                });
+                
+                const monthPaidItems = items.filter(it => !!monthPaidTxs.find(t => t.id === it.transaction_id));
                 const modal = monthPaidItems.reduce((s, it) => s + ((it.harga_modal || 0) * (it.qty || 1)) - (it.nilai_aki_lama || 0), 0);
+                
                 monthlyRevenue.push({
                     month: d.toLocaleDateString("id-ID", { month: "short", year: "2-digit" }),
                     revenue: rev,
@@ -157,14 +172,15 @@ export default function DashboardPage() {
 
             setStats({
                 totalRevenue, revenueThisMonth, revenueLastMonth,
-                totalTx: txs.length, txPaid: paidTxs.length,
-                txDraft: txs.filter(t => t.status === "draft").length,
-                txCancelled: txs.filter(t => t.status === "cancelled").length,
+                totalTx: txsThisMonth.length, txPaid: paidTxsThisMonth.length,
+                txDraft: txsThisMonth.filter(t => t.status === "draft").length,
+                txCancelled: txsThisMonth.filter(t => t.status === "cancelled").length,
                 txJual, txBeli, txTukar,
                 totalProfit, profitThisMonth,
                 totalCustomers: customers.length, newCustomersThisMonth,
                 totalProducts: products.length, lowStockProducts, totalStockValue,
                 topProducts, recentTx, monthlyRevenue,
+                totalAkiLamaValue, totalAkiLamaCount
             });
         } catch (e) {
             console.error(e);
@@ -212,9 +228,33 @@ export default function DashboardPage() {
                 <div className="p-4 md:p-6 lg:p-8 space-y-6 lg:space-y-8 max-w-7xl mx-auto">
 
                     {/* ── PAGE TITLE ── */}
-                    <div>
-                        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">Ringkasan Bisnis</h1>
-                        <p className="text-sm text-muted-foreground mt-1 font-medium">Data real-time dari semua transaksi Siswanto Aki.</p>
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">Ringkasan Bisnis</h1>
+                            <p className="text-sm text-muted-foreground mt-1 font-medium">Data performa Siswanto Aki untuk bulan terpilih.</p>
+                        </div>
+                        <div className="flex items-center bg-card p-1 rounded-full border border-border/60 shadow-sm shrink-0">
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-8 w-8 rounded-full hover:bg-muted"
+                                onClick={() => setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1))}
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <span className="text-sm font-extrabold w-32 text-center text-primary">
+                                {selectedDate.toLocaleDateString("id-ID", { month: "long", year: "numeric" })}
+                            </span>
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-8 w-8 rounded-full hover:bg-muted"
+                                disabled={selectedDate.getMonth() === new Date().getMonth() && selectedDate.getFullYear() === new Date().getFullYear()}
+                                onClick={() => setSelectedDate(new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1))}
+                            >
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
 
                     {/* ── KPI CARDS ── */}
@@ -224,7 +264,9 @@ export default function DashboardPage() {
                             <CardContent className="p-4 md:p-5">
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Pendapatan Bulan Ini</p>
+                                        <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                                            Pendapatan {selectedDate.toLocaleDateString("id-ID", { month: "long" })}
+                                        </p>
                                         <p className="text-2xl md:text-3xl font-black text-foreground tracking-tight">{formatRupiah(stats.revenueThisMonth)}</p>
                                         <div className="flex items-center gap-1.5 mt-2">
                                             {revGrowth !== null ? (
@@ -252,7 +294,9 @@ export default function DashboardPage() {
                         {/* Profit Bulan Ini */}
                         <Card className="col-span-1 border border-border/60 shadow-sm rounded-2xl bg-gradient-to-br from-emerald-500/5 to-background">
                             <CardContent className="p-4 md:p-5">
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">Profit Bulan Ini</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+                                    Profit {selectedDate.toLocaleDateString("id-ID", { month: "long" })}
+                                </p>
                                 <p className="text-xl md:text-2xl font-black text-emerald-600">{formatRupiah(stats.profitThisMonth)}</p>
                                 <p className="text-[10px] text-muted-foreground mt-1.5 font-medium">Total: {formatRupiah(stats.totalProfit)}</p>
                             </CardContent>
@@ -269,11 +313,12 @@ export default function DashboardPage() {
                     </div>
 
                     {/* ── SECONDARY KPIs ── */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
                         {[
                             { label: "Total Pelanggan", value: stats.totalCustomers, sub: `+${stats.newCustomersThisMonth} bulan ini`, icon: <Users className="w-4 h-4" />, color: "bg-blue-50 text-blue-600" },
                             { label: "Total Produk", value: stats.totalProducts, sub: `${stats.lowStockProducts} stok tipis`, icon: <Package className="w-4 h-4" />, color: "bg-purple-50 text-purple-600", warn: stats.lowStockProducts > 0 },
                             { label: "Nilai Stok", value: formatRupiah(stats.totalStockValue), sub: `${stats.totalProducts} jenis produk`, icon: <BarChart3 className="w-4 h-4" />, color: "bg-orange-50 text-orange-600" },
+                            { label: "Stok Aki Lama", value: formatRupiah(stats.totalAkiLamaValue), sub: `${stats.totalAkiLamaCount} unit belum terjual`, icon: <Repeat2 className="w-4 h-4" />, color: "bg-amber-50 text-amber-600" },
                             { label: "Transaksi Lunas", value: `${stats.txPaid}`, sub: `${stats.txCancelled} dibatalkan`, icon: <CheckCircle2 className="w-4 h-4" />, color: "bg-emerald-50 text-emerald-600" },
                         ].map((kpi, i) => (
                             <Card key={i} className="border border-border/60 shadow-sm rounded-2xl">

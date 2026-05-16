@@ -58,3 +58,13 @@ export interface ArticleFilters {
     limit?: number
     page?: number
 }
+
+export interface AkiLamaData {
+    id: string
+    transaction_id: string | null
+    keterangan: string
+    nilai: number
+    status: 'belum_dijual' | 'terjual'
+    created_at?: string
+    updated_at?: string
+}

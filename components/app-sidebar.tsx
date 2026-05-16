@@ -60,6 +60,11 @@ const data = {
       icon: <ShoppingCartIcon />,
     },
     {
+      title: "Stok Aki Lama",
+      url: "/dashboard/aki-lama",
+      icon: <BatteryFullIcon />,
+    },
+    {
       title: "Pelanggan",
       url: "/dashboard/pelanggan",
       icon: <UsersIcon />,

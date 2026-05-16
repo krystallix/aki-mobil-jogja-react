@@ -24,6 +24,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import html2canvas from "html2canvas-pro";
+import { QRCodeSVG } from "qrcode.react";
 
 type Transaction = {
     id: string;
@@ -422,6 +423,29 @@ export default function TransaksiPage() {
                 }
             }
 
+            // Record Aki Lama if it's paid and has trade-in value
+            if (txPayload.status === 'paid') {
+                for (const item of finalItemsPayload) {
+                    if (item.nilai_aki_lama && item.nilai_aki_lama > 0) {
+                        // To avoid duplicates when updating an existing paid transaction
+                        const { data: existingAki } = await supabase
+                            .from('aki_lama')
+                            .select('id')
+                            .eq('transaction_id', savedTxId)
+                            .limit(1);
+
+                        if (!existingAki || existingAki.length === 0) {
+                            await supabase.from('aki_lama').insert({
+                                transaction_id: savedTxId,
+                                keterangan: `Tukar Tambah - ${item.nama_produk}`,
+                                nilai: item.nilai_aki_lama,
+                                status: 'belum_dijual'
+                            });
+                        }
+                    }
+                }
+            }
+
             // Update customer purchase stats
             if (txPayload.status === 'paid' && customerId) {
                 const { data: customerTxs } = await supabase
@@ -607,6 +631,11 @@ export default function TransaksiPage() {
 
     const currentSubtotal = formItems.reduce((acc, item) => acc + (item.subtotal || 0), 0);
     const currentTotal = currentSubtotal + ongkir - (formData.diskon || 0);
+
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const invoiceLink = origin && formData.id && formData.customer_id 
+        ? `${origin}/invoice/${formData.id.split('-').pop()}-${formData.customer_id.split('-')[0]}` 
+        : '';
 
     return (
         <DashboardLayout>
@@ -1110,7 +1139,14 @@ export default function TransaksiPage() {
 
                                                 {/* Totals */}
                                                 <div className="flex justify-between items-end">
-                                                    <p className="text-xs text-gray-400 max-w-[200px]">Terima kasih atas kepercayaannya.</p>
+                                                    <div className="flex flex-col gap-4">
+                                                        {invoiceLink && (
+                                                            <div>
+                                                                <QRCodeSVG value={invoiceLink} size={56} />
+                                                            </div>
+                                                        )}
+                                                        <p className="text-xs text-gray-400 max-w-[200px]">Terima kasih atas kepercayaannya.</p>
+                                                    </div>
                                                     <div className="w-64">
                                                         <div className="flex justify-between py-2 text-sm">
                                                             <span className="text-gray-600">Subtotal</span>
@@ -1206,9 +1242,9 @@ export default function TransaksiPage() {
                             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
                                 <thead>
                                     <tr style={{ background: '#0f3460', color: 'white' }}>
-                                        <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Product / Service</th>
+                                        <th style={{ padding: '10px 16px', textAlign: 'left', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Produk / Layanan</th>
                                         <th style={{ padding: '10px 16px', textAlign: 'center', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Qty.</th>
-                                        <th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unit Price</th>
+                                        <th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Harga Unit</th>
                                         <th style={{ padding: '10px 16px', textAlign: 'right', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total</th>
                                     </tr>
                                 </thead>
@@ -1250,7 +1286,14 @@ export default function TransaksiPage() {
 
                         {/* Totals */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                            <p style={{ fontSize: '12px', color: '#9ca3af', maxWidth: '200px', margin: 0 }}>Terima kasih atas kepercayaannya.</p>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                {invoiceLink && (
+                                    <div>
+                                        <QRCodeSVG value={invoiceLink} size={56} />
+                                    </div>
+                                )}
+                                <p style={{ fontSize: '12px', color: '#9ca3af', maxWidth: '200px', margin: 0 }}>Terima kasih atas kepercayaannya.</p>
+                            </div>
                             <div style={{ width: '256px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', fontSize: '14px' }}>
                                     <span style={{ color: '#4b5563' }}>Subtotal</span>
