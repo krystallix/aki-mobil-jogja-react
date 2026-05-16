@@ -106,6 +106,9 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
         },
     })
 
+    const selectedKategori = form.watch("kategori")
+    const isJasa = selectedKategori === "Jasa"
+
     useEffect(() => {
         if (product && open) {
             // Supabase bisa return specifications sebagai object atau array
@@ -308,13 +311,13 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
             }
 
             const specData = {
-                kapasitas: values.kapasitas,
-                voltase: values.voltase,
-                panjang: values.panjang === "" ? null : Number(values.panjang),
-                lebar: values.lebar === "" ? null : Number(values.lebar),
-                tinggi: values.tinggi === "" ? null : Number(values.tinggi),
-                berat: values.berat === "" ? null : Number(values.berat),
-                polaritas: values.polaritas || null,
+                kapasitas: isJasa ? "-" : values.kapasitas,
+                voltase: isJasa ? "-" : values.voltase,
+                panjang: values.panjang === "" || isJasa ? null : Number(values.panjang) || null,
+                lebar: values.lebar === "" || isJasa ? null : Number(values.lebar) || null,
+                tinggi: values.tinggi === "" || isJasa ? null : Number(values.tinggi) || null,
+                berat: values.berat === "" || isJasa ? null : Number(values.berat) || null,
+                polaritas: isJasa ? null : values.polaritas || null,
             }
 
             // 1. Update tabel products langsung
@@ -366,7 +369,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
             }
             console.log("[EDIT] Old applications deleted ✅")
 
-            if (mobil.length > 0) {
+            if (!isJasa && mobil.length > 0) {
                 const appRows = mobil.map((nama) => ({ product_id: product.id, nama_mobil: nama }))
                 console.log("[EDIT] Inserting applications:", appRows.length, "items")
                 const { error: insertAppError } = await supabase
@@ -562,6 +565,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                                                     Aki Kering (MF)
                                                                 </SelectItem>
                                                                 <SelectItem value="Aki Hybrid">Aki Hybrid</SelectItem>
+                                                                <SelectItem value="Jasa">Jasa</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <FormMessage />
@@ -634,35 +638,33 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                         </div>
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <FormField
-                                                control={form.control}
-                                                name="harga_tukar"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">
-                                                            Harga Tukar Tambah (Rp)
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                type="number"
-                                                                placeholder="0"
-                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                                                value={field.value}
-                                                                onChange={handleNumberChange(field)}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
+                                            {!isJasa && (
+                                                <FormField
+                                                    control={form.control}
+                                                    name="harga_tukar"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="text-xs font-semibold">Harga Tukar Tambah (Rp)</FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    type="number"
+                                                                    placeholder="0"
+                                                                    className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                                    value={field.value}
+                                                                    onChange={handleNumberChange(field)}
+                                                                />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            )}
                                             <FormField
                                                 control={form.control}
                                                 name="stok"
                                                 render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">
-                                                            <RequiredLabel>Stok Unit</RequiredLabel>
-                                                        </FormLabel>
+                                                    <FormItem className={isJasa ? "sm:col-span-2" : ""}>
+                                                        <FormLabel className="text-xs font-semibold">Stok Unit</FormLabel>
                                                         <FormControl>
                                                             <Input
                                                                 type="number"
@@ -679,198 +681,198 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
-                                            <div className="w-1.5 h-4 bg-primary rounded-full" />
-                                            Spesifikasi
-                                        </h3>
-                                        <div className="grid grid-cols-3 gap-4">
-                                            <FormField
-                                                control={form.control}
-                                                name="kapasitas"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">
-                                                            <RequiredLabel>Kapasitas (Ah)</RequiredLabel>
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                placeholder="contoh: 45"
-                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                                                {...field}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="voltase"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">
-                                                            <RequiredLabel>Voltase</RequiredLabel>
-                                                        </FormLabel>
-                                                        <Select onValueChange={field.onChange} value={field.value}>
-                                                            <FormControl>
-                                                                <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
-                                                                    <SelectValue placeholder="Pilih" />
-                                                                </SelectTrigger>
-                                                            </FormControl>
-                                                            <SelectContent>
-                                                                <SelectItem value="12V">12V</SelectItem>
-                                                                <SelectItem value="24V">24V</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="polaritas"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">Polaritas</FormLabel>
-                                                        <Select onValueChange={field.onChange} value={field.value}>
-                                                            <FormControl>
-                                                                <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
-                                                                    <SelectValue placeholder="Pilih" />
-                                                                </SelectTrigger>
-                                                            </FormControl>
-                                                            <SelectContent>
-                                                                <SelectItem value="L">L (Kiri)</SelectItem>
-                                                                <SelectItem value="R">R (Kanan)</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-
-                                        <div className="grid grid-cols-4 gap-4">
-                                            <FormField
-                                                control={form.control}
-                                                name="panjang"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">Panjang (mm)</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                type="number"
-                                                                placeholder="0"
-                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                                                value={field.value}
-                                                                onChange={handleNumberChange(field)}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="lebar"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">Lebar (mm)</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                type="number"
-                                                                placeholder="0"
-                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                                                value={field.value}
-                                                                onChange={handleNumberChange(field)}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="tinggi"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">Tinggi (mm)</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                type="number"
-                                                                placeholder="0"
-                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                                                value={field.value}
-                                                                onChange={handleNumberChange(field)}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="berat"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="text-xs">Berat (kg)</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                type="number"
-                                                                step="0.01"
-                                                                placeholder="0"
-                                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                                                value={field.value}
-                                                                onChange={handleNumberChange(field)}
-                                                            />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-4 pb-4">
-                                        <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
-                                            <div className="w-1.5 h-4 bg-primary rounded-full" />
-                                            Kompatibilitas
-                                        </h3>
-                                        <div className="space-y-3">
-                                            <Input
-                                                placeholder="Ketik nama mobil atau paste daftar (pisah koma)"
-                                                value={mobilInput}
-                                                onChange={(e) => setMobilInput(e.target.value)}
-                                                onKeyDown={handleMobilKeyDown}
-                                                onBlur={handleMobilBlur}
-                                                onPaste={handleMobilPaste}
-                                                className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
-                                            />
-                                            {mobil.length > 0 && (
-                                                <div className="flex flex-wrap gap-2 p-3 border rounded-xl bg-muted/30">
-                                                    {mobil.map((item) => (
-                                                        <Badge
-                                                            key={item}
-                                                            variant="secondary"
-                                                            className="pl-3 pr-1 py-1 text-sm gap-1"
-                                                        >
-                                                            {item}
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => removeMobil(item)}
-                                                                className="hover:text-destructive"
-                                                            >
-                                                                <X className="h-3.5 w-3.5" />
-                                                            </button>
-                                                        </Badge>
-                                                    ))}
+                                    {!isJasa && (
+                                        <>
+                                            <div className="space-y-4">
+                                                <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
+                                                    <div className="w-1.5 h-4 bg-primary rounded-full" />
+                                                    Spesifikasi
+                                                </h3>
+                                                <div className="grid grid-cols-3 gap-4">
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="kapasitas"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs font-semibold">Kapasitas (Ah)</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        placeholder="contoh: 45"
+                                                                        className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                                        {...field}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="voltase"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs font-semibold">Voltase</FormLabel>
+                                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
+                                                                            <SelectValue placeholder="Pilih" />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        <SelectItem value="12V">12V</SelectItem>
+                                                                        <SelectItem value="24V">24V</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="polaritas"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs font-semibold">Polaritas</FormLabel>
+                                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                                    <FormControl>
+                                                                        <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30">
+                                                                            <SelectValue placeholder="Pilih" />
+                                                                        </SelectTrigger>
+                                                                    </FormControl>
+                                                                    <SelectContent>
+                                                                        <SelectItem value="L">L (Kiri)</SelectItem>
+                                                                        <SelectItem value="R">R (Kanan)</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
                                                 </div>
-                                            )}
-                                            <p className="text-xs text-muted-foreground">
-                                                Contoh: Innova, Fortuner, Avanza (tekan Enter atau koma untuk menambah)
-                                            </p>
-                                        </div>
-                                    </div>
+
+                                                <div className="grid grid-cols-4 gap-4">
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="panjang"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs">Panjang (mm)</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        type="number"
+                                                                        placeholder="0"
+                                                                        className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                                        value={field.value}
+                                                                        onChange={handleNumberChange(field)}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="lebar"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs">Lebar (mm)</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        type="number"
+                                                                        placeholder="0"
+                                                                        className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                                        value={field.value}
+                                                                        onChange={handleNumberChange(field)}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="tinggi"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs">Tinggi (mm)</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        type="number"
+                                                                        placeholder="0"
+                                                                        className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                                        value={field.value}
+                                                                        onChange={handleNumberChange(field)}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="berat"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="text-xs">Berat (kg)</FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        type="number"
+                                                                        step="0.01"
+                                                                        placeholder="0"
+                                                                        className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                                        value={field.value}
+                                                                        onChange={handleNumberChange(field)}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4 pb-4">
+                                                <h3 className="text-[12px] flex items-center gap-2.5 font-black uppercase tracking-widest text-muted-foreground pb-2">
+                                                    <div className="w-1.5 h-4 bg-primary rounded-full" />
+                                                    Kompatibilitas
+                                                </h3>
+                                                <div className="space-y-3">
+                                                    <Input
+                                                        placeholder="Ketik nama mobil atau paste daftar (pisah koma)"
+                                                        value={mobilInput}
+                                                        onChange={(e) => setMobilInput(e.target.value)}
+                                                        onKeyDown={handleMobilKeyDown}
+                                                        onBlur={handleMobilBlur}
+                                                        onPaste={handleMobilPaste}
+                                                        className="h-12 rounded-xl bg-muted/20 border-border/50 focus-visible:ring-primary/30"
+                                                    />
+                                                    {mobil.length > 0 && (
+                                                        <div className="flex flex-wrap gap-2 p-3 border rounded-xl bg-muted/30">
+                                                            {mobil.map((item) => (
+                                                                <Badge
+                                                                    key={item}
+                                                                    variant="secondary"
+                                                                    className="pl-3 pr-1 py-1 text-sm gap-1"
+                                                                >
+                                                                    {item}
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => removeMobil(item)}
+                                                                        className="hover:text-destructive"
+                                                                    >
+                                                                        <X className="h-3.5 w-3.5" />
+                                                                    </button>
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Contoh: Innova, Fortuner, Avanza (tekan Enter atau koma untuk menambah)
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
 

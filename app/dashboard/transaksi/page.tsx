@@ -25,6 +25,7 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import html2canvas from "html2canvas-pro";
 import { QRCodeSVG } from "qrcode.react";
+import { formatDateWIB } from "@/lib/utils";
 
 type Transaction = {
     id: string;
@@ -582,12 +583,17 @@ export default function TransaksiPage() {
                 }
                 const file = new File([blob], `Invoice-${formData.id}.png`, { type: "image/png" });
 
+                const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                const link = origin && formData.id && formData.customer_id 
+                    ? `${origin}/invoice/${formData.id.split('-').pop()}-${formData.customer_id.split('-')[0]}` 
+                    : '';
+
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                     try {
                         await navigator.share({
                             files: [file],
                             title: `Invoice ${formData.id}`,
-                            text: `Berikut lampiran invoice pesanan Anda. Terima kasih!`
+                            text: `Berikut lampiran invoice pesanan Anda. Terima kasih!\n\nUntuk melihat sisa garansi silahkan scan QR di invoice atau kunjungi laman berikut:\n${link}`
                         });
                         toast.success("Berhasil membuka menu share", { id: "invoice" });
                     } catch (e) {
@@ -1068,7 +1074,7 @@ export default function TransaksiPage() {
                                                         </div>
                                                         <div className="bg-gray-50 p-3 grid grid-cols-2 gap-y-2 text-xs text-gray-600 font-medium">
                                                             <span>Dibuat</span>
-                                                            <span className="text-right text-gray-900">{formData.created_at ? new Date(formData.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}</span>
+                                                            <span className="text-right text-gray-900">{formatDateWIB(formData.created_at || new Date())}</span>
                                                             <span>Tipe</span>
                                                             <span className="text-right text-gray-900 uppercase font-bold text-[10px]">{formData.tipe?.replace('_', ' ')}</span>
                                                             <span>Status</span>
@@ -1216,7 +1222,7 @@ export default function TransaksiPage() {
                                 </div>
                                 <div style={{ background: '#f9fafb', padding: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#4b5563' }}>
                                     <span>Dibuat</span>
-                                    <span style={{ textAlign: 'right', color: '#111827', fontWeight: 600 }}>{formData.created_at ? new Date(formData.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}</span>
+                                    <span style={{ textAlign: 'right', color: '#111827', fontWeight: 600 }}>{formatDateWIB(formData.created_at || new Date())}</span>
                                     <span>Tipe</span>
                                     <span style={{ textAlign: 'right', color: '#111827', fontWeight: 700, fontSize: '10px', textTransform: 'uppercase' }}>{formData.tipe?.replace('_', ' ')}</span>
                                     <span>Status</span>

@@ -262,6 +262,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
     if (m.includes("aspira") && (m.includes("hybrid") || k.includes("hybrid"))) return createTheme("#d97706", "#7c2d12")
     if (m.includes("aspira")) return createTheme("#334155", "#0f172a")
     if (m.includes("chilwee")) return createTheme("#15803d", "#064e3b")
+    if (k.includes("jasa")) return createTheme("#7e22ce", "#4c1d95") // Purple theme
 
     return createTheme("#334155", "#0f172a")
   }

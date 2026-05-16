@@ -18,6 +18,7 @@ export function getCategoryFolder(kategori: string): string {
         "Aki Basah": "basah",
         "Aki Kering (MF)": "mf",
         "Aki Hybrid": "hybrid",
+        "Jasa": "jasa",
     }
     return categoryMap[kategori] || normalizeFileName(kategori)
 }

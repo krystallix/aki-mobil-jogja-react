@@ -7,6 +7,7 @@ import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
+import { formatDateWIB } from "@/lib/utils";
 
 export default function InvoiceClientView({ transaction }: { transaction: any }) {
     const invoicePrintRef = useRef<HTMLDivElement>(null);
@@ -70,8 +71,7 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
             ongkir = parseInt(match[1], 10);
         }
     }
-
-    const handleShareWA = async () => {
+    const handleDownload = async () => {
         if (!invoicePrintRef.current) return;
         try {
             setIsDownloading(true);
@@ -96,37 +96,18 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
                     toast.error("Gagal membuat gambar", { id: "invoice" });
                     return;
                 }
-                const file = new File([blob], `Invoice-${transaction.id}.png`, { type: "image/png" });
-
-                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: `Invoice ${transaction.id}`,
-                            text: `Berikut lampiran invoice pesanan Anda. Terima kasih!`
-                        });
-                        toast.success("Berhasil membuka menu share", { id: "invoice" });
-                    } catch (e) {
-                        toast.dismiss("invoice");
-                    }
-                } else {
-                    try {
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement("a");
-                        a.href = url;
-                        a.download = `Invoice-${transaction.id}.png`;
-                        a.click();
-                        URL.revokeObjectURL(url);
-                        toast.success("Gambar berhasil diunduh.", { id: "invoice", duration: 4000 });
-                    } catch (e) {
-                        toast.error("Gagal mengunduh gambar", { id: "invoice" });
-                    }
-                }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `Invoice-${transaction.id}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                toast.success("Gambar berhasil diunduh.", { id: "invoice", duration: 4000 });
             }, "image/png");
 
         } catch (error) {
             console.error(error);
-            toast.error("Gagal membuat invoice", { id: "invoice" });
+            toast.error("Gagal mengunduh invoice", { id: "invoice" });
         } finally {
             setIsDownloading(false);
         }
@@ -145,7 +126,7 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
                 </Link>
                 <div className="flex gap-2">
                     <Button 
-                        onClick={handleShareWA} 
+                        onClick={handleDownload} 
                         disabled={isDownloading}
                         className="rounded-full bg-primary font-bold shadow-sm"
                     >
@@ -208,7 +189,7 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
                                 </div>
                                 <div className="bg-gray-50 p-3 grid grid-cols-2 gap-y-2 text-xs text-gray-600 font-medium">
                                     <span>Dibuat</span>
-                                    <span className="text-right text-gray-900">{transaction.created_at ? new Date(transaction.created_at).toISOString().split('T')[0] : '-'}</span>
+                                    <span className="text-right text-gray-900">{formatDateWIB(transaction.created_at)}</span>
                                     <span>Tipe</span>
                                     <span className="text-right text-gray-900 uppercase font-bold text-[10px]">{transaction.tipe?.replace('_', ' ')}</span>
                                     <span>Status</span>
@@ -349,7 +330,7 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
                                 </div>
                                 <div style={{ background: '#f9fafb', padding: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#4b5563' }}>
                                     <span>Dibuat</span>
-                                    <span style={{ textAlign: 'right', color: '#111827', fontWeight: 600 }}>{transaction.created_at ? new Date(transaction.created_at).toISOString().split('T')[0] : '-'}</span>
+                                    <span style={{ textAlign: 'right', color: '#111827', fontWeight: 600 }}>{formatDateWIB(transaction.created_at)}</span>
                                     <span>Tipe</span>
                                     <span style={{ textAlign: 'right', color: '#111827', fontWeight: 700, fontSize: '10px', textTransform: 'uppercase' }}>{transaction.tipe?.replace('_', ' ')}</span>
                                     <span>Status</span>

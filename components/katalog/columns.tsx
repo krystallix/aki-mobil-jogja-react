@@ -75,6 +75,8 @@ export const columns: ColumnDef<Battery>[] = [
                     bgColor = "bg-blue-200"
                 } else if (kategoriLower.includes("mf") || kategoriLower.includes("kering")) {
                     bgColor = "bg-lime-200"
+                } else if (kategoriLower.includes("jasa")) {
+                    bgColor = "bg-purple-200"
                 }
             }
 

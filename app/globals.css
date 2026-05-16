@@ -161,7 +161,6 @@
 }
 
 /* rich editor tiptap css  */
-/* Tiptap Editor Styles */
 .ProseMirror {
   outline: none;
 }
@@ -174,6 +173,123 @@
   pointer-events: none;
 }
 
+/* Typography inside tiptap-content */
+.tiptap-content {
+  line-height: 1.75;
+  color: inherit;
+}
+
+.tiptap-content h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin-top: 0.67em;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+}
+
+.tiptap-content h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.83em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+.tiptap-content h3 {
+  font-size: 1.17em;
+  font-weight: 700;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.tiptap-content p {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+}
+
+.tiptap-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin-left: 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.tiptap-content code {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: monospace;
+}
+
+.tiptap-content pre {
+  background: #1f2937;
+  color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.tiptap-content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.tiptap-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* LIST FIXES - override Tailwind preflight */
+.tiptap-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.75rem !important;
+  margin: 0.75rem 0 !important;
+}
+
+.tiptap-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.75rem !important;
+  margin: 0.75rem 0 !important;
+}
+
+.tiptap-content li {
+  display: list-item !important;
+  margin: 0.25rem 0 !important;
+}
+
+.tiptap-content ul ul {
+  list-style-type: circle !important;
+}
+
+.tiptap-content ul ul ul {
+  list-style-type: square !important;
+}
+
+.tiptap-content ol ol {
+  list-style-type: lower-alpha !important;
+}
+
+.tiptap-content hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+.tiptap-content mark {
+  background-color: #fef08a;
+  padding: 0.1em 0.2em;
+  border-radius: 0.125rem;
+}
+
+/* Keep old ProseMirror rules for fallback */
 .ProseMirror h1 {
   font-size: 2em;
   font-weight: bold;
@@ -237,6 +353,28 @@
 .ProseMirror ol {
   padding-left: 1.5rem;
   margin: 1rem 0;
+}
+
+.ProseMirror ul {
+  list-style-type: disc !important;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal !important;
+}
+
+.ProseMirror ul li,
+.ProseMirror ol li {
+  display: list-item !important;
+  margin: 0.25rem 0;
+}
+
+.ProseMirror ul ul {
+  list-style-type: circle !important;
+}
+
+.ProseMirror ul ul ul {
+  list-style-type: square !important;
 }
 
 .ProseMirror hr {
