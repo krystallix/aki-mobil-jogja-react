@@ -11,6 +11,18 @@ interface ArticlePageProps {
     }>;
 }
 
+const BASE_URL = 'https://akimobiljogja.com'
+
+/**
+ * Wrap a Supabase Storage URL through our og-image proxy.
+ * This strips the `x-robots-tag: none` header that Supabase adds,
+ * which prevents Facebook/social crawlers from loading og:image.
+ */
+function proxyOgImage(url: string | null | undefined): string | null {
+    if (!url) return null
+    return `${BASE_URL}/api/og-image?url=${encodeURIComponent(url)}`
+}
+
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
     const { slug } = await params;
@@ -48,7 +60,11 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     }
 
     const keywords = article.tags?.length > 0 ? article.tags : ['aki mobil', 'tips otomotif', 'perawatan aki'];
-    const articleUrl = `https://akimobiljogja.com/artikel/${slug}`;
+    const articleUrl = `${BASE_URL}/artikel/${slug}`;
+
+    // Use proxy URL so Facebook crawler can access the image
+    // (Supabase Storage sets x-robots-tag: none which blocks social crawlers)
+    const ogImageUrl = proxyOgImage(article.featured_image)
 
     return {
         title: pageTitle,
@@ -67,8 +83,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             modifiedTime: article.updated_at || article.created_at,
             authors: ['Siswanto Aki'],
             tags: keywords,
-            images: article.featured_image ? [{
-                url: article.featured_image,
+            images: ogImageUrl ? [{
+                url: ogImageUrl,
                 width: 1200,
                 height: 630,
                 alt: article.title,
@@ -79,7 +95,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
             card: "summary_large_image",
             title: pageTitle,
             description: metaDescription,
-            images: article.featured_image ? [article.featured_image] : [],
+            images: ogImageUrl ? [ogImageUrl] : [],
         },
     };
 }

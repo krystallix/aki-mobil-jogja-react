@@ -69,7 +69,7 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
       `- Merek: ${selectedProduct.merek}`,
       `- Tipe: ${cleanName}`,
       `- Kategori: ${selectedProduct.kategori}`,
-      `- Kapasitas: ${capacityValue}`,
+      ...(selectedProduct.kategori?.toLowerCase().includes('jasa') ? [] : [`- Kapasitas: ${capacityValue}`]),
       `- Garansi: ${selectedProduct.garansi || '-'}`,
       ``,
       `🚗 APLIKASI KENDARAAN:`,
@@ -526,13 +526,15 @@ export default function GeneratorClient({ products }: GeneratorClientProps) {
                               {selectedProduct.kategori}
                             </div>
                           </div>
-                          <div className="flex flex-col gap-2">
-                            <span className="text-sm font-bold uppercase tracking-widest ml-1" style={{ color: t.labelColor }}>Kapasitas</span>
-                            <div className="text-4xl font-black uppercase tracking-tighter flex items-center gap-2" style={{ color: t.titleColor }}>
-                              <Zap className="w-7 h-7" style={{ color: t.zapColor }} />
-                              {capacityValue}
+                          {!selectedProduct.kategori?.toLowerCase().includes('jasa') && (
+                            <div className="flex flex-col gap-2">
+                              <span className="text-sm font-bold uppercase tracking-widest ml-1" style={{ color: t.labelColor }}>Kapasitas</span>
+                              <div className="text-4xl font-black uppercase tracking-tighter flex items-center gap-2" style={{ color: t.titleColor }}>
+                                <Zap className="w-7 h-7" style={{ color: t.zapColor }} />
+                                {capacityValue}
+                              </div>
                             </div>
-                          </div>
+                          )}
                           <div className="flex flex-col gap-2">
                             <span className="text-sm font-bold uppercase tracking-widest ml-1" style={{ color: t.labelColor }}>Garansi</span>
                             <div className="text-4xl font-black uppercase tracking-tighter flex items-center gap-2" style={{ color: t.titleColor }}>

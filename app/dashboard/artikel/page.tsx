@@ -1,6 +1,7 @@
 "use client"
 import DashboardLayout from "@/components/layouts/dashboard-layout";
 import TipTapEditor from "@/components/tiptap";
+import AiArtikelGenerator from "@/components/artikel/ai-artikel-generator";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -287,6 +288,14 @@ export default function ArtikelPage() {
         }
     };
 
+    const handleAiGenerated = (data: Partial<ArticleData>) => {
+        setFormData(prev => ({
+            ...prev,
+            ...data,
+        }))
+        setIsMobileListOpen(false)
+    }
+
     const handleDeleteClick = (article: ArticleData, e: React.MouseEvent) => {
         e.stopPropagation();
         setArticleToDelete(article);
@@ -488,7 +497,8 @@ export default function ArtikelPage() {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 w-full md:w-auto">
+                                <div className="flex flex-wrap gap-2 w-full md:w-auto items-center">
+                                    <AiArtikelGenerator onGenerated={handleAiGenerated} />
                                     <Button
                                         variant="outline"
                                         onClick={() => handleSave(false)}
