@@ -16,6 +16,7 @@ export interface BatteryApplication {
 
 export interface Battery {
     id: string
+    slug: string
     nama: string
     merek: string
     tipe: string  // Tambahkan ini

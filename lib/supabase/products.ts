@@ -211,7 +211,7 @@ export const fetchRelatedProducts = async (capacity: string, excludeId: string) 
         .from("products")
         .select(
             `
-            id, nama, gambar, harga_jual, harga_tukar, merek, tipe,
+            id, slug, nama, gambar, harga_jual, harga_tukar, merek, tipe,
             specifications!inner (kapasitas)
         `
         )

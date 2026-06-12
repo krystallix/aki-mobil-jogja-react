@@ -106,9 +106,9 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
         setPage(1)
     }
 
-    const handleSuccess = async (id?: string) => {
-        const targetId = id || editTargetId.current || undefined
-        if (targetId) await revalidateProducts(targetId)
+    const handleSuccess = async (slug?: string) => {
+        const targetSlug = slug || editTargetId.current || undefined
+        if (targetSlug) await revalidateProducts(targetSlug)
         router.refresh()
     }
 
@@ -414,7 +414,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                 <div className="flex gap-1.5 pt-2 border-t border-border/40">
                                                     <button
                                                         className="flex-1 h-8 rounded-lg bg-transparent border border-primary/60 text-primary flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
-                                                        onClick={() => { editTargetId.current = battery.id; setEditTarget(battery) }}
+                                                        onClick={() => { editTargetId.current = battery.slug; setEditTarget(battery) }}
                                                     >
                                                         <Pencil className="w-3 h-3" />
                                                         Edit
@@ -428,7 +428,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                     </button>
                                                     <button
                                                         className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-200 active:scale-[0.97]"
-                                                        onClick={() => window.open(`/katalog/product/${battery.id}`, "_blank")}
+                                                        onClick={() => window.open(`/katalog/product/${battery.slug}`, "_blank")}
                                                         aria-label={`Lihat ${battery.nama}`}
                                                     >
                                                         <Eye className="w-3.5 h-3.5" />

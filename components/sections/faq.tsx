@@ -5,10 +5,67 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Check, Clock, CreditCard, ShieldCheck, Truck, Wrench } from "lucide-react"
+import JsonLd from "@/components/json-ld"
 
 export default function FaqSections() {
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+            {
+                '@type': 'Question',
+                name: 'Beli aki di sini dipasangin gratis gak?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Gratis! Kami pasang langsung di tempat. Bahkan kalau mau, bisa kami anterin sekalian pasang ke lokasi kamu. Jadi tinggal duduk manis aja, teknisi kami yang ngerjain sampai mobilmu siap jalan lagi.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Ada garansi berapa lama ya?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Semua aki di sini bergaransi, mulai dari 1 bulan sampai 12 bulan tergantung merek dan tipenya. Garansi berlaku selama aki masih dalam kondisi normal pemakaian.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Tokonya buka jam berapa aja?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Kita buka setiap hari dari jam 7 pagi sampai 9 malam. Kalau ada darurat malam hari, bisa hubungi nomor WhatsApp kita, biasanya masih bisa dilayani asal di area jangkauan. Hari libur tetap buka normal.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Kalau motor/mobil saya mogok di jalan, bisa diantar?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Bisa! Langsung telepon atau WA ke nomor kami, kasih tau lokasi kamu. Teknisi kami siap berangkat bawa aki yang pas buat kendaraan kamu, langsung pasang di lokasi. Layanan antar pasang ini gratis, tidak ada charge tambahan.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Bisa minta cek kondisi aki dulu sebelum beli?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Bisa, malah kami sarankan dicek dulu. Kami punya alat tester buat ngecek tegangan dan kondisi aki kamu. Gratis pemeriksaannya. Jadi kamu bisa tau pasti apakah aki emang harus ganti atau cuma perlu di-charge aja.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Pembayarannya gimana? Bisa transfer atau cash?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Fleksibel! Bisa cash langsung atau transfer bank. Kalau pesan antar pasang, bayarnya pas teknisi datang setelah pemasangan selesai dan mobilmu sudah nyala. Tinggal pilih mana yang lebih nyaman.',
+                },
+            },
+        ],
+    };
+
     return (
         <section className="py-12 lg:py-20 bg-card/20 border-t border-border/50">
+            <JsonLd data={faqSchema} />
             <div className="container mx-auto max-w-[900px] px-4">
                 <div className="flex w-full justify-center py-8 md:py-10">
                     <div className="text-center">

@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Fetch all products
     const products = await getAllProducts()
     const productUrls = products.map((product) => ({
-        url: `${baseUrl}/katalog/product/${product.id}`,
+        url: `${baseUrl}/katalog/product/${product.slug}`,
         lastModified: product.created_at ? new Date(product.created_at) : new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.9,
@@ -28,6 +28,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/tentang-kami',
         '/katalog',
         '/artikel',
+        '/rekomendasi-aki',
+        '/kebijakan-pengembalian',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),

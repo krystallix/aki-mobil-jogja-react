@@ -34,11 +34,11 @@ export function ProductActions({ battery }: ProductActionsProps) {
     }
 
     const handleView = () => {
-        window.open(`/products/${battery.id}`, "_blank")
+        window.open(`/katalog/product/${battery.slug}`, "_blank")
     }
 
     const handleSuccess = async () => {
-        await revalidateProducts(battery.id)
+        await revalidateProducts(battery.slug)
         router.refresh()
     }
 

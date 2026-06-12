@@ -28,6 +28,7 @@ type Specification = {
 
 type Product = {
     id: string;
+    slug: string;
     nama: string;
     kategori: string;
     merek: string;

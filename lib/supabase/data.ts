@@ -22,7 +22,7 @@ export const getProductBySlug = cache(async (slug: string) => {
         nama_mobil
       )
     `)
-        .eq("id", slug)
+        .eq("slug", slug)
         .single();
 
     if (error || !data) {
@@ -48,7 +48,7 @@ export const getAllProducts = cache(async () => {
     const supabase = await createClient();
     const { data } = await supabase
         .from("products")
-        .select("id, created_at")
+        .select("id, slug, created_at")
         .order("created_at", { ascending: false });
     return data || [];
 });
@@ -59,7 +59,7 @@ export const getRelatedProducts = cache(async (capacity: string, excludeId: stri
     const { data } = await supabase
         .from("products")
         .select(`
-            id, nama, gambar, harga_jual, harga_tukar, merek, tipe,
+            id, slug, nama, gambar, harga_jual, harga_tukar, merek, tipe,
             specifications!inner (kapasitas)
         `)
         .eq("specifications.kapasitas", capacity)

@@ -398,7 +398,7 @@ export function EditProductDialog({ product, open, onOpenChange, onSuccess }: Ed
             }
 
             toast.success("Produk berhasil diperbarui!")
-            await revalidateProducts(product.id)
+            await revalidateProducts(product.slug)
             onOpenChange(false)
             onSuccess?.()
 

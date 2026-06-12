@@ -13,6 +13,7 @@ type Specification = {
 interface ProductCardProps {
     product: {
         id: string;
+        slug: string;
         nama: string;
         kategori: string;
         merek: string;
@@ -69,7 +70,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     return (
         <div className="group border border-border/60 rounded-xl lg:rounded-2xl overflow-hidden hover:border-border transition-all duration-300 bg-card relative">
 
-            <Link href={`/katalog/product/${product.id}`} className="absolute inset-0 z-20">
+            <Link href={`/katalog/product/${product.slug}`} className="absolute inset-0 z-20">
                 <span className="sr-only">Lihat detail {product.nama}</span>
             </Link>
 
@@ -123,7 +124,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 */}
 
                 <h3 className="text-base font-bold line-clamp-1 leading-tight" title={product.nama}>
-                    <Link href={`/katalog/product/${product.id}`} className="hover:text-primary transition-colors relative z-30">
+                    <Link href={`/katalog/product/${product.slug}`} className="hover:text-primary transition-colors relative z-30">
                         {product.nama}
                     </Link>
                 </h3>
@@ -179,7 +180,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                             variant="outline"
                             className="h-9 cursor-pointer rounded-full border-border/50 bg-background/50 backdrop-blur hover:bg-muted shadow-none"
                         >
-                            <Link href={`/katalog/product/${product.id}`}>
+                            <Link href={`/katalog/product/${product.slug}`}>
                                 <ArrowRight className="w-4 h-4 md:mr-1" />
                                 <span className="hidden md:block">Detail</span>
                             </Link>

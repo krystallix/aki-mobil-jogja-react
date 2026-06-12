@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import HomeLayout from "@/components/layouts/home-layout";
+import JsonLd from "@/components/json-ld";
 import { ShieldCheck, RotateCcw, Clock, Phone, AlertCircle, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -74,8 +75,27 @@ const sections = [
 ];
 
 export default function KebijakanPengembalianPage() {
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Kebijakan Pengembalian | Siswanto Aki',
+        description: 'Kebijakan pengembalian dan penukaran produk Siswanto Aki. Garansi resmi dengan proses klaim mudah dan transparan.',
+        url: 'https://akimobiljogja.com/kebijakan-pengembalian',
+    };
+
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Beranda', item: 'https://akimobiljogja.com' },
+            { '@type': 'ListItem', position: 2, name: 'Kebijakan Pengembalian', item: 'https://akimobiljogja.com/kebijakan-pengembalian' },
+        ],
+    };
+
     return (
         <HomeLayout>
+            <JsonLd data={jsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
             <div className="max-w-5xl mx-auto px-6 py-10 lg:py-16">
                 {/* Header - Styled like Homepage Panel */}
                 <div className="mb-10 lg:mb-12 rounded-3xl bg-linear-to-br from-indigo-950 via-indigo-900 to-indigo-800 p-6 lg:p-10 text-white relative overflow-hidden">
