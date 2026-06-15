@@ -131,14 +131,18 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
 
                 <div className="hidden md:flex gap-3 text-xs text-muted-foreground pointer-events-auto">
-                    <div className="flex items-center gap-1">
-                        <Zap className="size-3" />
-                        <span>{product.specifications[0]?.kapasitas}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <ShieldCheck className="size-3" />
-                        <span>{product.garansi}</span>
-                    </div>
+                    {product.specifications[0]?.kapasitas && (
+                        <div className="flex items-center gap-1">
+                            <Zap className="size-3" />
+                            <span>{product.specifications[0].kapasitas}</span>
+                        </div>
+                    )}
+                    {product.garansi && (
+                        <div className="flex items-center gap-1">
+                            <ShieldCheck className="size-3" />
+                            <span>{product.garansi}</span>
+                        </div>
+                    )}
                     <div className="flex items-center gap-1">
                         <BatteryCharging className="size-3" />
                         <span className="capitalize">{product.tipe}</span>
