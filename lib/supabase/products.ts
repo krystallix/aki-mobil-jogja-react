@@ -99,7 +99,15 @@ export const fetchAllProducts = async () => {
         console.error("Error fetching all products:", error)
         return []
     }
-    return data || []
+    return (data || []).map(item => ({
+        ...item,
+        specifications: Array.isArray(item.specifications)
+            ? item.specifications
+            : item.specifications
+                ? [item.specifications]
+                : [],
+        applications: item.applications || [],
+    }))
 }
 
 export const fetchProducts = async (filters: ProductFilters) => {
