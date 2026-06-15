@@ -80,7 +80,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-primary/2 rounded-full blur-2xl pointer-events-none" />
 
                 {/* Mobile Ampere Badge Overlay */}
-                {product.specifications[0]?.kapasitas && (
+                {product.specifications[0]?.kapasitas && product.specifications[0].kapasitas !== '-' && (
                     <div className="absolute top-3 left-3 z-10 md:hidden flex items-center h-8">
                         <div className="bg-primary/10 backdrop-blur-md text-primary border border-primary/20 text-[9px] font-bold px-2 py-0.5 rounded-md shadow-none flex items-center gap-1">
                             <Zap className="size-2.5" />
@@ -131,13 +131,13 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
 
                 <div className="hidden md:flex gap-3 text-xs text-muted-foreground pointer-events-auto">
-                    {product.specifications[0]?.kapasitas && (
+                    {product.specifications[0]?.kapasitas && product.specifications[0].kapasitas !== '-' && (
                         <div className="flex items-center gap-1">
                             <Zap className="size-3" />
                             <span>{product.specifications[0].kapasitas}</span>
                         </div>
                     )}
-                    {product.garansi && (
+                    {product.garansi && product.garansi !== '-' && (
                         <div className="flex items-center gap-1">
                             <ShieldCheck className="size-3" />
                             <span>{product.garansi}</span>
