@@ -5,58 +5,27 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import {
   Sparkles,
-  ChevronDown,
   Loader2,
   Check,
   ArrowRight,
   RefreshCw,
-  Cpu,
-  Zap,
 } from "lucide-react"
 import type { ArticleData } from "@/lib/supabase/queries"
 
-type AiProvider = "nvidia" | "vercel"
-
 interface AiArtikelGeneratorProps {
-  /** Called when AI has fully generated the article fields */
   onGenerated: (data: Partial<ArticleData>) => void
 }
 
-const PROVIDER_META: Record<AiProvider, { label: string; icon: React.ReactNode; color: string }> =
-{
-  nvidia: {
-    label: "NVIDIA AI",
-    icon: <Cpu className="w-3.5 h-3.5" />,
-    color: "text-green-600",
-  },
-  vercel: {
-    label: "Vercel AI",
-    icon: <Zap className="w-3.5 h-3.5" />,
-    color: "text-slate-800",
-  },
-}
-
 export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorProps) {
-  const [provider, setProvider] = useState<AiProvider>("nvidia")
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<"keyword" | "titles" | "generating">("keyword")
 
@@ -65,8 +34,6 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
   const [suggestedTitles, setSuggestedTitles] = useState<string[]>([])
   const [selectedTitle, setSelectedTitle] = useState<string | null>(null)
   const [isGeneratingArticle, setIsGeneratingArticle] = useState(false)
-
-  const providerMeta = PROVIDER_META[provider]
 
   const resetState = () => {
     setStep("keyword")
@@ -95,14 +62,15 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
       const res = await fetch("/api/ai-artikel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "suggest-titles", provider, keyword }),
+        body: JSON.stringify({ action: "suggest-titles", keyword }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "Gagal generate judul")
       setSuggestedTitles(data.titles || [])
       setStep("titles")
-    } catch (err: any) {
-      toast.error(`Gagal generate judul: ${err.message}`)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Gagal generate judul"
+      toast.error(`Gagal generate judul: ${message}`)
     } finally {
       setIsLoadingTitles(false)
     }
@@ -120,7 +88,7 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
       const res = await fetch("/api/ai-artikel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "generate-article", provider, title: selectedTitle }),
+        body: JSON.stringify({ action: "generate-article", title: selectedTitle }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || "Gagal generate artikel")
@@ -136,8 +104,9 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
       toast.success("Artikel berhasil digenerate oleh AI! Silakan review dan edit sebelum publish.")
       setOpen(false)
       resetState()
-    } catch (err: any) {
-      toast.error(`Gagal generate artikel: ${err.message}`)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Gagal generate artikel"
+      toast.error(`Gagal generate artikel: ${message}`)
       setStep("titles")
     } finally {
       setIsGeneratingArticle(false)
@@ -146,60 +115,13 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
 
   return (
     <>
-      {/* ── Trigger Button with Provider Dropdown ─────────────────────────── */}
-      <div className="flex items-center gap-0 rounded-xl overflow-hidden border border-violet-200 shadow-sm">
-        <Button
-          onClick={() => setOpen(true)}
-          className="gap-1.5 h-10 px-3 rounded-none rounded-l-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          AI Generate
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className={`h-10 px-2 rounded-none rounded-r-xl border-0 border-l border-violet-300 bg-violet-50 hover:bg-violet-100 ${providerMeta.color} font-bold text-xs transition-all gap-1`}
-            >
-              {providerMeta.icon}
-              <span className="hidden sm:inline">{providerMeta.label}</span>
-              <ChevronDown className="w-3 h-3 opacity-60" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48 rounded-xl border-border/60 shadow-xl">
-            <DropdownMenuLabel className="text-[11px] uppercase tracking-widest text-muted-foreground">
-              Pilih AI Provider
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuRadioGroup
-              value={provider}
-              onValueChange={(v) => setProvider(v as AiProvider)}
-            >
-              <DropdownMenuRadioItem
-                value="nvidia"
-                className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
-              >
-                <Cpu className="w-3.5 h-3.5 text-green-600" />
-                <span>NVIDIA AI</span>
-                <Badge variant="secondary" className="ml-auto text-[9px] px-1.5">
-                  Llama 70B
-                </Badge>
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem
-                value="vercel"
-                className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
-              >
-                <Zap className="w-3.5 h-3.5 text-slate-700" />
-                <span>Vercel AI</span>
-                <Badge variant="secondary" className="ml-auto text-[9px] px-1.5">
-                  Openai/gpt-4o
-                </Badge>
-              </DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <Button
+        onClick={() => setOpen(true)}
+        className="gap-1.5 h-10 px-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition-all"
+      >
+        <Sparkles className="w-3.5 h-3.5" />
+        AI Generate
+      </Button>
 
       {/* ── Main Dialog ──────────────────────────────────────────────────────── */}
       <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -215,9 +137,7 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
                   AI Artikel Generator
                 </DialogTitle>
                 <p className="text-xs text-muted-foreground font-medium mt-0.5 flex items-center gap-1.5">
-                  {providerMeta.icon}
-                  <span className={providerMeta.color + " font-bold"}>{providerMeta.label}</span>
-                  &nbsp;·&nbsp; SEO Specialist + Teknisi Aki
+                  Arkane Gateway · SEO Specialist + Teknisi Aki
                 </p>
               </div>
             </div>
@@ -229,10 +149,6 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
                 { key: "titles", label: "Pilih Judul" },
                 { key: "generating", label: "Generate" },
               ].map((s, i) => {
-                const isActive =
-                  s.key === step ||
-                  (step === "generating" && s.key === "titles") ||
-                  (step === "titles" && s.key === "keyword")
                 const isDone =
                   (step === "titles" && s.key === "keyword") ||
                   (step === "generating" && s.key !== "generating")
@@ -376,7 +292,7 @@ export default function AiArtikelGenerator({ onGenerated }: AiArtikelGeneratorPr
                 <div>
                   <p className="font-extrabold text-base">AI sedang menulis artikel...</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Menggunakan {providerMeta.label} · Mungkin butuh 15-30 detik
+                    Menggunakan Arkane Gateway · Mungkin butuh 15-30 detik
                   </p>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">

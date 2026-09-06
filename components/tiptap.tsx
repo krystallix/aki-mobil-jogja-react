@@ -13,6 +13,8 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import Placeholder from '@tiptap/extension-placeholder'
 import { common, createLowlight } from 'lowlight'
 import { useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { uploadArticleContentImage } from '@/lib/supabase/storage'
 
 // Import komponen Tiptap UI
 import { ImageUploadButton } from '@/components/tiptap-ui/image-upload-button'
@@ -63,70 +65,69 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 /**
  * Handle image upload - Convert ke base64 untuk preview
  */
-const handleImageUpload = async (
+const validateImageFile = (file: File) => {
+    if (!file) throw new Error("No file provided")
+    if (!file.type.startsWith('image/')) throw new Error("File harus berupa gambar")
+    if (file.size > MAX_FILE_SIZE) {
+        throw new Error(`Ukuran file melebihi maksimal ${MAX_FILE_SIZE / (1024 * 1024)}MB`)
+    }
+}
+
+const fileToBase64 = async (
     file: File,
     onProgress?: (event: { progress: number }) => void,
     abortSignal?: AbortSignal
 ): Promise<string> => {
-    if (!file) {
-        throw new Error("No file provided")
-    }
-
-    if (!file.type.startsWith('image/')) {
-        throw new Error("File harus berupa gambar")
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-        throw new Error(
-            `Ukuran file melebihi maksimal ${MAX_FILE_SIZE / (1024 * 1024)}MB`
-        )
-    }
-
     return new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
-
         let progress = 0
         const interval = setInterval(() => {
             progress += 20
-            if (progress <= 100 && onProgress) {
-                onProgress({ progress })
-            }
-            if (progress >= 100) {
-                clearInterval(interval)
-            }
+            onProgress?.({ progress: Math.min(progress, 95) })
+            if (progress >= 95) clearInterval(interval)
         }, 50)
 
         reader.onload = () => {
             clearInterval(interval)
-            if (onProgress) onProgress({ progress: 100 })
+            onProgress?.({ progress: 100 })
             resolve(reader.result as string)
         }
-
         reader.onerror = () => {
             clearInterval(interval)
             reject(new Error('Failed to read file'))
         }
-
-        if (abortSignal) {
-            abortSignal.addEventListener('abort', () => {
-                clearInterval(interval)
-                reader.abort()
-                reject(new Error('Upload cancelled'))
-            })
-        }
-
+        abortSignal?.addEventListener('abort', () => {
+            clearInterval(interval)
+            reader.abort()
+            reject(new Error('Upload cancelled'))
+        })
         reader.readAsDataURL(file)
     })
 }
 
 interface TipTapEditorProps {
     content?: string
+    articleSlug?: string
     onChange?: (content: string) => void
 }
 
-const TipTapEditor = ({ content, onChange }: TipTapEditorProps) => {
+const TipTapEditor = ({ content, articleSlug, onChange }: TipTapEditorProps) => {
     const [linkUrl, setLinkUrl] = useState('')
     const [showLinkInput, setShowLinkInput] = useState(false)
+
+    const handleEditorImageUpload = useCallback(async (
+        file: File,
+        onProgress?: (event: { progress: number }) => void,
+        abortSignal?: AbortSignal
+    ): Promise<string> => {
+        validateImageFile(file)
+        if (!articleSlug?.trim()) return fileToBase64(file, onProgress, abortSignal)
+        onProgress?.({ progress: 20 })
+        const supabase = createClient()
+        const publicUrl = await uploadArticleContentImage(supabase, file, articleSlug)
+        onProgress?.({ progress: 100 })
+        return publicUrl
+    }, [articleSlug])
 
     const editor = useEditor({
         extensions: [
@@ -145,7 +146,7 @@ const TipTapEditor = ({ content, onChange }: TipTapEditorProps) => {
             }),
             ImageResize.configure({
                 inline: true,
-                // @ts-ignore
+                // @ts-expect-error ImageResize supports allowBase64 at runtime
                 allowBase64: true,
                 HTMLAttributes: {
                     class: 'rounded-lg',
@@ -157,7 +158,7 @@ const TipTapEditor = ({ content, onChange }: TipTapEditorProps) => {
                 accept: 'image/*',
                 maxSize: MAX_FILE_SIZE,
                 limit: 5,
-                upload: handleImageUpload,
+                upload: handleEditorImageUpload,
                 onError: (error) => {
                     console.error('Upload failed:', error)
                     alert(error.message || 'Upload gagal')
@@ -333,6 +334,27 @@ const TipTapEditor = ({ content, onChange }: TipTapEditorProps) => {
                 >
                     <Highlighter className="h-3.5 w-3.5" />
                 </Toggle>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size="sm" variant="ghost" title="Text Color" className="h-7 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted">
+                            Color
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="rounded-xl border-border/60 shadow-xl">
+                        {[
+                            { label: 'Default', color: '' },
+                            { label: 'Black', color: '#111827' },
+                            { label: 'Blue', color: '#2563eb' },
+                            { label: 'Green', color: '#16a34a' },
+                            { label: 'Red', color: '#dc2626' },
+                            { label: 'Amber', color: '#d97706' },
+                        ].map((item) => (
+                            <DropdownMenuItem key={item.label} onClick={() => item.color ? editor.chain().focus().setColor(item.color).run() : editor.chain().focus().unsetColor().run()} className="text-sm font-medium rounded-lg cursor-pointer">
+                                {item.label}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
                 <Separator orientation="vertical" className="h-8" />
 
@@ -446,6 +468,34 @@ const TipTapEditor = ({ content, onChange }: TipTapEditorProps) => {
                     hideWhenUnavailable={true}
                     showShortcut={false}
                 />
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size="sm" variant="ghost" title="Image Layout" className="h-7 px-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted">
+                            Image
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="rounded-xl border-border/60 shadow-xl">
+                        {[
+                            { label: 'Small', width: '35%' },
+                            { label: 'Medium', width: '60%' },
+                            { label: 'Full', width: '100%' },
+                        ].map((item) => (
+                            <DropdownMenuItem key={item.width} onClick={() => editor.chain().focus().updateAttributes('imageResize', { width: item.width }).run()} className="text-sm font-medium rounded-lg cursor-pointer">
+                                {item.label}
+                            </DropdownMenuItem>
+                        ))}
+                        <DropdownMenuItem onClick={() => editor.chain().focus().updateAttributes('imageResize', { 'data-align': 'left' }).run()} className="text-sm font-medium rounded-lg cursor-pointer">
+                            Align left
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => editor.chain().focus().updateAttributes('imageResize', { 'data-align': 'center' }).run()} className="text-sm font-medium rounded-lg cursor-pointer">
+                            Align center
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => editor.chain().focus().updateAttributes('imageResize', { 'data-align': 'right' }).run()} className="text-sm font-medium rounded-lg cursor-pointer">
+                            Align right
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
                 {/* Horizontal Rule */}
                 <Button

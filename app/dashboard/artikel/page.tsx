@@ -24,7 +24,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
+import { FaWhatsapp, FaFacebookF, FaTelegramPlane } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Dialog,
@@ -51,6 +56,7 @@ import {
 } from "@/lib/supabase/queries";
 import { revalidateArticles } from "@/app/actions/revalidate";
 import { createClient } from "@/lib/supabase/client";
+import { useIsNativeShare } from "@/hooks/use-is-native-share";
 
 const DEFAULT_FORM: ArticleData = {
     title: '',
@@ -78,6 +84,7 @@ export default function ArtikelPage() {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const isMobileShare = useIsNativeShare();
 
     // State untuk Upload Featured Image
     const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -171,6 +178,23 @@ export default function ArtikelPage() {
         } else {
             handleCopyLink(article);
         }
+    };
+
+    const openSocialShare = (article: ArticleData, url: string) => {
+        const articleUrl = `${window.location.origin}/artikel/${article.slug}`;
+        const encodedUrl = encodeURIComponent(articleUrl);
+        const encodedTitle = encodeURIComponent(article.title);
+
+        const link =
+            url === "whatsapp"
+                ? `https://wa.me/?text=${encodeURIComponent(`${article.title}\n${articleUrl}`)}`
+                : url === "facebook"
+                    ? `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+                    : url === "twitter"
+                        ? `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`
+                        : `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`;
+
+        window.open(link, "_blank", "noopener,noreferrer,width=700,height=600");
     };
 
     const handleCopyLink = async (article: ArticleData) => {
@@ -437,7 +461,7 @@ export default function ArtikelPage() {
                                                         )}
                                                     </DropdownMenuItem>
 
-                                                    {article.status === 'published' && (
+                                                    {article.status === 'published' && isMobileShare && (
                                                         <DropdownMenuItem
                                                             className="cursor-pointer text-[13px] font-medium rounded-lg"
                                                             onClick={(e) => {
@@ -448,6 +472,60 @@ export default function ArtikelPage() {
                                                             <Share2 className="h-4 w-4 mr-2 text-muted-foreground" />
                                                             <span>Bagikan</span>
                                                         </DropdownMenuItem>
+                                                    )}
+
+                                                    {article.status === 'published' && !isMobileShare && (
+                                                        <DropdownMenuSub>
+                                                            <DropdownMenuSubTrigger
+                                                                className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
+                                                                onClick={(e) => e.stopPropagation()}
+                                                            >
+                                                                <Share2 className="h-4 w-4 text-muted-foreground" />
+                                                                Bagikan
+                                                            </DropdownMenuSubTrigger>
+                                                            <DropdownMenuSubContent className="w-44 rounded-xl border-border/60 shadow-xl p-1.5">
+                                                                <DropdownMenuItem
+                                                                    className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        openSocialShare(article, "whatsapp");
+                                                                    }}
+                                                                >
+                                                                    <FaWhatsapp className="h-4 w-4 text-emerald-500" />
+                                                                    WhatsApp
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        openSocialShare(article, "facebook");
+                                                                    }}
+                                                                >
+                                                                    <FaFacebookF className="h-4 w-4 text-blue-600" />
+                                                                    Facebook
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        openSocialShare(article, "twitter");
+                                                                    }}
+                                                                >
+                                                                    <FaXTwitter className="h-4 w-4" />
+                                                                    X (Twitter)
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="cursor-pointer text-[13px] font-medium rounded-lg gap-2"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        openSocialShare(article, "telegram");
+                                                                    }}
+                                                                >
+                                                                    <FaTelegramPlane className="h-4 w-4 text-sky-500" />
+                                                                    Telegram
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuSubContent>
+                                                        </DropdownMenuSub>
                                                     )}
 
                                                     <DropdownMenuSeparator className="bg-border/40" />
@@ -565,6 +643,7 @@ export default function ArtikelPage() {
                                             <div className="border border-border/60 rounded-[1.25rem] overflow-hidden bg-muted/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                                                 <TipTapEditor
                                                     content={formData.content}
+                                                    articleSlug={formData.slug}
                                                     onChange={(c) => setFormData(p => ({ ...p, content: c }))}
                                                 />
                                             </div>

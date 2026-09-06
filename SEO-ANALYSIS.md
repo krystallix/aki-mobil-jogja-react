@@ -23,13 +23,13 @@
 | Route | Page | SEO Status |
 |---|---|---|
 | `/` | Homepage | ✅ Good |
-| `/tentang-kami` | About | ❌ No metadata export |
+| `/tentang-kami` | About | ✅ Good |
 | `/katalog` | Catalog | ✅ Good |
 | `/katalog/product/[slug]` | Product Detail | ✅ Good |
 | `/artikel` | Article Listing | ✅ Good |
 | `/artikel/[slug]` | Article Detail | ✅ Good |
-| `/rekomendasi-aki` | Battery Recommendation | ✅ Fixed |
-| `/kebijakan-pengembalian` | Return Policy | ⚠️ Missing JSON-LD |
+| `/rekomendasi-aki` | Battery Recommendation | ✅ Good |
+| `/kebijakan-pengembalian` | Return Policy | ✅ Good |
 | `/invoice/[id]` | Invoice | noindex |
 
 **Redirects:** `/aki` → `/katalog` (301), `/aki/:slug*` → `/katalog/product/:slug*` (301)
@@ -66,7 +66,7 @@
 
 - `robots.txt` — Allows `/`, disallows `/dashboard/`, `/login/`, `/_next/`
 - `Sitemap` — Dynamic, covers: `/`, `/tentang-kami`, `/katalog`, `/artikel`, all articles, all products
-- Missing from sitemap: `/rekomendasi-aki`, `/kebijakan-pengembalian`
+- Sitemap includes: `/`, `/tentang-kami`, `/katalog`, `/artikel`, `/rekomendasi-aki`, `/kebijakan-pengembalian`, all published articles, all products
 
 ---
 
@@ -131,22 +131,19 @@
 
 | Issue | Page | Priority |
 |---|---|---|
-| ❌ No metadata export | `/tentang-kami` | **High** |
-| ❌ Missing from sitemap | `/rekomendasi-aki`, `/kebijakan-pengembalian` | **Medium** |
-| ⚠️ No JSON-LD | `/kebijakan-pengembalian` | **Medium** |
-| ⚠️ Product URLs use DB ID | `/katalog/product/BAT001` | Low |
-| ⚠️ No FAQPage schema on FAQ | Homepage | ✅ Fixed |
-| ⚠️ No OG image on rec page | `/rekomendasi-aki` | ✅ Fixed |
+| ✅ Metadata export | `/tentang-kami` | Fixed |
+| ✅ Static routes in sitemap | `/rekomendasi-aki`, `/kebijakan-pengembalian` | Fixed |
+| ✅ JSON-LD | `/kebijakan-pengembalian` | Fixed |
+| ✅ Product URLs use slugs | `/katalog/product/[slug]` | Fixed |
+| ✅ FAQPage schema on FAQ | Homepage | Fixed |
+| ✅ OG image on rec page | `/rekomendasi-aki` | Fixed |
 
 ---
 
 ## 6. Recommendations Summary
 
-1. **Add metadata** to `/tentang-kami`
-2. **Add JSON-LD** to `/kebijakan-pengembalian`
-3. **Add missing routes** to sitemap
-4. **Expand article topics** — target problem-based queries (aki soak, tekor, mesin susah starter)
-5. **Build Google Business Profile** — ensure NAP matches JSON-LD exactly
-6. **Switch product URLs** to SEO-friendly slugs (e.g., `/katalog/product/aki-gs-astra-ns40`)
-7. **Add FAQPage schema** — ✅ Done
-8. **Fix recommendation page SEO** — ✅ Done
+1. **Expand article topics** — target problem-based queries (aki soak, tekor, mesin susah starter)
+2. **Build Google Business Profile** — ensure NAP matches JSON-LD exactly
+3. **Monitor indexed product URLs** — product detail route already uses slugs
+4. **Keep sitemap/static metadata audited** after adding new routes
+5. **Track Core Web Vitals** after enabling ISR on product-heavy pages

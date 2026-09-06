@@ -2,22 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import {
   generateTitleSuggestions,
   generateFullArticle,
-  type AiProvider,
 } from "@/lib/ai/article-generator"
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { action, provider, keyword, title } = body
+    const { action, keyword, title } = body
 
-    if (!provider || !["nvidia", "vercel"].includes(provider)) {
-      return NextResponse.json(
-        { error: "Provider tidak valid. Gunakan 'nvidia' atau 'vercel'." },
-        { status: 400 }
-      )
-    }
-
-    // ── Action: suggest titles ────────────────────────────────────────────────
     if (action === "suggest-titles") {
       if (!keyword || typeof keyword !== "string") {
         return NextResponse.json(
@@ -26,15 +17,10 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      const titles = await generateTitleSuggestions({
-        keyword: keyword.trim(),
-        provider: provider as AiProvider,
-      })
-
+      const titles = await generateTitleSuggestions({ keyword: keyword.trim() })
       return NextResponse.json({ titles })
     }
 
-    // ── Action: generate full article ─────────────────────────────────────────
     if (action === "generate-article") {
       if (!title || typeof title !== "string") {
         return NextResponse.json(
@@ -43,17 +29,14 @@ export async function POST(req: NextRequest) {
         )
       }
 
-      const result = await generateFullArticle({
-        title: title.trim(),
-        provider: provider as AiProvider,
-      })
-
+      const result = await generateFullArticle({ title: title.trim() })
       return NextResponse.json(result)
     }
 
     return NextResponse.json({ error: "Action tidak dikenal." }, { status: 400 })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[ai-artikel]", err)
-    return NextResponse.json({ error: err.message || "Internal server error" }, { status: 500 })
+    const message = err instanceof Error ? err.message : "Internal server error"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

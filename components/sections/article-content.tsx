@@ -3,14 +3,23 @@
 import { ArticleData } from '@/lib/supabase/queries';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, Tag, ArrowLeft, Share2, Phone, MessageSquare } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Calendar, Clock, Tag, ArrowLeft, Share2, Phone, MessageSquare, Link2, Check } from 'lucide-react';
+import { useState } from 'react';
+import { useIsNativeShare } from '@/hooks/use-is-native-share';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TiptapImage from '@tiptap/extension-image';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaFacebookF, FaTelegramPlane } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ArticleContentProps {
     article: ArticleData;
@@ -19,6 +28,20 @@ interface ArticleContentProps {
 
 export default function ArticleContent({ article, relatedArticles }: ArticleContentProps) {
     const [copied, setCopied] = useState(false);
+    const isMobileShare = useIsNativeShare();
+
+    const hasContentImage = /<img[^>]*>/i.test(article.content || "");
+
+    const handleNativeShare = async () => {
+        if (!navigator.share) return;
+        try {
+            await navigator.share({
+                title: article.title,
+                text: article.excerpt || article.title,
+                url: window.location.href,
+            });
+        } catch (err) { }
+    };
 
     const editor = useEditor({
         extensions: [
@@ -57,22 +80,46 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
         return `${Math.ceil(wordCount / wordsPerMinute)} mnt baca`;
     };
 
-    const handleShare = async () => {
-        const url = window.location.href;
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: article.title,
-                    text: article.excerpt || article.title,
-                    url: url,
-                });
-            } catch (err) { }
-        } else {
-            navigator.clipboard.writeText(url);
+    const handleCopyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error("Copy link failed:", err);
         }
     };
+
+    const openShareUrl = (url: string) => {
+        window.open(url, "_blank", "noopener,noreferrer,width=700,height=600");
+    };
+
+    const shareLinks = [
+        {
+            label: "WhatsApp",
+            icon: <FaWhatsapp className="h-4 w-4 text-emerald-500" />,
+            href: () =>
+                `https://wa.me/?text=${encodeURIComponent(`${article.title}\n${window.location.href}`)}`,
+        },
+        {
+            label: "Facebook",
+            icon: <FaFacebookF className="h-4 w-4 text-blue-600" />,
+            href: () =>
+                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+        },
+        {
+            label: "X (Twitter)",
+            icon: <FaXTwitter className="h-4 w-4" />,
+            href: () =>
+                `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`,
+        },
+        {
+            label: "Telegram",
+            icon: <FaTelegramPlane className="h-4 w-4 text-sky-500" />,
+            href: () =>
+                `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`,
+        },
+    ];
 
     const category = article.tags?.[0] || 'ARTIKEL';
 
@@ -109,13 +156,73 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                                 <Clock size={16} className="text-primary" />
                                 <span>{getReadingTime(article.content)}</span>
                             </div>
-                            <button
-                                onClick={handleShare}
-                                className="flex items-center gap-2 hover:text-primary transition-colors"
-                            >
-                                <Share2 size={16} className="text-primary" />
-                                <span>{copied ? 'Link Disalin!' : 'Bagikan'}</span>
-                            </button>
+                            {isMobileShare ? (
+                                <button
+                                    onClick={handleNativeShare}
+                                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                                    aria-label="Bagikan artikel"
+                                >
+                                    <Share2 size={16} className="text-primary" />
+                                    <span>Bagikan</span>
+                                </button>
+                            ) : (
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <button
+                                            className="flex items-center gap-2 hover:text-primary transition-colors"
+                                            aria-label="Bagikan artikel"
+                                        >
+                                            <Share2 size={16} className="text-primary" />
+                                            <span>{copied ? 'Link Disalin!' : 'Bagikan'}</span>
+                                        </button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent
+                                        align="start"
+                                        className="w-52 rounded-xl border-border/60 shadow-xl p-1.5"
+                                    >
+                                        <DropdownMenuItem
+                                            onClick={() => openShareUrl(shareLinks[0].href())}
+                                            className="rounded-lg cursor-pointer gap-2.5 py-2"
+                                        >
+                                            {shareLinks[0].icon}
+                                            WhatsApp
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => openShareUrl(shareLinks[1].href())}
+                                            className="rounded-lg cursor-pointer gap-2.5 py-2"
+                                        >
+                                            {shareLinks[1].icon}
+                                            Facebook
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => openShareUrl(shareLinks[2].href())}
+                                            className="rounded-lg cursor-pointer gap-2.5 py-2"
+                                        >
+                                            {shareLinks[2].icon}
+                                            X (Twitter)
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => openShareUrl(shareLinks[3].href())}
+                                            className="rounded-lg cursor-pointer gap-2.5 py-2"
+                                        >
+                                            {shareLinks[3].icon}
+                                            Telegram
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem
+                                            onClick={handleCopyLink}
+                                            className="rounded-lg cursor-pointer gap-2.5 py-2 text-muted-foreground"
+                                        >
+                                            {copied ? (
+                                                <Check className="h-4 w-4 text-emerald-500" />
+                                            ) : (
+                                                <Link2 className="h-4 w-4" />
+                                            )}
+                                            {copied ? "Link Disalin!" : "Salin Link"}
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -127,7 +234,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                     {/* Left Column - Article Content */}
                     <div className="lg:col-span-8">
                         {/* Featured Image */}
-                        {article.featured_image && (
+                        {article.featured_image && !hasContentImage && (
                             <div className="relative w-full aspect-21/9 rounded-[2rem] lg:rounded-[3rem] overflow-hidden mb-12 border border-border/50">
                                 <Image
                                     src={article.featured_image}

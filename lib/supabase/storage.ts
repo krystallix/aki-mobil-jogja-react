@@ -143,6 +143,34 @@ export async function uploadFeaturedImage(
  * Upload single base64 image to Supabase Storage
  * Structure: articles/slug/images/timestamp-random.png
  */
+export async function uploadArticleContentImage(
+    supabase: SupabaseClient,
+    file: File,
+    articleSlug: string
+): Promise<string> {
+    const fileExt = file.name.split(".").pop()?.toLowerCase() || "jpg"
+    const timestamp = Date.now()
+    const randomStr = Math.random().toString(36).substring(7)
+    const fileName = `content-${timestamp}-${randomStr}.${fileExt}`
+    const filePath = `articles/${normalizeFileName(articleSlug)}/images/${fileName}`
+
+    const { error: uploadError } = await supabase.storage
+        .from("aki-mobil-jogja")
+        .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type,
+        })
+
+    if (uploadError) throw uploadError
+
+    const { data: { publicUrl } } = supabase.storage
+        .from("aki-mobil-jogja")
+        .getPublicUrl(filePath)
+
+    return publicUrl
+}
+
 export async function uploadBase64ImageToSupabase(
     supabase: SupabaseClient,
     base64: string,

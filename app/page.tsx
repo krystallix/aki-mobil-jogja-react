@@ -11,8 +11,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 300
 
 export const metadata: Metadata = {
     title: "Toko Aki Terdekat Jogja - Siswanto Aki | Servis & Tukar Tambah Aki Mobil Bantul 24 Jam",

@@ -6,8 +6,7 @@ import JsonLd from '@/components/json-ld';
 
 import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from "@/lib/supabase/queries";
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 300
 
 export const metadata: Metadata = {
     title: 'Katalog Aki Mobil - Harga Terbaru | Siswanto Aki',

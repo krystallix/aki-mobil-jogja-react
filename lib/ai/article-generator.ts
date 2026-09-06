@@ -1,238 +1,172 @@
-/**
- * AI Article Generator for AkiMobilJogja
- * Supports NVIDIA (meta/llama) and Vercel AI (v0) providers.
- *
- * System Persona:
- *   - SEO Specialist focused on long-tail keywords & topical authority
- *   - Expert automotive battery technician (aki kendaraan)
- */
-
-export type AiProvider = "nvidia" | "vercel"
-
 export interface GenerateTitleSuggestionsInput {
   keyword: string
-  provider: AiProvider
 }
 
 export interface GenerateFullArticleInput {
   title: string
-  provider: AiProvider
 }
 
 export interface GenerateFullArticleOutput {
   slug: string
   tags: string[]
-  content: string // HTML from tiptap-compatible structure
+  content: string
   excerpt: string
 }
 
-// ─── System prompt ───────────────────────────────────────────────────────────
-export const SYSTEM_PROMPT = `
-Kamu adalah seorang ahli ganda:
-
-1. SEO SPECIALIST dengan pengalaman 10+ tahun:
-   - Mahir dalam riset keyword, on-page SEO, dan topical authority
-   - Memahami cara menulis konten yang disukai Google (E-E-A-T)
-   - Terbiasa membuat slug, meta description, dan tag yang relevan
-   - Selalu optimasi heading hierarchy (H1, H2, H3), internal linking, dan readability
-
-2. EXPERT TEKNISI AKI KENDARAAN:
-   - Menguasai semua jenis aki: aki basah, MF (Maintenance Free), kering, GEL, LiFePO4
-   - Paham spesifikasi teknis: CCA (Cold Cranking Amps), CA, RC, kapasitas Ah, voltage
-   - Memahami masalah aki: sulfasi, overcharging, self-discharge, korosi terminal
-   - Hafal aplikasi aki untuk berbagai kendaraan: mobil, motor, sepeda listrik, truk
-   - Mengenal brand terkemuka: GS, Incoe, MSB, Aspira, Yuasa, Chilwee, dll.
-   - Ahli troubleshooting: aki tidak ngecas, soak, tekor, mesin susah start
-   - Paham cara merawat aki agar awet dan efisien
-
-Bisnis yang kontennya kamu buat: SISWANTO AKI / AKI MOBIL JOGJA
-- Berlokasi di Yogyakarta
-- Spesialisasi: penjualan & pemasangan aki kendaraan (mobil, motor, sepeda listrik)
-- Layanan: gratis antar pasang area Jogja, garansi resmi, cek aki gratis
-- Website: akimobiljogja.com | WhatsApp: 0813 5400 7400
-
-Instruksi OUTPUT:
-- Selalu dalam Bahasa Indonesia yang natural dan berwibawa
-- Hindari bahasa yang terlalu formal atau kaku
-- Gunakan kata kunci secara natural, tidak keyword stuffing
-- Fokus pada nilai edukatif dan kepercayaan pembaca
+const SYSTEM_PROMPT = `
+Kamu menulis artikel untuk Siswanto Aki / Aki Mobil Jogja.
+Peranmu: SEO specialist lokal dan teknisi aki kendaraan.
+Gaya bahasa wajib natural seperti manusia, tidak generik, tidak berulang, tidak terdengar seperti template AI.
+Pakai Bahasa Indonesia sehari-hari yang rapi, hangat, jelas, dan meyakinkan.
+Jangan berlebihan memakai kata "penting", "solusi terbaik", "di era modern", atau frasa promosi kosong.
+Utamakan pengalaman praktis: gejala aki rusak, penyebab, langkah cek, kapan harus ganti, dan tips nyata.
+Bisnis: toko dan layanan aki di Yogyakarta/Bantul, antar pasang, cek aki, tukar tambah, garansi resmi.
+Website: akimobiljogja.com. WhatsApp: 0813 5400 7400.
 `.trim()
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function buildNvidiaMessages(systemPrompt: string, userPrompt: string) {
-  return [
-    { role: "system", content: systemPrompt },
-    { role: "user", content: userPrompt },
-  ]
+type ChatMessage = {
+  role: "system" | "user"
+  content: string
 }
 
-async function callNvidia(messages: object[], maxTokens = 2048): Promise<string> {
-  const apiKey = process.env.NVIDIA_KEY
-  if (!apiKey) throw new Error("NVIDIA_KEY tidak dikonfigurasi di .env.local")
+function extractJsonObject(text: string): unknown {
+  const start = text.indexOf("{")
+  if (start === -1) throw new Error("Tidak ditemukan JSON di respons AI")
 
-  const res = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+  let depth = 0
+  let inString = false
+  let escaped = false
+
+  for (let i = start; i < text.length; i++) {
+    const char = text[i]
+    if (inString) {
+      if (escaped) escaped = false
+      else if (char === "\\") escaped = true
+      else if (char === '"') inString = false
+      continue
+    }
+    if (char === '"') inString = true
+    else if (char === "{") depth++
+    else if (char === "}") {
+      depth--
+      if (depth === 0) return JSON.parse(text.slice(start, i + 1))
+    }
+  }
+
+  throw new Error("Respons AI JSON tidak lengkap")
+}
+
+async function callArkane(messages: ChatMessage[], maxTokens = 2048): Promise<string> {
+  const apiKey = process.env.ARKANE_GATEWAY_API_KEY
+  if (!apiKey) throw new Error("ARKANE_GATEWAY_API_KEY tidak dikonfigurasi di .env.local")
+
+  const res = await fetch("https://gateway.arkane.my.id/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: "meta/llama-3.3-70b-instruct",
+      model: "combo-1",
       messages,
-      temperature: 0.7,
+      temperature: 0.78,
+      reasoning_effort: "none",
       max_tokens: maxTokens,
     }),
   })
 
-  if (!res.ok) {
-    const errText = await res.text()
-    throw new Error(`NVIDIA API error (${res.status}): ${errText}`)
-  }
-
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content ?? ""
-}
-
-async function callVercel(messages: object[], maxTokens = 2048): Promise<string> {
-  const apiKey = process.env.VERCEL_KEY
-  if (!apiKey) throw new Error("VERCEL_KEY tidak dikonfigurasi di .env.local")
-
-  const res = await fetch("https://ai-gateway.vercel.sh/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "openai/gpt-4o",
-      messages,
-      max_tokens: maxTokens,
-    }),
-  })
+  const raw = await res.text()
 
   if (!res.ok) {
-    const errText = await res.text()
-    throw new Error(`Vercel AI error (${res.status}): ${errText}`)
+    throw new Error(`Arkane Gateway error (${res.status}): ${raw.slice(0, 500)}`)
   }
 
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content ?? ""
+  const data = extractJsonObject(raw) as {
+    choices?: Array<{ message?: { content?: string } }>
+  }
+  const content = data.choices?.[0]?.message?.content ?? ""
+  if (!content.trim()) {
+    throw new Error("AI tidak mengembalikan konten. Coba generate ulang.")
+  }
+  return content
 }
 
-async function callAi(
-  provider: AiProvider,
-  messages: object[],
-  maxTokens = 2048
-): Promise<string> {
-  if (provider === "nvidia") return callNvidia(messages, maxTokens)
-  return callVercel(messages, maxTokens)
+function cleanJson(raw: string) {
+  return raw
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```\s*$/i, "")
+    .trim()
 }
 
-// ─── Step 1: Generate Title Suggestions ──────────────────────────────────────
+function normalizeSlug(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 80)
+}
 
-export async function generateTitleSuggestions(
-  input: GenerateTitleSuggestionsInput
-): Promise<string[]> {
+export async function generateTitleSuggestions(input: GenerateTitleSuggestionsInput): Promise<string[]> {
   const userPrompt = `
-Buatkan 5 judul artikel blog SEO-friendly untuk website bengkel aki kendaraan.
+Buat 5 judul artikel menarik dan natural tentang: "${input.keyword}".
 
-Topik/keyword utama: "${input.keyword}"
-
-Aturan judul:
-1. Panjang 50-70 karakter (ideal untuk SERP Google)
-2. Sertakan keyword utama secara natural
-3. Gunakan kata trigger: "Panduan", "Tips", "Cara", "Kenali", "Penyebab", "Rekomendasi", dll.
-4. Relevan dengan dunia aki / baterai kendaraan dan konteks Jogja jika perlu
-5. JANGAN gunakan angka tahun kecuali relevan
-6. JANGAN pakai tanda petik, emoji, atau tanda kurung yang tidak perlu
-7. Menarik untuk diklik (click-worthy) namun tidak clickbait
-
-Balas HANYA dengan 5 judul, satu per baris, tanpa nomor, tanpa bullet, tanpa penjelasan tambahan.
+Satu judul per baris, tanpa nomor, tanpa bullet, tanpa tanda petik.
 `.trim()
 
-  const messages = buildNvidiaMessages(SYSTEM_PROMPT, userPrompt)
-  const raw = await callAi(input.provider, messages, 512)
+  const raw = await callArkane([
+    { role: "system", content: SYSTEM_PROMPT },
+    { role: "user", content: userPrompt },
+  ], 4096)
 
   return raw
     .split("\n")
-    .map((l) => l.replace(/^[\d\.\-\*]+\s*/, "").trim())
-    .filter((l) => l.length > 0)
+    .map((line) => line.replace(/^[\d.\-*\s]+/, "").trim())
+    .filter(Boolean)
     .slice(0, 5)
 }
 
-// ─── Step 2: Generate Full Article ───────────────────────────────────────────
-
-export async function generateFullArticle(
-  input: GenerateFullArticleInput
-): Promise<GenerateFullArticleOutput> {
+export async function generateFullArticle(input: GenerateFullArticleInput): Promise<GenerateFullArticleOutput> {
   const userPrompt = `
-Buatkan artikel blog lengkap untuk website AkiMobilJogja berdasarkan judul berikut:
+Tulis artikel lengkap berdasarkan judul ini:
+"${input.title}"
 
-JUDUL: "${input.title}"
-
-Output WAJIB dalam format JSON yang valid dengan struktur ini (tanpa markdown fence, langsung JSON):
+Balas JSON valid saja:
 {
-  "slug": "url-slug-dari-judul",
+  "slug": "slug-artikel",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "excerpt": "Meta description 140-160 karakter yang mengandung keyword utama",
-  "content": "KONTEN HTML LENGKAP DISINI"
+  "excerpt": "meta description 140-160 karakter",
+  "content": "HTML artikel"
 }
 
-Aturan SLUG:
-- Lowercase, gunakan tanda strip (-) sebagai pemisah
-- Hilangkan karakter spesial dan tanda baca
-- Maksimal 60 karakter
-- Sertakan keyword utama
-
-Aturan TAGS (5-7 tag):
-- Relevan dengan isi artikel
-- Mix: broad tag (aki, aki mobil) + specific tag (aki GS, aki soak, dll.)
-- Tidak perlu hashtag #
-
-Aturan EXCERPT:
-- 140-160 karakter
-- Mengandung keyword utama
-- Mendorong user untuk membaca
-- Natural dan informatif
-
-Aturan CONTENT (HTML):
-- Gunakan heading hierarchy: <h2> untuk section utama, <h3> untuk sub-section
-- Panjang minimal 800 kata, idealnya 1200-1500 kata
-- Struktur: Intro → 4-6 section utama → Kesimpulan/CTA
-- Paragraf pendek (3-5 kalimat), mudah dibaca
-- Gunakan <ul><li> atau <ol><li> untuk list
-- Sisipkan call-to-action di akhir mengarah ke Siswanto Aki / AkiMobilJogja
-- Bold <strong> kata kunci penting secara natural
-- Jangan sertakan tag <h1> (sudah ada di halaman)
-- Jangan sertakan tag <html>, <head>, <body>
-- Konten harus edukatif, berisi fakta teknis tentang aki yang akurat
-
-Balas HANYA dengan JSON yang valid. JANGAN tambahkan markdown code fence, penjelasan, atau teks apapun di luar JSON.
+Aturan artikel:
+- Bahasa manusia, natural, tidak kaku, tidak AI slop.
+- Panjang 900-1300 kata.
+- Jangan pakai <h1>.
+- Pakai <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>.
+- Paragraf pendek, tiap paragraf punya informasi nyata.
+- Sertakan contoh gejala/penyebab/langkah cek yang masuk akal.
+- Hindari pengulangan frasa promosi.
+- CTA akhir halus ke Siswanto Aki untuk cek aki, ganti aki, tukar tambah, atau antar pasang area Jogja/Bantul.
+- Konten HTML harus kompatibel dengan Tiptap.
+- Jangan tambahkan markdown fence atau teks di luar JSON.
 `.trim()
 
-  const messages = buildNvidiaMessages(SYSTEM_PROMPT, userPrompt)
-  const raw = await callAi(input.provider, messages, 3000)
-
-  // Strip markdown fences if AI adds them anyway
-  const cleaned = raw
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```\s*$/, "")
-    .trim()
+  const raw = await callArkane([
+    { role: "system", content: SYSTEM_PROMPT },
+    { role: "user", content: userPrompt },
+  ], 8192)
 
   try {
-    const parsed = JSON.parse(cleaned)
+    const parsed = JSON.parse(cleanJson(raw))
     return {
-      slug: String(parsed.slug || "").toLowerCase().replace(/\s+/g, "-").slice(0, 80),
-      tags: Array.isArray(parsed.tags) ? parsed.tags.map(String) : [],
-      excerpt: String(parsed.excerpt || "").slice(0, 160),
+      slug: normalizeSlug(String(parsed.slug || input.title)),
+      tags: Array.isArray(parsed.tags) ? parsed.tags.map(String).slice(0, 7) : [],
+      excerpt: String(parsed.excerpt || "").slice(0, 170),
       content: String(parsed.content || ""),
     }
   } catch {
-    // Fallback: try to extract partial JSON
-    throw new Error(
-      "AI mengembalikan format yang tidak valid. Coba generate ulang.\n\nRaw output:\n" +
-      raw.slice(0, 300)
-    )
+    throw new Error("AI mengembalikan JSON tidak valid. Coba generate ulang.")
   }
 }

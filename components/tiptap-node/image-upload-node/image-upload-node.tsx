@@ -6,6 +6,7 @@ import { NodeViewWrapper } from "@tiptap/react"
 import { Button } from "@/components/tiptap-ui-primitive/button"
 import { CloseIcon } from "@/components/tiptap-icons/close-icon"
 import "@/components/tiptap-node/image-upload-node/image-upload-node.scss"
+import { CropImageDialog } from "@/components/tiptap-node/crop-image-dialog"
 import { focusNextNode, isValidPosition } from "@/lib/tiptap-utils"
 
 export interface FileItem {
@@ -207,6 +208,7 @@ function useFileUpload(options: UploadOptions) {
   return {
     fileItems,
     uploadFiles,
+    uploadSingle: uploadFile,
     removeFileItem,
     clearAllFiles,
   }
@@ -447,40 +449,96 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
     onError: extension.options.onError,
   }
 
-  const { fileItems, uploadFiles, removeFileItem, clearAllFiles } =
+  const { fileItems, uploadSingle, removeFileItem, clearAllFiles } =
     useFileUpload(uploadOptions)
 
-  const handleUpload = async (files: File[]) => {
-    const urls = await uploadFiles(files)
+  const [cropQueue, setCropQueue] = useState<File[]>([])
+  const [cropCursor, setCropCursor] = useState(0)
+  const [cropSrc, setCropSrc] = useState("")
+  const [isCropOpen, setIsCropOpen] = useState(false)
+  const uploadedUrlsRef = useRef<string[]>([])
+  const sourceNamesRef = useRef<string[]>([])
 
-    if (urls.length > 0) {
-      const pos = props.getPos()
-
-      if (isValidPosition(pos)) {
-        const imageNodes = urls.map((url, index) => {
-          const filename =
-            files[index]?.name.replace(/\.[^/.]+$/, "") || "unknown"
-          return {
-            type: extension.options.type,
-            attrs: {
-              ...extension.options,
-              src: url,
-              alt: filename,
-              title: filename,
-            },
-          }
-        })
-
-        props.editor
-          .chain()
-          .focus()
-          .deleteRange({ from: pos, to: pos + props.node.nodeSize })
-          .insertContentAt(pos, imageNodes)
-          .run()
-
-        focusNextNode(props.editor)
-      }
+  const openCropForNext = (queue: File[], cursor: number) => {
+    if (cursor >= queue.length) {
+      insertUploadedImages()
+      return
     }
+    const file = queue[cursor]
+    const objectUrl = URL.createObjectURL(file)
+    setCropSrc(objectUrl)
+    setCropQueue(queue)
+    setCropCursor(cursor)
+    setIsCropOpen(true)
+  }
+
+  const handleQueueFile = (fileToUpload: Blob | File) => {
+    const file = cropQueue[cropCursor]
+    const nextCursor = cropCursor + 1
+    const isLast = nextCursor >= cropQueue.length
+    setIsCropOpen(false)
+    URL.revokeObjectURL(cropSrc)
+
+    const uploadFile =
+      fileToUpload instanceof File
+        ? fileToUpload
+        : new File([fileToUpload], file?.name || "image.jpg", {
+            type: fileToUpload.type || file?.type || "image/jpeg",
+          })
+
+    uploadSingle(uploadFile).then((url) => {
+      if (url) {
+        uploadedUrlsRef.current.push(url)
+        sourceNamesRef.current.push(file?.name || "image")
+      }
+      if (!isLast) {
+        openCropForNext(cropQueue, nextCursor)
+      } else {
+        insertUploadedImages()
+      }
+    })
+  }
+
+  const insertUploadedImages = () => {
+    const urls = uploadedUrlsRef.current
+    const names = sourceNamesRef.current
+
+    uploadedUrlsRef.current = []
+    sourceNamesRef.current = []
+    setCropQueue([])
+    setCropCursor(0)
+
+    if (urls.length === 0) return
+
+    const pos = props.getPos()
+
+    if (isValidPosition(pos)) {
+      const imageNodes = urls.map((url, index) => {
+        const filename = names[index]?.replace(/\.[^/.]+$/, "") || "unknown"
+        return {
+          type: extension.options.type,
+          attrs: {
+            ...extension.options,
+            src: url,
+            alt: filename,
+            title: filename,
+          },
+        }
+      })
+
+      props.editor
+        .chain()
+        .focus()
+        .deleteRange({ from: pos, to: pos + props.node.nodeSize })
+        .insertContentAt(pos, imageNodes)
+        .run()
+
+      focusNextNode(props.editor)
+    }
+  }
+
+  const handleUpload = (files: File[]) => {
+    openCropForNext(files, 0)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -500,6 +558,7 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
   }
 
   const hasFiles = fileItems.length > 0
+  const pendingFile = cropQueue[cropCursor]
 
   return (
     <NodeViewWrapper
@@ -538,6 +597,16 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
             />
           ))}
         </div>
+      )}
+
+      {pendingFile && cropSrc && (
+        <CropImageDialog
+          open={isCropOpen}
+          src={cropSrc}
+          fileName={pendingFile.name}
+          onCancel={() => handleQueueFile(pendingFile)}
+          onConfirm={handleQueueFile}
+        />
       )}
 
       <input

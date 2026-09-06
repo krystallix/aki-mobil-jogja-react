@@ -73,6 +73,44 @@ export const fetchCapacities = async () => {
 }
 
 export const fetchAllProducts = async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+        .from("products")
+        .select(
+            `
+            *,
+            specifications (
+                kapasitas,
+                voltase,
+                polaritas,
+                panjang,
+                lebar,
+                tinggi,
+                berat
+            ),
+            applications (
+                nama_mobil
+            )
+        `
+        )
+        .order("created_at", { ascending: false })
+
+    if (error) {
+        console.error("Error fetching all products:", error)
+        return []
+    }
+    return (data || []).map(item => ({
+        ...item,
+        specifications: Array.isArray(item.specifications)
+            ? item.specifications
+            : item.specifications
+                ? [item.specifications]
+                : [],
+        applications: item.applications || [],
+    }))
+}
+
+export const fetchAllProductsNoStore = async () => {
     const supabase = createNoStoreClient()
     const { data, error } = await supabase
         .from("products")

@@ -202,29 +202,7 @@ Sistem pengelolaan artikel/blog yang terintegrasi langsung dengan website publik
 
 ---
 
-### 🤖 2.9 Generator Konten AI (Untuk Posting Sosmed)
-
-**Apa ini?**
-Fitur canggih yang membantu Anda membuat konten promosi produk untuk media sosial (Facebook Marketplace, Instagram, dll.) secara otomatis — termasuk gambar dan teks deskripsi.
-
-**Apa yang bisa dilakukan:**
-- Pilih produk dari daftar, konten langsung disiapkan otomatis
-- **Preview desain gambar** 1080×1080 pixel langsung di layar (siap upload ke Instagram/Facebook)
-- **2 slide gambar** per produk:
-  - Slide 1: foto produk + spesifikasi + harga + info kontak
-  - Slide 2: daftar aplikasi kendaraan yang cocok
-- Warna tema gambar otomatis menyesuaikan merek aki (Incoe = biru, GS = hijau, dll.)
-- **Teks deskripsi siap copy-paste** lengkap dengan spesifikasi, harga, aplikasi kendaraan, dan info kontak
-- **Generator judul AI** — klik tombol, dapatkan 5 pilihan judul yang menarik dan persuasif (powered by AI)
-- **Download gambar** dalam format PNG berkualitas tinggi
-- **Post langsung ke Facebook Marketplace** — tidak perlu buka aplikasi Facebook secara manual
-
-**Manfaat nyata untuk bisnis:**
-> Yang biasanya membutuhkan 30 menit untuk buat 1 postingan iklan, sekarang bisa selesai dalam **kurang dari 2 menit**. Gambar langsung profesional, teks lengkap, dan bisa langsung tayang.
-
----
-
-### 🌐 2.10 Website Publik Profesional (Toko Online)
+### 🌐 2.9 Website Publik Profesional (Toko Online)
 
 **Apa ini?**
 Halaman website publik yang bisa ditemukan oleh calon pelanggan di Google — berfungsi sebagai "etalase digital" toko Anda.
@@ -248,7 +226,7 @@ Halaman website publik yang bisa ditemukan oleh calon pelanggan di Google — be
 
 ---
 
-### 🔐 2.11 Sistem Login & Keamanan Dashboard
+### 🔐 2.10 Sistem Login & Keamanan Dashboard
 
 **Apa ini?**
 Sistem autentikasi yang memastikan hanya pemilik atau karyawan yang berwenang bisa mengakses dashboard manajemen.

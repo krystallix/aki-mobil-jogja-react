@@ -2,10 +2,10 @@
 
 Website e-commerce modern untuk toko aki mobil di Yogyakarta dengan fitur manajemen produk dan artikel blog.
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
 ![Supabase](https://img.shields.io/badge/Supabase-Backend-green)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-38bdf8)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38bdf8)
 
 ## ✨ Fitur Utama
 
@@ -38,9 +38,9 @@ Website e-commerce modern untuk toko aki mobil di Yogyakarta dengan fitur manaje
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
-- **Styling**: TailwindCSS + Shadcn/ui
+- **Styling**: TailwindCSS 4 + Shadcn/ui
 - **Rich Text Editor**: TipTap
 - **State Management**: React Hooks
 - **Form Handling**: React Hook Form
@@ -83,7 +83,8 @@ Buat file `.env.local` di root project:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_publishable_key
+ARKANE_GATEWAY_API_KEY=your_arkane_gateway_key
 ```
 
 4. **Setup Supabase Database**
