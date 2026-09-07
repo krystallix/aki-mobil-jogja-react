@@ -31,13 +31,14 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
     const isMobileShare = useIsNativeShare();
 
     const hasContentImage = /<img[^>]*>/i.test(article.content || "");
+    const shareCaption = (article.excerpt || article.title).trim();
 
     const handleNativeShare = async () => {
         if (!navigator.share) return;
         try {
             await navigator.share({
                 title: article.title,
-                text: article.excerpt || article.title,
+                text: shareCaption,
                 url: window.location.href,
             });
         } catch (err) { }
@@ -99,7 +100,7 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
             label: "WhatsApp",
             icon: <FaWhatsapp className="h-4 w-4 text-emerald-500" />,
             href: () =>
-                `https://wa.me/?text=${encodeURIComponent(`${article.title}\n${window.location.href}`)}`,
+                `https://wa.me/?text=${encodeURIComponent(`${shareCaption}\n${window.location.href}`)}`,
         },
         {
             label: "Facebook",
@@ -111,13 +112,13 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
             label: "X (Twitter)",
             icon: <FaXTwitter className="h-4 w-4" />,
             href: () =>
-                `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`,
+                `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareCaption)}`,
         },
         {
             label: "Telegram",
             icon: <FaTelegramPlane className="h-4 w-4 text-sky-500" />,
             href: () =>
-                `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`,
+                `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareCaption)}`,
         },
     ];
 

@@ -161,12 +161,13 @@ export default function ArtikelPage() {
 
     const handleShareClick = async (article: ArticleData) => {
         const articleUrl = `${window.location.origin}/artikel/${article.slug}`;
+        const shareCaption = (article.excerpt || article.title).trim();
 
         if (navigator.share) {
             try {
                 await navigator.share({
                     title: article.title,
-                    text: article.excerpt || '',
+                    text: shareCaption,
                     url: articleUrl,
                 });
                 toast.success('Artikel berhasil dibagikan!');
@@ -183,16 +184,17 @@ export default function ArtikelPage() {
     const openSocialShare = (article: ArticleData, url: string) => {
         const articleUrl = `${window.location.origin}/artikel/${article.slug}`;
         const encodedUrl = encodeURIComponent(articleUrl);
-        const encodedTitle = encodeURIComponent(article.title);
+        const shareCaption = (article.excerpt || article.title).trim();
+        const encodedCaption = encodeURIComponent(shareCaption);
 
         const link =
             url === "whatsapp"
-                ? `https://wa.me/?text=${encodeURIComponent(`${article.title}\n${articleUrl}`)}`
+                ? `https://wa.me/?text=${encodeURIComponent(`${shareCaption}\n${articleUrl}`)}`
                 : url === "facebook"
                     ? `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
                     : url === "twitter"
-                        ? `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`
-                        : `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`;
+                        ? `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedCaption}`
+                        : `https://t.me/share/url?url=${encodedUrl}&text=${encodedCaption}`;
 
         window.open(link, "_blank", "noopener,noreferrer,width=700,height=600");
     };
