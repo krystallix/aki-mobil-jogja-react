@@ -68,3 +68,31 @@ export interface AkiLamaData {
     created_at?: string
     updated_at?: string
 }
+
+export interface CrmTransactionItem {
+    id?: number;
+    transaction_id?: string;
+    product_id?: string;
+    nama_produk: string;
+    merek?: string;
+    tipe_produk?: string;
+    qty?: number;
+}
+
+export interface CrmCustomerTransaction {
+    id: string;
+    customer_id: string | null;
+    customer_nama: string;
+    customer_no_hp: string | null;
+    customer_alamat?: string | null;
+    tipe: string;
+    status: string;
+    subtotal?: number;
+    diskon?: number;
+    total: number;
+    created_at: string;
+    paid_at?: string | null;
+    crm_follow_up_at?: string | null;
+    transaction_items?: CrmTransactionItem[];
+}
+

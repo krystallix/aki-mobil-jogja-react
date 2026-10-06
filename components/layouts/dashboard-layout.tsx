@@ -5,21 +5,21 @@ import {
     SidebarProvider,
 } from "@/components/ui/sidebar"
 
-
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider
             style={
                 {
-                    "--sidebar-width": "calc(var(--spacing) * 72)",
-                    "--header-height": "calc(var(--spacing) * 12)",
+                    "--sidebar-width": "15rem",
+                    "--header-height": "3.5rem",
                 } as React.CSSProperties
             }
+            className="bg-[#f5f5f7] dark:bg-background"
         >
-            <AppSidebar variant="inset" />
-            <SidebarInset>
-                <SiteHeader title="Dashboard" />
-                <div className="max-h-[calc(100vh-var(--header-height))] overflow-y-auto">
+            <AppSidebar />
+            <SidebarInset className="bg-[#fbfbfd] dark:bg-background/90 min-h-screen flex flex-col">
+                <SiteHeader />
+                <div className="flex-1 w-full">
                     {children}
                 </div>
             </SidebarInset>

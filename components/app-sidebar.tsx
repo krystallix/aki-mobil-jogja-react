@@ -3,101 +3,112 @@
 import * as React from "react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import {
-  LayoutDashboardIcon,
-  BatteryFullIcon,
-  FileTextIcon,
-  ShoppingCartIcon,
-  Settings2Icon,
-  UsersIcon
+  LayoutDashboard,
+  Battery,
+  FileText,
+  ShoppingCart,
+  RotateCcw,
+  Users,
+  Settings,
+  Store,
+  Sparkles
 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 const data = {
-  user: {
-    name: "Admin",
-    email: "admin@akimobiljogja.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navContent: [
+  navCommand: [
     {
-      title: "Dashboard",
+      title: "Business Overview",
       url: "/dashboard",
-      icon: <LayoutDashboardIcon />,
+      icon: <LayoutDashboard />,
     },
     {
-      title: "Katalog Aki",
+      title: "Battery Catalog",
       url: "/dashboard/katalog",
-      icon: <BatteryFullIcon />,
+      icon: <Battery />,
     },
     {
-      title: "Artikel",
+      title: "Articles & Blog",
       url: "/dashboard/artikel",
-      icon: <FileTextIcon />,
+      icon: <FileText />,
     },
   ],
-  navBusiness: [
+  navCommerce: [
     {
-      title: "Transaksi",
+      title: "POS Transactions",
       url: "/dashboard/transaksi",
-      icon: <ShoppingCartIcon />,
+      icon: <ShoppingCart />,
     },
     {
-      title: "Stok Aki Lama",
-      url: "/dashboard/aki-lama",
-      icon: <BatteryFullIcon />,
-    },
-    {
-      title: "Pelanggan",
+      title: "Customers CRM",
       url: "/dashboard/pelanggan",
-      icon: <UsersIcon />,
+      icon: <Users />,
     },
     {
-      title: "Pengaturan",
+      title: "Old Battery Stock",
+      url: "/dashboard/aki-lama",
+      icon: <RotateCcw />,
+    },
+  ],
+  navPlatform: [
+    {
+      title: "Public Catalog",
+      url: "/katalog",
+      icon: <Store />,
+    },
+    {
+      title: "Battery Finder",
+      url: "/rekomendasi-aki",
+      icon: <Sparkles />,
+    },
+    {
+      title: "Settings",
       url: "/dashboard/settings",
-      icon: <Settings2Icon />,
+      icon: <Settings />,
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarHeader className="pt-4 pb-2 px-4">
+    <Sidebar collapsible="offcanvas" className="border-r border-neutral-200/80 dark:border-neutral-800 bg-[#fbfbfd] dark:bg-card/40" {...props}>
+      <SidebarHeader className="p-4 pb-2">
+        {/* App Workspace Logo Badge */}
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="h-12 bg-muted/20 border border-border/40 rounded-[1.25rem] px-3 transition-colors hover:bg-muted/40"
+            <Link
+              href="/"
+              className="flex items-center gap-3 p-1.5 rounded-xl transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800/60"
             >
-              <Link href="/" className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-background border border-border/60 flex items-center justify-center shadow-sm shrink-0">
-                  <Image src="/logo.svg" alt="logo" width={20} height={20} className="object-contain" />
-                </div>
-                <span className="text-lg md:text-base font-bold tracking-tight text-foreground">Siswanto Aki</span>
-              </Link>
-            </SidebarMenuButton>
+              <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-[0_2px_8px_rgba(79,70,229,0.25)] shrink-0">
+                S
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[13px] font-bold text-neutral-900 dark:text-neutral-100 truncate leading-snug">
+                  Siswanto Aki OS
+                </span>
+                <span className="text-xs text-neutral-400 truncate leading-tight">
+                  Business Operations
+                </span>
+              </div>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navContent} label="Menu Utama" />
-        <NavMain items={data.navBusiness} label="Administrasi" />
+
+      <SidebarContent className="px-2 py-2 space-y-1">
+        <NavMain items={data.navCommand} label="COMMAND" />
+        <NavMain items={data.navCommerce} label="COMMERCE" />
+        <NavMain items={data.navPlatform} label="PLATFORM" />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
     </Sidebar>
   )
 }

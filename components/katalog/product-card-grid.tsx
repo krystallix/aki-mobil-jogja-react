@@ -124,19 +124,22 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
                     <Input
                         id="product-search"
-                        placeholder="Cari nama, merek, tipe..."
+                        placeholder="Search name, brand, type..."
                         value={search}
                         onChange={(e) => handleSearch(e.target.value)}
                         className="pl-9 h-9 rounded-lg border-border/60 bg-card shadow-none text-sm"
                     />
                     {search && (
-                        <button
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon-sm"
                             onClick={() => handleSearch("")}
-                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                            aria-label="Hapus pencarian"
+                            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground hover:text-foreground transition-colors"
+                            aria-label="Clear search"
                         >
                             <X className="w-3 h-3" />
-                        </button>
+                        </Button>
                     )}
                 </div>
 
@@ -146,7 +149,7 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                     size="sm"
                     className="h-9 px-2.5 rounded-lg border-border/60 bg-card gap-1.5 text-xs font-medium hover:border-primary/50 transition-all duration-200 shrink-0"
                     onClick={() => toggleSort(sortKey)}
-                    title={`Urutkan: ${sortLabel} (${sortDir})`}
+                    title={`Sort: ${sortLabel} (${sortDir})`}
                 >
                     <ArrowUpDown className="w-3 h-3" />
                     <span className="hidden sm:inline">{sortLabel}</span>
@@ -168,9 +171,9 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                 {/* Add CTA */}
                 <Button
                     onClick={() => setAddDialogOpen(true)}
-                    className="h-9 pl-3 pr-2 rounded-lg gap-1.5 bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 active:scale-[0.97] transition-all duration-200 shrink-0"
+                    className="h-9 pl-3 pr-2 rounded-lg gap-1.5 bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 active:scale-[0.97] transition-all duration-200 shrink-0"
                 >
-                    <span className="hidden sm:inline">Tambah</span>
+                    <span className="hidden sm:inline">Add Product</span>
                     <span className="w-5 h-5 rounded-md bg-white/20 flex items-center justify-center shrink-0">
                         <CirclePlus className="w-3 h-3" />
                     </span>
@@ -188,31 +191,37 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                         className="overflow-hidden"
                     >
                         <div className="flex flex-wrap gap-2 py-1 border-t border-border/40">
-                            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest self-center">Kategori:</span>
+                            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest self-center">Category:</span>
                             {["all", ...kategoriList].map((k) => (
-                                <button
+                                <Button
                                     key={k}
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
                                     onClick={() => { setFilterKategori(k); setPage(1) }}
-                                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-all duration-150 border ${filterKategori === k
-                                        ? "bg-primary text-primary-foreground border-primary"
+                                    className={`h-6 px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-all duration-150 border ${filterKategori === k
+                                        ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground"
                                         : "bg-card border-border/60 text-muted-foreground hover:border-primary/50 hover:text-foreground"
                                         }`}
                                 >
-                                    {k === "all" ? "Semua" : k}
-                                </button>
+                                    {k === "all" ? "All" : k}
+                                </Button>
                             ))}
                             <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest self-center ml-2">Sort:</span>
                             {(["nama", "harga_jual", "stok", "merek"] as SortKey[]).map((k) => (
-                                <button
+                                <Button
                                     key={k}
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
                                     onClick={() => toggleSort(k)}
-                                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-all duration-150 border ${sortKey === k
-                                        ? "bg-primary text-primary-foreground border-primary"
+                                    className={`h-6 px-2.5 py-0.5 rounded-full text-[11px] font-bold transition-all duration-150 border ${sortKey === k
+                                        ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground"
                                         : "bg-card border-border/60 text-muted-foreground hover:border-primary/50 hover:text-foreground"
                                         }`}
                                 >
-                                    {k === "nama" ? "Nama" : k === "harga_jual" ? "Harga" : k === "stok" ? "Stok" : "Merek"}
-                                </button>
+                                    {k === "nama" ? "Name" : k === "harga_jual" ? "Price" : k === "stok" ? "Stock" : "Brand"}
+                                </Button>
                             ))}
                         </div>
                     </motion.div>
@@ -222,10 +231,10 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
             {/* ── Meta row ── */}
             <div className="flex items-center justify-between">
                 <p className="text-[11px] text-muted-foreground">
-                    <span className="text-foreground font-bold">{filtered.length}</span> produk
+                    <span className="text-foreground font-bold">{filtered.length}</span> products
                     {filterKategori !== "all" && <span className="ml-1 text-primary">· {filterKategori}</span>}
                 </p>
-                <p className="text-[11px] text-muted-foreground">Hal. {safePage}/{pageCount}</p>
+                <p className="text-[11px] text-muted-foreground">Page {safePage}/{pageCount}</p>
             </div>
 
             {/* ── Empty state ── */}
@@ -234,8 +243,8 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                     <div className="w-12 h-12 rounded-xl bg-muted/50 border border-border/50 flex items-center justify-center">
                         <Package className="w-5 h-5 text-muted-foreground/40" />
                     </div>
-                    <p className="text-sm font-bold">Tidak ada produk</p>
-                    <p className="text-xs text-muted-foreground">Coba ubah kata kunci atau filter.</p>
+                    <p className="text-sm font-bold">No products found</p>
+                    <p className="text-xs text-muted-foreground">Try changing search keywords or filters.</p>
                 </div>
             ) : (
                 <>
@@ -307,14 +316,16 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                         </div>
 
                                         {/* Swipe Actions (Snap End) */}
-                                        <button
-                                            className="w-20 shrink-0 snap-center rounded-2xl border border-destructive/30 bg-destructive flex flex-col items-center justify-center text-white hover:bg-destructive/90 transition-colors"
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            className="w-20 h-auto shrink-0 snap-center rounded-2xl flex flex-col items-center justify-center text-white"
                                             onClick={() => setDeleteTarget(battery)}
-                                            aria-label={`Hapus ${battery.nama}`}
+                                            aria-label={`Delete ${battery.nama}`}
                                         >
                                             <Trash2 className="w-6 h-6 mb-1" />
-                                            <span className="text-[10px] font-bold uppercase tracking-widest">Hapus</span>
-                                        </button>
+                                            <span className="text-[10px] font-bold uppercase tracking-widest">Delete</span>
+                                        </Button>
                                     </div>
                                 </motion.div>
                             )
@@ -395,44 +406,53 @@ export function ProductCardGrid({ data }: ProductCardGridProps) {
                                                 {/* Price + stock */}
                                                 <div className="flex items-end justify-between gap-2 pt-1">
                                                     <div className="min-w-0">
-                                                        <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Harga Jual</p>
+                                                        <p className="text-[10px] text-muted-foreground font-medium mb-0.5">Retail Price</p>
                                                         <p className="text-sm font-extrabold text-foreground tracking-tight truncate">
                                                             {formatRupiah(battery.harga_jual)}
                                                         </p>
                                                         {battery.harga_tukar && (
                                                             <p className="text-[10px] text-primary font-bold truncate mt-0.5">
-                                                                TT: {formatRupiah(battery.harga_tukar)}
+                                                                Trade-In: {formatRupiah(battery.harga_tukar)}
                                                             </p>
                                                         )}
                                                     </div>
                                                     <span className={`px-2 py-1 rounded-md text-[10px] font-bold border shrink-0 ${getStokStyle(battery.stok)}`}>
-                                                        {battery.stok} Unit
+                                                        {battery.stok} Units
                                                     </span>
                                                 </div>
 
                                                 {/* Actions */}
                                                 <div className="flex gap-1.5 pt-2 border-t border-border/40">
-                                                    <button
-                                                        className="flex-1 h-8 rounded-lg bg-transparent border border-primary/60 text-primary flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="flex-1 h-8 rounded-lg border-primary/60 text-primary flex items-center justify-center gap-1.5 text-[11px] font-bold hover:bg-muted/30 hover:border-foreground/40 transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => { editTargetId.current = battery.slug; setEditTarget(battery) }}
                                                     >
                                                         <Pencil className="w-3 h-3" />
                                                         Edit
-                                                    </button>
-                                                    <button
+                                                    </Button>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon-sm"
                                                         className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-destructive hover:text-white hover:border-destructive transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => setDeleteTarget(battery)}
-                                                        aria-label={`Hapus ${battery.nama}`}
+                                                        aria-label={`Delete ${battery.nama}`}
                                                     >
                                                         <Trash2 className="w-3.5 h-3.5" />
-                                                    </button>
-                                                    <button
+                                                    </Button>
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="icon-sm"
                                                         className="w-8 h-8 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-200 active:scale-[0.97]"
                                                         onClick={() => window.open(`/katalog/product/${battery.slug}`, "_blank")}
-                                                        aria-label={`Lihat ${battery.nama}`}
+                                                        aria-label={`View ${battery.nama}`}
                                                     >
                                                         <Eye className="w-3.5 h-3.5" />
-                                                    </button>
+                                                    </Button>
                                                 </div>
                                             </div>
                                         </div>

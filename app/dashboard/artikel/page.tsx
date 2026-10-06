@@ -366,42 +366,46 @@ export default function ArtikelPage() {
                 <div className="grid grid-cols-12 gap-0 h-full">
 
                     {/* LEFT SIDEBAR */}
-                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full min-h-0 border-r border-border/40 bg-background/50`}>
-                        <div className="flex-none p-4 border-b bordper-border/40 bg-background/80 backdrop-blur-xl space-y-4">
+                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full min-h-0 border-r border-neutral-200/70 dark:border-border/40 bg-neutral-50/50 dark:bg-card/30`}>
+                        <div className="flex-none p-4 border-b border-neutral-200/70 dark:border-border/40 bg-white dark:bg-card space-y-3">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-extrabold tracking-tight">Daftar Artikel</h2>
-                                <Button size="sm" onClick={handleCreateNew} className="h-8 pl-2.5 pr-2 rounded-lg gap-1.5 bg-primary text-primary-foreground font-bold text-[11px] hover:bg-primary/90 active:scale-[0.97] transition-all duration-200">
-                                    <span>Tambah</span>
-                                    <span className="w-5 h-5 rounded-md bg-white/20 flex items-center justify-center shrink-0">
-                                        <Plus className="w-3 h-3" />
-                                    </span>
+                                <div>
+                                    <h2 className="text-base font-bold tracking-tight text-foreground">Artikel</h2>
+                                    <p className="text-[11px] text-muted-foreground">{articles.length} postingan blog</p>
+                                </div>
+                                <Button size="sm" onClick={handleCreateNew} className="h-8 px-3 rounded-lg gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-xs shrink-0 cursor-pointer">
+                                    <Plus className="w-3.5 h-3.5" />
+                                    <span>Tulis Baru</span>
                                 </Button>
                             </div>
 
-                            <div className="relative group">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                                 <Input
                                     placeholder="Cari artikel..."
-                                    className="pl-9 h-10 rounded-xl border-border/60 bg-card shadow-none text-sm font-medium focus-visible:ring-1 focus-visible:ring-primary/50"
+                                    className="pl-9 h-9 rounded-lg border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-medium"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
                                 {searchQuery && (
-                                    <button
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon-sm"
                                         onClick={() => setSearchQuery("")}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground w-6 h-6 flex items-center justify-center rounded-md"
                                     >
                                         <X className="w-3.5 h-3.5" />
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
                         </div>
 
-                        <ScrollArea className="flex-1">
+                        <ScrollArea className="flex-1 min-h-0 bg-neutral-50/50 dark:bg-card/30">
                             <div className="p-3 space-y-2">
                                 {isLoadingList ? (
                                     <div className="flex justify-center p-8">
-                                        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground/50" />
+                                        <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
                                     </div>
                                 ) : filteredArticles.map((article, i) => (
                                     <motion.div
@@ -409,24 +413,24 @@ export default function ArtikelPage() {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.04, duration: 0.3 }}
-                                        className={`group relative cursor-pointer transition-all duration-300 rounded-[1.25rem] p-4 border ${formData.id === article.id ? 'bg-primary/10 border-primary/40 shadow-sm' : 'bg-background border-border/60 hover:border-primary/40 hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)]'}`}
+                                        className={`group relative cursor-pointer transition-all rounded-xl p-3 border ${formData.id === article.id ? 'bg-indigo-50/50 dark:bg-indigo-950/30 border-indigo-500 ring-1 ring-indigo-500/20 shadow-xs' : 'bg-white dark:bg-card border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-300'}`}
                                         onClick={() => handleSelectArticle(article)}
                                     >
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div className="flex-1 min-w-0 flex flex-col gap-2">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border uppercase tracking-widest ${article.status === 'published' ? 'bg-primary text-primary-foreground border-transparent' : 'bg-transparent text-muted-foreground border-border/60'}`}>
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider ${article.status === 'published' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-950/40 dark:text-indigo-300' : 'bg-neutral-100 text-neutral-500 border border-neutral-200'}`}>
                                                         {article.status}
                                                     </span>
-                                                    <span className="text-[10px] font-bold text-muted-foreground/70">
+                                                    <span className="text-[10px] text-muted-foreground font-mono">
                                                         {article.created_at ? new Date(article.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : 'Baru'}
                                                     </span>
                                                 </div>
-                                                <p className="text-[15px] font-bold text-foreground leading-snug line-clamp-2">
+                                                <p className="text-xs font-semibold text-foreground leading-snug line-clamp-2">
                                                     {article.title || 'Tanpa Judul'}
                                                 </p>
                                                 {article.excerpt && (
-                                                    <p className="text-[11px] text-muted-foreground line-clamp-2 mt-0.5">
+                                                    <p className="text-[11px] text-muted-foreground line-clamp-1">
                                                         {article.excerpt}
                                                     </p>
                                                 )}
@@ -533,11 +537,11 @@ export default function ArtikelPage() {
                                                     <DropdownMenuSeparator className="bg-border/40" />
 
                                                     <DropdownMenuItem
-                                                        className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer text-[13px] font-bold rounded-lg"
+                                                        className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer text-xs font-semibold rounded-lg"
                                                         onClick={(e) => handleDeleteClick(article, e)}
                                                     >
                                                         <Trash2 className="h-4 w-4 mr-2" />
-                                                        <span>Hapus Artikel</span>
+                                                        <span>Delete Article</span>
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -550,8 +554,8 @@ export default function ArtikelPage() {
                                             <Search className="w-5 h-5 text-muted-foreground/40" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold">Tidak ada artikel</p>
-                                            <p className="text-xs text-muted-foreground mt-1">Coba gunakan kata kunci lain.</p>
+                                            <p className="text-sm font-bold">No articles found</p>
+                                            <p className="text-xs text-muted-foreground mt-1">Try another search keyword.</p>
                                         </div>
                                     </div>
                                 )}
@@ -560,20 +564,20 @@ export default function ArtikelPage() {
                     </div>
 
                     {/* RIGHT SIDE: EDITOR */}
-                    <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col`}>
+                    <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col bg-white dark:bg-background`}>
 
-                        <div className="flex-none p-4 md:p-6 border-b bg-background">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
+                        <div className="flex-none p-4 lg:px-6 border-b border-neutral-200/70 dark:border-border/40 bg-white dark:bg-card">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
                                 <div className="flex items-center gap-3 min-w-0">
-                                    <Button variant="ghost" size="icon" className="lg:hidden shrink-0" onClick={() => setIsMobileListOpen(true)}>
-                                        <ChevronLeft className="h-5 w-5" />
+                                    <Button variant="ghost" size="icon" className="lg:hidden shrink-0 h-8 w-8 rounded-lg bg-neutral-100" onClick={() => setIsMobileListOpen(true)}>
+                                        <ChevronLeft className="h-4 w-4" />
                                     </Button>
                                     <div className="min-w-0">
-                                        <h1 className="text-xl md:text-2xl font-bold line-clamp-1">
-                                            {formData.title || (formData.id ? 'Edit Artikel' : 'Buat Artikel Baru')}
+                                        <h1 className="text-base sm:text-lg font-bold line-clamp-1 text-foreground">
+                                            {formData.title || (formData.id ? 'Edit Article' : 'Write New Article')}
                                         </h1>
-                                        <p className="text-muted-foreground text-xs md:text-sm truncate">
-                                            {formData.id ? `ID: ${formData.id}` : 'Draft belum disimpan'}
+                                        <p className="text-muted-foreground text-xs truncate">
+                                            {formData.id ? `ID: ${formData.id}` : 'Unsaved draft'}
                                         </p>
                                     </div>
                                 </div>
@@ -583,49 +587,49 @@ export default function ArtikelPage() {
                                         variant="outline"
                                         onClick={() => handleSave(false)}
                                         disabled={isSaving || !formData.title.trim()}
-                                        className="gap-2 h-10 rounded-xl font-bold flex-1 md:flex-none"
+                                        className="gap-1.5 h-9 rounded-lg font-semibold text-xs border-neutral-200 text-neutral-700 hover:bg-neutral-50 flex-1 md:flex-none cursor-pointer"
                                     >
-                                        <Save className="w-4 h-4" />
+                                        <Save className="w-3.5 h-3.5" />
                                         {isSaving ? (
                                             <>
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Menyimpan
+                                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                Saving
                                             </>
                                         ) : (
-                                            'Simpan Draft'
+                                            'Save Draft'
                                         )}
                                     </Button>
                                     <Button
                                         onClick={() => handleSave(true)}
                                         disabled={isSaving || !formData.title.trim()}
-                                        className="gap-2 h-10 rounded-xl font-bold bg-primary hover:bg-primary/90 text-primary-foreground flex-1 md:flex-none"
+                                        className="gap-1.5 h-9 rounded-lg font-semibold text-xs bg-indigo-600 hover:bg-indigo-700 text-white flex-1 md:flex-none px-4 shadow-xs cursor-pointer"
                                     >
-                                        <Send className="w-4 h-4" />
-                                        {formData.status === 'published' ? 'Update' : 'Publikasikan'}
+                                        <Send className="w-3.5 h-3.5" />
+                                        {formData.status === 'published' ? 'Update' : 'Publish'}
                                     </Button>
                                 </div>
                             </div>
                         </div>
 
-                        <ScrollArea className="flex-1">
-                            <div className="p-6">
+                        <ScrollArea className="flex-1 bg-neutral-50/40 dark:bg-background">
+                            <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
                                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                                     <div className="xl:col-span-2 space-y-6">
                                         <div className="space-y-2">
                                             <Label className="text-sm font-semibold">
-                                                Judul <span className="text-destructive">*</span>
+                                                Title <span className="text-rose-500">*</span>
                                             </Label>
                                             <Input
                                                 value={formData.title}
                                                 onChange={handleTitleChange}
-                                                placeholder="Judul artikel yang menarik..."
+                                                placeholder="Enter an engaging article title..."
                                                 className="text-lg font-bold h-12 rounded-xl border-border/60"
                                             />
                                         </div>
 
                                         <div className="space-y-2">
                                             <Label className="text-sm font-semibold">
-                                                Slug URL <span className="text-destructive">*</span>
+                                                URL Slug <span className="text-rose-500">*</span>
                                             </Label>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-[13px] font-bold text-muted-foreground bg-muted/50 border border-border/40 px-3 py-0 h-10 rounded-lg whitespace-nowrap flex items-center justify-center">
@@ -635,13 +639,13 @@ export default function ArtikelPage() {
                                                     value={formData.slug}
                                                     onChange={(e) => setFormData(p => ({ ...p, slug: e.target.value }))}
                                                     className="font-mono text-sm h-10 rounded-lg border-border/60"
-                                                    placeholder="url-slug-artikel"
+                                                    placeholder="article-slug"
                                                 />
                                             </div>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <Label className="text-sm font-semibold">Konten</Label>
+                                            <Label className="text-sm font-semibold">Content</Label>
                                             <div className="border border-border/60 rounded-[1.25rem] overflow-hidden bg-muted/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                                                 <TipTapEditor
                                                     content={formData.content}
@@ -655,7 +659,7 @@ export default function ArtikelPage() {
                                     <div className="space-y-6">
                                         <Card className="rounded-[1.25rem] border border-border/60 bg-muted/20 shadow-none">
                                             <CardHeader className="pb-3 border-b border-border/40 bg-background/50 rounded-t-[1.25rem]">
-                                                <CardTitle className="text-[13px] font-extrabold uppercase tracking-wide">Pengaturan</CardTitle>
+                                                <CardTitle className="text-[13px] font-extrabold uppercase tracking-wide">Settings</CardTitle>
                                             </CardHeader>
                                             <CardContent className="space-y-4 pt-4">
                                                 <div className="space-y-2">
@@ -680,11 +684,11 @@ export default function ArtikelPage() {
                                                     <Textarea
                                                         value={formData.excerpt || ''}
                                                         onChange={(e) => setFormData(p => ({ ...p, excerpt: e.target.value }))}
-                                                        placeholder="Deskripsi singkat untuk SEO..."
+                                                        placeholder="Short description for SEO and previews..."
                                                         className="h-24 resize-none rounded-lg border-border/60"
                                                     />
                                                     <p className="text-[11px] text-muted-foreground font-medium">
-                                                        {formData.excerpt?.length || 0}/160 karakter
+                                                        {formData.excerpt?.length || 0}/160 characters
                                                     </p>
                                                 </div>
                                             </CardContent>
@@ -692,7 +696,7 @@ export default function ArtikelPage() {
 
                                         <Card className="rounded-[1.25rem] border border-border/60 bg-muted/20 shadow-none">
                                             <CardHeader className="pb-3 border-b border-border/40 bg-background/50 rounded-t-[1.25rem]">
-                                                <CardTitle className="text-[13px] font-extrabold uppercase tracking-wide">Media & Tags</CardTitle>
+                                                <CardTitle className="text-[13px] font-extrabold uppercase tracking-wide">Media &amp; Tags</CardTitle>
                                             </CardHeader>
                                             <CardContent className="space-y-4 pt-4">
                                                 <div className="space-y-2">
@@ -722,23 +726,18 @@ export default function ArtikelPage() {
                                                                 {isUploadingImage ? (
                                                                     <>
                                                                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                                                        Mengupload...
+                                                                        Uploading...
                                                                     </>
                                                                 ) : (
                                                                     <>
                                                                         <Upload className="w-4 h-4 mr-2" />
-                                                                        Pilih Gambar
+                                                                        Choose Image
                                                                     </>
                                                                 )}
                                                             </Button>
                                                             <p className="text-xs text-muted-foreground">
-                                                                Maksimal 5MB (JPG, PNG, WebP)
+                                                                Max size 5MB (JPG, PNG, WebP)
                                                             </p>
-                                                            {!formData.slug.trim() && (
-                                                                <p className="text-xs text-orange-600">
-                                                                    Isi judul terlebih dahulu untuk upload gambar
-                                                                </p>
-                                                            )}
                                                         </TabsContent>
 
                                                         <TabsContent value="url" className="space-y-2">
@@ -755,13 +754,13 @@ export default function ArtikelPage() {
                                                                 onClick={() => {
                                                                     if (imageUrl.trim()) {
                                                                         setFormData(p => ({ ...p, featured_image: imageUrl }));
-                                                                        toast.success('Featured image URL berhasil ditambahkan!');
+                                                                        toast.success('Featured image URL attached successfully');
                                                                     }
                                                                 }}
                                                                 disabled={!imageUrl.trim()}
                                                             >
                                                                 <ImageIcon className="w-4 h-4 mr-2" />
-                                                                Gunakan URL
+                                                                Use URL
                                                             </Button>
                                                         </TabsContent>
                                                     </Tabs>
@@ -793,7 +792,7 @@ export default function ArtikelPage() {
                                                         value={tagInput}
                                                         onChange={(e) => setTagInput(e.target.value)}
                                                         onKeyDown={handleAddTag}
-                                                        placeholder="Ketik tag, tekan Enter..."
+                                                        placeholder="Type a tag and press Enter..."
                                                         className="h-10 rounded-lg border-border/60"
                                                     />
                                                     {formData.tags && formData.tags.length > 0 && (
@@ -825,45 +824,45 @@ export default function ArtikelPage() {
             </div>
 
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-[425px] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
-                    <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
-                        <DialogTitle className="text-xl font-extrabold tracking-tight">Konfirmasi Hapus</DialogTitle>
+                <DialogContent className="sm:max-w-[425px] rounded-2xl overflow-hidden border border-neutral-200/80 shadow-2xl bg-white dark:bg-card">
+                    <DialogHeader className="px-6 py-5 border-b border-neutral-100 bg-neutral-50/50">
+                        <DialogTitle className="text-lg font-bold">Delete Article</DialogTitle>
                     </DialogHeader>
 
                     <div className="px-6 py-4">
                         <Alert variant="destructive" className="bg-destructive/10 border-destructive/30 rounded-xl">
-                            <TriangleAlert className="h-4 w-4" />
-                            <AlertTitle className="font-bold">Peringatan!</AlertTitle>
+                            <TriangleAlert className="h-5 w-5" />
+                            <AlertTitle className="font-bold">Warning</AlertTitle>
                             <AlertDescription className="text-sm font-medium mt-1">
-                                Artikel <strong className="font-semibold">&quot;{articleToDelete?.title}&quot;</strong> akan dihapus permanen beserta semua gambar di dalamnya. Tindakan ini tidak dapat dibatalkan.
+                                Article <strong className="font-semibold">&quot;{articleToDelete?.title}&quot;</strong> will be permanently deleted along with all its uploaded images. This action cannot be undone.
                             </AlertDescription>
                         </Alert>
                     </div>
 
-                    <DialogFooter className="px-6 py-4 border-t border-border/40 bg-muted/20 gap-2 sm:gap-0">
+                    <DialogFooter className="px-6 py-4 border-t border-neutral-100 bg-neutral-50/50 flex sm:justify-end gap-2">
                         <Button
                             variant="outline"
                             onClick={() => setDeleteDialogOpen(false)}
                             disabled={isDeleting}
-                            className="h-11 rounded-xl font-bold"
+                            className="h-9 rounded-lg font-medium border-neutral-200 px-4"
                         >
-                            Batal
+                            Cancel
                         </Button>
                         <Button
                             onClick={handleDeleteConfirm}
                             disabled={isDeleting}
                             variant="destructive"
-                            className="gap-2 h-11 rounded-xl font-bold"
+                            className="gap-2 h-9 rounded-lg font-semibold bg-rose-600 hover:bg-rose-700 text-white px-4"
                         >
                             {isDeleting ? (
                                 <>
                                     <Loader2 className="h-4 w-4 animate-spin" />
-                                    Menghapus...
+                                    Deleting...
                                 </>
                             ) : (
                                 <>
-                                    <Trash2 className="h-4 w-4" />
-                                    Ya, Hapus Permanen
+                                    <Trash2 className="w-4 h-4" />
+                                    Delete Article
                                 </>
                             )}
                         </Button>

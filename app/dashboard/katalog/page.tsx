@@ -10,14 +10,15 @@ export default async function KatalogPage() {
 
     return (
         <DashboardLayout>
-            <div className="flex flex-1 flex-col gap-5 p-4 lg:p-6 mt-3">
+            <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 lg:p-8 w-full">
                 {/* Page Header */}
-                <div>
-
-                    <h1 className="text-4xl text-indigo-800 font-extrabold tracking-tight">Katalog Produk</h1>
-                    <p className="text-md text-muted-foreground font-light mt-0.5">
-                        Kelola produk
-                    </p>
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-neutral-200/60 dark:border-border/40">
+                    <div>
+                        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">Battery Catalog</h1>
+                        <p className="text-sm text-muted-foreground font-medium mt-1">
+                            Manage battery inventory, retail prices, wholesale costs, and specifications.
+                        </p>
+                    </div>
                 </div>
 
                 <ProductCardGrid data={batteries} />

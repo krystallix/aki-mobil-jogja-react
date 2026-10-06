@@ -230,43 +230,47 @@ export default function PelangganPage() {
                 <div className="grid grid-cols-12 gap-0 h-full">
 
                     {/* ── LEFT SIDEBAR: LIST ── */}
-                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full min-h-0 border-r border-border/40 bg-background/50`}>
+                    <div className={`${isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-4 xl:col-span-3 flex-col h-full min-h-0 border-r border-neutral-200/70 dark:border-border/40 bg-neutral-50/50 dark:bg-card/30`}>
 
-                        <div className="flex-none p-4 md:p-5 border-b border-border/40 bg-background/80 backdrop-blur-xl space-y-4">
+                        <div className="flex-none p-4 border-b border-neutral-200/70 dark:border-border/40 bg-white dark:bg-card space-y-3">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl lg:text-2xl font-extrabold tracking-tight text-foreground">Pelanggan</h2>
-                                <Button size="sm" onClick={handleCreateNew} className="h-9 lg:h-10 pl-3 pr-2 rounded-full gap-1.5 bg-primary text-primary-foreground font-bold text-xs lg:text-sm hover:bg-primary/90 active:scale-[0.97] transition-all duration-200 shrink-0">
-                                    <span>Tambah</span>
-                                    <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                                        <Plus className="w-3 h-3" />
-                                    </span>
+                                <div>
+                                    <h2 className="text-base font-bold tracking-tight text-foreground">Customers</h2>
+                                    <p className="text-[11px] text-muted-foreground">{customers.length} contacts listed</p>
+                                </div>
+                                <Button size="sm" onClick={handleCreateNew} className="h-8 px-3 rounded-lg gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-xs shrink-0 cursor-pointer">
+                                    <Plus className="w-3.5 h-3.5" />
+                                    <span>New</span>
                                 </Button>
                             </div>
 
-                            <div className="relative group">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-200" />
+                            <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                                 <Input
-                                    placeholder="Cari pelanggan..."
-                                    className="pl-10 pr-9 h-11 rounded-full border-border/60 bg-card shadow-none text-sm font-medium focus-visible:ring-1 focus-visible:ring-primary/50 transition-all hover:border-primary/50"
+                                    placeholder="Search customer..."
+                                    className="pl-9 pr-9 h-9 rounded-lg border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-medium"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
                                 {searchQuery && (
-                                    <button
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon-sm"
                                         onClick={() => setSearchQuery("")}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors w-6 h-6 flex items-center justify-center rounded-full hover:bg-muted"
+                                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground w-6 h-6 flex items-center justify-center rounded-md"
                                     >
                                         <X className="w-3.5 h-3.5" />
-                                    </button>
+                                    </Button>
                                 )}
                             </div>
                         </div>
 
                         <ScrollArea className="flex-1 min-h-0">
-                            <div className="p-3 lg:p-4 flex flex-col gap-2">
+                            <div className="p-2.5 flex flex-col gap-1.5">
                                 {isLoading ? (
                                     <div className="flex justify-center p-8">
-                                        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                                        <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
                                     </div>
                                 ) : filteredCustomers.map((customer, i) => (
                                     <motion.div
@@ -274,25 +278,25 @@ export default function PelangganPage() {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.02, duration: 0.2 }}
-                                        className={`group relative cursor-pointer transition-all duration-300 rounded-xl lg:rounded-2xl p-3.5 border ${formData.id === customer.id ? 'bg-primary/10 border-primary/40 shadow-sm' : 'bg-card border-border/60 hover:border-border hover:shadow-sm'}`}
+                                        className={`group relative cursor-pointer transition-all rounded-lg p-2.5 border ${formData.id === customer.id ? 'bg-indigo-50/50 dark:bg-indigo-950/30 border-indigo-500 ring-1 ring-indigo-500/20 shadow-2xs' : 'bg-white dark:bg-card border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-300'}`}
                                         onClick={() => handleSelectCustomer(customer)}
                                     >
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                                                <p className={`text-[15px] font-bold leading-tight truncate ${formData.id === customer.id ? 'text-primary' : 'text-foreground'}`}>
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="flex-1 min-w-0 flex flex-col gap-1">
+                                                <p className={`text-xs font-semibold leading-tight truncate ${formData.id === customer.id ? 'text-indigo-600 dark:text-indigo-400' : 'text-neutral-900 dark:text-neutral-100'}`}>
                                                     {customer.nama}
                                                 </p>
 
                                                 <div className="flex items-center gap-1.5 flex-wrap">
                                                     {customer.no_hp && (
-                                                        <span className="flex items-center text-[10px] lg:text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-md border border-border/40">
-                                                            <Phone className="w-2.5 h-2.5 mr-1" />
+                                                        <span className="flex items-center text-[10px] font-mono text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded border border-neutral-200/60 dark:border-neutral-700/60">
+                                                            <Phone className="w-2.5 h-2.5 mr-1 text-neutral-400" />
                                                             {maskPhoneNumber(customer.no_hp)}
                                                         </span>
                                                     )}
                                                     {customer.kota && (
-                                                        <span className="flex items-center text-[10px] lg:text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-md border border-border/40">
-                                                            <MapPin className="w-2.5 h-2.5 mr-1" />
+                                                        <span className="flex items-center text-[10px] text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded border border-neutral-200/60 dark:border-neutral-700/60">
+                                                            <MapPin className="w-2.5 h-2.5 mr-1 text-neutral-400" />
                                                             {customer.kota}
                                                         </span>
                                                     )}
@@ -304,18 +308,18 @@ export default function PelangganPage() {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-7 w-7 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity shrink-0 bg-muted/30 border border-border/50 hover:bg-background hover:shadow-sm"
+                                                        className="h-6 w-6 rounded-md opacity-0 group-hover:opacity-100 transition-opacity shrink-0 hover:bg-neutral-100"
                                                     >
-                                                        <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                                                        <MoreVertical className="h-3.5 w-3.5 text-neutral-400" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-36 rounded-xl border-border/60 shadow-xl">
                                                     <DropdownMenuItem
-                                                        className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer text-[13px] font-bold rounded-lg"
+                                                        className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer text-xs font-medium rounded-lg"
                                                         onClick={(e) => handleDeleteClick(customer, e)}
                                                     >
                                                         <Trash2 className="h-3.5 w-3.5 mr-2" />
-                                                        <span>Hapus</span>
+                                                        <span>Delete</span>
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -328,8 +332,8 @@ export default function PelangganPage() {
                                             <Search className="w-5 h-5 text-muted-foreground/40" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold">Tidak ada data</p>
-                                            <p className="text-xs text-muted-foreground mt-1">Coba kata kunci lain.</p>
+                                            <p className="text-sm font-bold">No customers found</p>
+                                            <p className="text-xs text-muted-foreground mt-1">Try another search term.</p>
                                         </div>
                                     </div>
                                 )}
@@ -338,21 +342,21 @@ export default function PelangganPage() {
                     </div>
 
                     {/* ── RIGHT SIDE: EDITOR ── */}
-                    <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col bg-background/50`}>
+                    <div className={`${!isMobileListOpen ? 'flex' : 'hidden'} lg:flex col-span-12 lg:col-span-8 xl:col-span-9 h-full flex-col bg-white dark:bg-background`}>
 
                         {/* EDITOR HEADER */}
-                        <div className="flex-none p-4 md:p-6 border-b border-border/40 bg-background/80 backdrop-blur-xl z-10 relative">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
+                        <div className="flex-none p-4 lg:px-6 border-b border-neutral-200/70 dark:border-border/40 bg-white dark:bg-card z-10 relative">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0">
                                 <div className="flex items-center gap-3 min-w-0">
-                                    <Button variant="ghost" size="icon" className="lg:hidden shrink-0 h-10 w-10 rounded-full bg-muted/50 border border-border/50" onClick={() => setIsMobileListOpen(true)}>
-                                        <ChevronLeft className="h-5 w-5" />
+                                    <Button variant="ghost" size="icon" className="lg:hidden shrink-0 h-8 w-8 rounded-lg bg-neutral-100" onClick={() => setIsMobileListOpen(true)}>
+                                        <ChevronLeft className="h-4 w-4" />
                                     </Button>
                                     <div className="min-w-0">
-                                        <h1 className="text-xl md:text-2xl font-extrabold line-clamp-1 text-foreground">
-                                            {formData.nama || (formData.id ? 'Edit Pelanggan' : 'Pelanggan Baru')}
+                                        <h1 className="text-base sm:text-lg font-bold line-clamp-1 text-foreground">
+                                            {formData.nama || (formData.id ? 'Edit Customer' : 'New Customer')}
                                         </h1>
-                                        <p className="text-muted-foreground text-xs md:text-sm truncate font-medium">
-                                            {formData.id ? `ID: ${formData.id.split('-')[0]}...` : 'Belum disimpan ke database'}
+                                        <p className="text-muted-foreground text-xs truncate">
+                                            {formData.id ? `ID: ${formData.id.split('-')[0]}...` : 'Unsaved draft'}
                                         </p>
                                     </div>
                                 </div>
@@ -360,17 +364,17 @@ export default function PelangganPage() {
                                     <Button
                                         onClick={handleSave}
                                         disabled={isSaving || !formData.nama.trim()}
-                                        className="gap-2 h-11 lg:h-12 rounded-full font-bold bg-primary hover:bg-primary/90 text-primary-foreground flex-1 md:flex-none px-6 lg:px-8 shadow-sm transition-all"
+                                        className="gap-2 h-9 rounded-lg font-semibold text-xs bg-indigo-600 hover:bg-indigo-700 text-white flex-1 md:flex-none px-5 shadow-xs transition-all cursor-pointer"
                                     >
                                         {isSaving ? (
                                             <>
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Menyimpan...
+                                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                Saving...
                                             </>
                                         ) : (
                                             <>
-                                                <Save className="w-4 h-4" />
-                                                Simpan
+                                                <Save className="w-3.5 h-3.5" />
+                                                Save Customer
                                             </>
                                         )}
                                     </Button>
@@ -379,73 +383,73 @@ export default function PelangganPage() {
                         </div>
 
                         {/* EDITOR BODY */}
-                        <ScrollArea className="flex-1">
+                        <ScrollArea className="flex-1 bg-neutral-50/40 dark:bg-background">
                             <div className="p-4 md:p-6 lg:p-8 w-full">
-                                <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
+                                <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
 
                                     {/* MAIN FORM */}
                                     <div className="xl:col-span-2">
-                                        <Card className="h-full rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm overflow-hidden flex flex-col">
-                                            <CardHeader className="pb-4 border-b border-border/40 bg-muted/20 px-5 lg:px-6">
-                                                <CardTitle className="text-[11px] lg:text-xs font-extrabold uppercase tracking-widest text-foreground/80 flex items-center gap-2">
-                                                    <span className="w-1 h-5 rounded-full bg-primary text-primary" />
-                                                    Informasi Dasar
+                                        <Card className="h-full rounded-2xl border border-neutral-200/80 dark:border-border/60 bg-white dark:bg-card shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col">
+                                            <CardHeader className="pb-3 border-b border-neutral-200/60 dark:border-border/40 bg-white dark:bg-card px-5">
+                                                <CardTitle className="text-xs font-bold uppercase tracking-wider text-neutral-500 flex items-center gap-2">
+                                                    <span className="w-1.5 h-4 rounded-full bg-indigo-600" />
+                                                    Basic Information
                                                 </CardTitle>
                                             </CardHeader>
-                                            <CardContent className="flex-1 space-y-5 pt-5 lg:pt-6 px-5 lg:px-6 pb-6">
-                                                <div className="space-y-2">
-                                                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                                        Nama Lengkap <span className="text-destructive">*</span>
+                                            <CardContent className="flex-1 space-y-4 pt-5 px-5 pb-6">
+                                                <div className="space-y-1.5">
+                                                    <Label className="text-xs font-semibold text-neutral-600">
+                                                        Full Name <span className="text-rose-500">*</span>
                                                     </Label>
                                                     <Input
                                                         value={formData.nama}
                                                         onChange={(e) => setFormData(p => ({ ...p, nama: e.target.value }))}
-                                                        placeholder="Contoh: Budi Santoso"
-                                                        className="text-base font-bold h-12 lg:h-14 rounded-xl border-border/60 bg-background focus-visible:ring-1 focus-visible:ring-primary/50"
+                                                        placeholder="E.g. Budi Santoso"
+                                                        className="text-sm font-semibold h-10 rounded-lg border-neutral-200 bg-neutral-50 dark:bg-neutral-900 focus-visible:ring-indigo-500/20 focus-visible:border-indigo-500"
                                                     />
                                                 </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">
-                                                    <div className="space-y-2">
-                                                        <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                                            Nomor HP (WhatsApp)
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div className="space-y-1.5">
+                                                        <Label className="text-xs font-semibold text-neutral-600">
+                                                            Phone Number (WhatsApp)
                                                         </Label>
                                                         <div className="relative">
-                                                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                                                             <Input
                                                                 value={formData.no_hp || ''}
                                                                 onChange={(e) => setFormData(p => ({ ...p, no_hp: e.target.value }))}
                                                                 placeholder="081234567890"
-                                                                className="pl-11 h-11 lg:h-12 rounded-xl border-border/60 font-medium bg-background"
+                                                                className="pl-9 h-10 rounded-lg border-neutral-200 font-mono text-xs bg-neutral-50 dark:bg-neutral-900"
                                                                 type="tel"
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="space-y-2">
-                                                        <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                                            Kota / Area
+                                                    <div className="space-y-1.5">
+                                                        <Label className="text-xs font-semibold text-neutral-600">
+                                                            City / Area
                                                         </Label>
                                                         <div className="relative">
-                                                            <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                                            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                                                             <Input
                                                                 value={formData.kota || ''}
                                                                 onChange={(e) => setFormData(p => ({ ...p, kota: e.target.value }))}
-                                                                placeholder="Contoh: Sleman"
-                                                                className="pl-11 h-11 lg:h-12 rounded-xl border-border/60 font-medium bg-background"
+                                                                placeholder="E.g. Sleman"
+                                                                className="pl-9 h-10 rounded-lg border-neutral-200 text-xs bg-neutral-50 dark:bg-neutral-900"
                                                             />
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="space-y-2">
-                                                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                                        Alamat Lengkap
+                                                <div className="space-y-1.5">
+                                                    <Label className="text-xs font-semibold text-neutral-600">
+                                                        Full Address
                                                     </Label>
                                                     <Textarea
                                                         value={formData.alamat || ''}
                                                         onChange={(e) => setFormData(p => ({ ...p, alamat: e.target.value }))}
-                                                        placeholder="Jalan, RT/RW, Kelurahan..."
-                                                        className="h-28 resize-none rounded-xl border-border/60 font-medium p-4 bg-background"
+                                                        placeholder="Street, District, Postal Code..."
+                                                        className="h-24 resize-none rounded-lg border-neutral-200 text-xs p-3 bg-neutral-50 dark:bg-neutral-900"
                                                     />
                                                 </div>
                                             </CardContent>
@@ -455,61 +459,42 @@ export default function PelangganPage() {
                                     {/* ANALYTICS / METADATA SIDEBAR */}
                                     <div className="h-full">
                                         {formData.id ? (
-                                            <Card className="h-full rounded-xl lg:rounded-2xl border border-border/60 bg-muted/10 shadow-sm flex flex-col">
-                                                <CardHeader className="pb-4 border-b border-border/40 bg-muted/20 px-5 lg:px-6">
-                                                    <CardTitle className="text-[11px] lg:text-xs font-extrabold uppercase tracking-widest text-foreground/80 flex items-center gap-2">
-                                                        <span className="w-2 h-2 rounded-full bg-blue-500" />
-                                                        Riwayat Transaksi
+                                            <Card className="h-full rounded-2xl border border-neutral-200/80 dark:border-border/60 bg-white dark:bg-card shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col">
+                                                <CardHeader className="pb-3 border-b border-neutral-200/60 dark:border-border/40 px-5">
+                                                    <CardTitle className="text-xs font-bold uppercase tracking-wider text-neutral-500 flex items-center gap-2">
+                                                        <span className="w-1.5 h-4 rounded-full bg-indigo-600" />
+                                                        History &amp; Statistics
                                                     </CardTitle>
                                                 </CardHeader>
-                                                <CardContent className="flex-1 flex flex-col justify-between pt-5 lg:pt-6 px-5 lg:px-6 pb-6 space-y-4 lg:space-y-5">
-                                                    <div className="bg-background rounded-xl p-4 lg:p-5 border border-border/40 shadow-sm">
-                                                        <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
-                                                            <ShoppingBag className="w-3.5 h-3.5" /> Total Pembelian
-                                                        </p>
-                                                        <p className="text-3xl font-black text-foreground">
-                                                            {formData.total_pembelian} <span className="text-sm font-medium text-muted-foreground">kali</span>
-                                                        </p>
+                                                <CardContent className="flex-1 space-y-4 pt-5 px-5 pb-6">
+                                                    <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800">
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Total Orders</span>
+                                                        <p className="text-2xl font-bold font-mono text-neutral-900 dark:text-neutral-100 mt-1">{formData.total_pembelian || 0}</p>
                                                     </div>
-
-                                                    <div className="bg-background rounded-xl p-4 lg:p-5 border border-border/40 shadow-sm">
-                                                        <p className="text-[10px] lg:text-xs font-bold text-muted-foreground mb-1.5 uppercase tracking-wider flex items-center gap-1.5">
-                                                            <TrendingUp className="w-3.5 h-3.5" /> Nilai Transaksi
-                                                        </p>
-                                                        <p className="text-2xl font-extrabold text-primary tracking-tight">
-                                                            {formatRupiah(formData.total_nilai_pembelian)}
-                                                        </p>
+                                                    <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800">
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">Total Purchase Value</span>
+                                                        <p className="text-xl font-bold font-mono text-indigo-600 dark:text-indigo-400 mt-1">{formatRupiah(formData.total_nilai_pembelian || 0)}</p>
                                                     </div>
-
-                                                    <div className="grid grid-cols-2 gap-3 pt-2">
-                                                        <div className="bg-background rounded-xl p-3.5 border border-border/40">
-                                                            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                                                                <Calendar className="w-3 h-3" /> Pertama
-                                                            </p>
-                                                            <p className="text-xs lg:text-sm font-bold">
-                                                                {formData.pertama_beli ? new Date(formData.pertama_beli).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
-                                                            </p>
+                                                    <div className="grid grid-cols-2 gap-3 pt-1">
+                                                        <div className="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800">
+                                                            <span className="text-[10px] text-neutral-500 font-medium block">First Order</span>
+                                                            <span className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 font-mono">
+                                                                {formData.pertama_beli ? new Date(formData.pertama_beli).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
+                                                            </span>
                                                         </div>
-                                                        <div className="bg-background rounded-xl p-3.5 border border-border/40">
-                                                            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                                                                <Calendar className="w-3 h-3" /> Terakhir
-                                                            </p>
-                                                            <p className="text-xs lg:text-sm font-bold">
-                                                                {formData.terakhir_beli ? new Date(formData.terakhir_beli).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
-                                                            </p>
+                                                        <div className="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800">
+                                                            <span className="text-[10px] text-neutral-500 font-medium block">Last Order</span>
+                                                            <span className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 font-mono">
+                                                                {formData.terakhir_beli ? new Date(formData.terakhir_beli).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </CardContent>
                                             </Card>
                                         ) : (
-                                            <Card className="h-full min-h-[16rem] rounded-xl lg:rounded-2xl border border-border/60 bg-card shadow-sm border-dashed flex flex-col items-center justify-center p-8 text-center">
-                                                <div className="w-14 h-14 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center mb-4">
-                                                    <UserCircle className="w-6 h-6 text-muted-foreground/50" />
-                                                </div>
-                                                <p className="text-base font-bold text-foreground">Pelanggan Baru</p>
-                                                <p className="text-xs font-medium text-muted-foreground mt-1.5 max-w-[200px]">
-                                                    Statistik transaksi akan muncul setelah pesanan pertama dibuat.
-                                                </p>
+                                            <Card className="h-full rounded-2xl border border-neutral-200/80 dark:border-border/60 bg-white dark:bg-card shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
+                                                <UserCircle className="w-10 h-10 text-neutral-300 mb-2" />
+                                                <p className="text-xs">Customer purchase statistics will show after orders are placed.</p>
                                             </Card>
                                         )}
                                     </div>
@@ -522,45 +507,45 @@ export default function PelangganPage() {
 
             {/* DELETE DIALOG */}
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent className="sm:max-w-[425px] p-0 rounded-2xl lg:rounded-3xl overflow-hidden border border-border/60 shadow-2xl bg-background/95 backdrop-blur-2xl">
-                    <DialogHeader className="px-6 py-5 border-b border-border/40 bg-muted/20">
-                        <DialogTitle className="text-xl font-extrabold tracking-tight">Hapus Pelanggan</DialogTitle>
+                <DialogContent className="sm:max-w-[425px] p-0 rounded-2xl overflow-hidden border border-neutral-200/80 shadow-2xl bg-white dark:bg-card">
+                    <DialogHeader className="px-6 py-5 border-b border-neutral-100 bg-neutral-50/50">
+                        <DialogTitle className="text-lg font-bold">Delete Customer</DialogTitle>
                     </DialogHeader>
 
                     <div className="px-6 py-4">
                         <Alert variant="destructive" className="bg-destructive/10 border-destructive/30 rounded-xl">
                             <TriangleAlert className="h-5 w-5" />
-                            <AlertTitle className="font-bold">Perhatian!</AlertTitle>
+                            <AlertTitle className="font-bold">Warning</AlertTitle>
                             <AlertDescription className="text-sm font-medium mt-1 text-destructive/90">
-                                Yakin ingin menghapus data pelanggan <strong className="font-semibold text-destructive">&quot;{customerToDelete?.nama}&quot;</strong>? Tindakan ini permanen.
+                                Are you sure you want to delete <strong className="font-semibold text-destructive">&quot;{customerToDelete?.nama}&quot;</strong>? This action cannot be undone.
                             </AlertDescription>
                         </Alert>
                     </div>
 
-                    <DialogFooter className="px-6 py-5 border-t border-border/40 bg-muted/20 flex sm:justify-end gap-3 mb-0.5">
+                    <DialogFooter className="px-6 py-4 border-t border-neutral-100 bg-neutral-50/50 flex sm:justify-end gap-2">
                         <Button
                             variant="outline"
                             onClick={() => setDeleteDialogOpen(false)}
                             disabled={isDeleting}
-                            className="h-11 rounded-full font-bold border-border/60 px-6 m-0"
+                            className="h-9 rounded-lg font-medium border-neutral-200 px-4"
                         >
-                            Batal
+                            Cancel
                         </Button>
                         <Button
                             onClick={handleDeleteConfirm}
                             disabled={isDeleting}
                             variant="destructive"
-                            className="gap-2 h-11 rounded-full font-bold bg-destructive hover:bg-destructive/90 text-white px-6 m-0"
+                            className="gap-2 h-9 rounded-lg font-semibold bg-rose-600 hover:bg-rose-700 text-white px-4"
                         >
                             {isDeleting ? (
                                 <>
                                     <Loader2 className="h-4 w-4 animate-spin" />
-                                    Menghapus...
+                                    Deleting...
                                 </>
                             ) : (
                                 <>
                                     <Trash2 className="w-4 h-4" />
-                                    Hapus Data
+                                    Delete Customer
                                 </>
                             )}
                         </Button>

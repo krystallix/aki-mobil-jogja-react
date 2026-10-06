@@ -147,116 +147,119 @@ export default function AkiLamaPage() {
     return (
         <DashboardLayout>
             <ScrollArea className="h-[calc(100vh-var(--header-height))]">
-                <div className="p-4 md:p-6 lg:p-8 space-y-6 max-w-6xl mx-auto">
+                <div className="p-4 md:p-6 lg:p-8 space-y-6 w-full">
                     
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">Stok Aki Lama</h1>
-                            <p className="text-sm text-muted-foreground mt-1 font-medium">Kelola aki lama hasil tukar tambah atau input manual.</p>
+                            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">Used Battery Stock</h1>
+                            <p className="text-sm text-muted-foreground mt-1 font-medium">Manage trade-in scrap batteries or add manual stock items.</p>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Button onClick={() => setIsAddOpen(true)} className="rounded-full font-bold px-5 bg-primary shadow-sm">
+                            <Button onClick={() => setIsAddOpen(true)} className="rounded-lg font-bold px-4 bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs">
                                 <Plus className="w-4 h-4 mr-2" />
-                                Tambah Manual
+                                Add Manual Item
                             </Button>
                         </div>
                     </div>
 
                     {/* Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Card className="border border-border/60 shadow-sm rounded-2xl bg-gradient-to-br from-amber-500/10 to-background overflow-hidden">
+                        <Card className="border border-neutral-200/80 dark:border-border/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] rounded-2xl bg-white dark:bg-card overflow-hidden">
                             <CardContent className="p-5 flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center shrink-0">
                                     <BatteryCharging className="w-6 h-6 text-amber-600" />
                                 </div>
                                 <div>
-                                    <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Total Nilai (Belum Terjual)</p>
-                                    <p className="text-2xl font-black text-foreground">{formatRupiah(totalUnsold)}</p>
+                                    <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Total Valuation (Unsold)</p>
+                                    <p className="text-2xl font-black text-foreground font-mono">{formatRupiah(totalUnsold)}</p>
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card className="border border-border/60 shadow-sm rounded-2xl bg-gradient-to-br from-blue-500/10 to-background overflow-hidden">
+                        <Card className="border border-neutral-200/80 dark:border-border/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] rounded-2xl bg-white dark:bg-card overflow-hidden">
                             <CardContent className="p-5 flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
-                                    <Repeat2 className="w-6 h-6 text-blue-600" />
+                                <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center shrink-0">
+                                    <Repeat2 className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 <div>
-                                    <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Total Unit (Belum Terjual)</p>
-                                    <p className="text-2xl font-black text-foreground">{countUnsold} Unit</p>
+                                    <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Total Quantity (Unsold)</p>
+                                    <p className="text-2xl font-black text-foreground font-mono">{countUnsold} Units</p>
                                 </div>
                             </CardContent>
                         </Card>
                     </div>
 
                     {/* Filters & List */}
-                    <Card className="border border-border/60 shadow-sm rounded-2xl overflow-hidden">
-                        <div className="p-4 border-b border-border/40 bg-muted/5 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                    <Card className="border border-neutral-200/80 dark:border-border/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] rounded-2xl bg-white dark:bg-card overflow-hidden">
+                        <div className="p-4 border-b border-neutral-200/60 dark:border-border/40 bg-white dark:bg-card flex flex-col sm:flex-row gap-3 items-center justify-between">
                             <div className="relative w-full sm:max-w-xs">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                                 <Input 
-                                    placeholder="Cari keterangan / ID Transaksi..." 
-                                    className="pl-9 h-10 rounded-full border-border/60 text-sm"
+                                    placeholder="Search description or Tx ID..." 
+                                    className="pl-9 h-9 rounded-lg border-neutral-200 text-xs bg-neutral-50 dark:bg-neutral-900"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
                             </div>
-                            <div className="flex bg-muted/50 p-1 rounded-full w-full sm:w-auto">
+                            <div className="flex p-0.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/60 dark:border-neutral-700/60 w-full sm:w-auto">
                                 <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    className={`rounded-full px-4 text-xs font-bold ${filterStatus === 'semua' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className={`flex-1 sm:flex-none h-7 py-1 px-3 rounded-md text-xs font-semibold transition-all cursor-pointer ${filterStatus === 'semua' ? 'bg-white dark:bg-card text-neutral-900 dark:text-neutral-100 shadow-xs hover:bg-white' : 'text-neutral-500 hover:text-neutral-900 hover:bg-transparent'}`}
                                     onClick={() => setFilterStatus('semua')}
-                                >Semua</Button>
+                                >All</Button>
                                 <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    className={`rounded-full px-4 text-xs font-bold ${filterStatus === 'belum_dijual' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className={`flex-1 sm:flex-none h-7 py-1 px-3 rounded-md text-xs font-semibold transition-all cursor-pointer ${filterStatus === 'belum_dijual' ? 'bg-white dark:bg-card text-neutral-900 dark:text-neutral-100 shadow-xs hover:bg-white' : 'text-neutral-500 hover:text-neutral-900 hover:bg-transparent'}`}
                                     onClick={() => setFilterStatus('belum_dijual')}
-                                >Belum Terjual</Button>
+                                >Unsold</Button>
                                 <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    className={`rounded-full px-4 text-xs font-bold ${filterStatus === 'terjual' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className={`flex-1 sm:flex-none h-7 py-1 px-3 rounded-md text-xs font-semibold transition-all cursor-pointer ${filterStatus === 'terjual' ? 'bg-white dark:bg-card text-neutral-900 dark:text-neutral-100 shadow-xs hover:bg-white' : 'text-neutral-500 hover:text-neutral-900 hover:bg-transparent'}`}
                                     onClick={() => setFilterStatus('terjual')}
-                                >Terjual</Button>
+                                >Sold</Button>
                             </div>
                         </div>
 
                         <div className="p-0">
                             {isLoading ? (
                                 <div className="flex items-center justify-center py-12">
-                                    <Loader2 className="w-8 h-8 animate-spin text-primary/50" />
+                                    <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
                                 </div>
                             ) : filteredList.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-                                    <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                                        <BatteryCharging className="w-8 h-8 text-muted-foreground/50" />
+                                    <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-3 text-neutral-400">
+                                        <BatteryCharging className="w-6 h-6" />
                                     </div>
-                                    <p className="text-lg font-bold text-foreground">Tidak ada data</p>
-                                    <p className="text-sm text-muted-foreground mt-1 max-w-sm">Belum ada stok aki lama yang tersimpan atau sesuai dengan filter pencarian.</p>
+                                    <p className="text-sm font-bold text-foreground">No records found</p>
+                                    <p className="text-xs text-muted-foreground mt-1 max-w-sm">No used battery items matching your search query or status filter.</p>
                                 </div>
                             ) : (
-                                <div className="divide-y divide-border/40">
+                                <div className="divide-y divide-neutral-100 dark:divide-border/40">
                                     {filteredList.map((item) => (
-                                        <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-5 hover:bg-muted/10 transition-colors gap-4">
+                                        <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 md:p-5 hover:bg-neutral-50/60 dark:hover:bg-muted/10 transition-colors gap-4">
                                             <div className="flex-1 min-w-0 flex items-start gap-3">
-                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${item.status === 'belum_dijual' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                                                    {item.status === 'belum_dijual' ? <Clock className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5" />}
+                                                <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${item.status === 'belum_dijual' ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/40' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40'}`}>
+                                                    {item.status === 'belum_dijual' ? <Clock className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
                                                 </div>
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1">
-                                                        <p className="font-bold text-sm sm:text-base leading-tight line-clamp-2">{item.keterangan}</p>
+                                                        <p className="font-semibold text-xs sm:text-sm leading-tight line-clamp-2 text-foreground">{item.keterangan}</p>
                                                         {item.status === 'terjual' && (
-                                                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded border bg-emerald-50 text-emerald-600 border-emerald-200 uppercase whitespace-nowrap">Terjual</span>
+                                                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase whitespace-nowrap">Sold</span>
                                                         )}
                                                     </div>
-                                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground font-medium">
-                                                        <span>{formatDate(item.created_at)}</span>
+                                                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                                                        <span className="font-mono text-[11px]">{formatDate(item.created_at)}</span>
                                                         {item.transaction_id && (
                                                             <>
-                                                                <span className="w-1 h-1 rounded-full bg-border" />
-                                                                <span className="font-mono text-[11px] uppercase bg-muted px-1.5 rounded-md">{item.transaction_id.split('-').pop()}</span>
+                                                                <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
+                                                                <span className="font-mono text-[10px] uppercase bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 px-1.5 py-0.5 rounded">{item.transaction_id.split('-').pop()}</span>
                                                             </>
                                                         )}
                                                     </div>
@@ -265,29 +268,29 @@ export default function AkiLamaPage() {
 
                                             <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 pl-12 sm:pl-0">
                                                 <div className="text-left sm:text-right">
-                                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Nilai</p>
-                                                    <p className={`font-black ${item.status === 'belum_dijual' ? 'text-amber-600' : 'text-muted-foreground line-through decoration-muted-foreground/30'}`}>
+                                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Value</p>
+                                                    <p className={`font-bold text-xs sm:text-sm font-mono tabular-nums ${item.status === 'belum_dijual' ? 'text-neutral-900 dark:text-white' : 'text-neutral-400 line-through'}`}>
                                                         {formatRupiah(item.nilai)}
                                                     </p>
                                                 </div>
                                                 <div className="flex items-center gap-2 shrink-0">
                                                     <Button 
                                                         variant={item.status === 'belum_dijual' ? "outline" : "secondary"}
-                                                        className={`h-9 font-bold text-xs ${item.status === 'belum_dijual' ? 'border-emerald-200 text-emerald-600 hover:bg-emerald-50' : ''}`}
+                                                        className={`h-8 px-3 font-semibold text-xs rounded-lg ${item.status === 'belum_dijual' ? 'border-neutral-200 text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300' : ''}`}
                                                         onClick={() => handleToggleStatus(item)}
                                                     >
-                                                        {item.status === 'belum_dijual' ? 'Tandai Terjual' : 'Batal Jual'}
+                                                        {item.status === 'belum_dijual' ? 'Mark as Sold' : 'Revert to Unsold'}
                                                     </Button>
                                                     <Button 
                                                         variant="ghost" 
                                                         size="icon" 
-                                                        className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                        className="h-8 w-8 text-neutral-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg"
                                                         onClick={() => {
                                                             setDeleteId(item.id);
                                                             setIsDeleteOpen(true);
                                                         }}
                                                     >
-                                                        <Trash2 className="w-4 h-4" />
+                                                        <Trash2 className="w-3.5 h-3.5" />
                                                     </Button>
                                                 </div>
                                             </div>
@@ -302,26 +305,26 @@ export default function AkiLamaPage() {
 
             {/* Modal Tambah Manual */}
             <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                <DialogContent className="sm:max-w-[425px] rounded-[2rem]">
+                <DialogContent className="sm:max-w-[425px] rounded-2xl">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-extrabold tracking-tight">Tambah Aki Lama</DialogTitle>
+                        <DialogTitle className="text-xl font-extrabold tracking-tight">Add Used Battery Item</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="space-y-2">
-                            <Label className="text-xs font-bold uppercase text-muted-foreground">Keterangan / Nama Aki</Label>
+                            <Label className="text-xs font-bold uppercase text-muted-foreground">Description / Battery Name</Label>
                             <Input 
-                                placeholder="Contoh: Aki Bekas Innova 2018" 
-                                className="h-11 rounded-xl font-bold bg-muted/30"
+                                placeholder="E.g. Scrap Battery Innova 2018" 
+                                className="h-10 rounded-lg font-medium"
                                 value={keterangan}
                                 onChange={(e) => setKeterangan(e.target.value)}
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-xs font-bold uppercase text-muted-foreground">Nilai (Rp)</Label>
+                            <Label className="text-xs font-bold uppercase text-muted-foreground">Valuation Amount (Rp)</Label>
                             <Input 
                                 type="text"
                                 placeholder="50.000" 
-                                className="h-11 rounded-xl font-bold bg-muted/30"
+                                className="h-10 rounded-lg font-medium"
                                 value={nilai}
                                 onChange={(e) => {
                                     const val = e.target.value.replace(/\D/g, "");
@@ -331,10 +334,10 @@ export default function AkiLamaPage() {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" className="rounded-full font-bold" onClick={() => setIsAddOpen(false)}>Batal</Button>
-                        <Button onClick={handleAddManual} disabled={isSaving} className="rounded-full font-bold px-6">
+                        <Button variant="outline" className="rounded-lg font-semibold" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                        <Button onClick={handleAddManual} disabled={isSaving} className="rounded-lg font-semibold px-5 bg-indigo-600 hover:bg-indigo-700 text-white">
                             {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
-                            Simpan
+                            Save
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -342,17 +345,17 @@ export default function AkiLamaPage() {
 
             {/* Modal Konfirmasi Hapus */}
             <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-                <DialogContent className="sm:max-w-[400px] rounded-[2rem]">
+                <DialogContent className="sm:max-w-[400px] rounded-2xl">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-extrabold tracking-tight text-destructive">Hapus Data?</DialogTitle>
+                        <DialogTitle className="text-xl font-extrabold tracking-tight text-destructive">Delete Item?</DialogTitle>
                     </DialogHeader>
                     <div className="py-2">
-                        <p className="text-sm text-muted-foreground font-medium">Data aki lama ini akan dihapus secara permanen. Anda yakin?</p>
+                        <p className="text-sm text-muted-foreground font-medium">This used battery record will be permanently deleted. Are you sure?</p>
                     </div>
                     <DialogFooter className="gap-2 sm:gap-0">
-                        <Button variant="outline" className="rounded-full font-bold" onClick={() => setIsDeleteOpen(false)}>Batal</Button>
-                        <Button variant="destructive" className="rounded-full font-bold px-6" onClick={handleDelete}>
-                            Ya, Hapus
+                        <Button variant="outline" className="rounded-lg font-semibold" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+                        <Button variant="destructive" className="rounded-lg font-semibold px-5" onClick={handleDelete}>
+                            Yes, Delete
                         </Button>
                     </DialogFooter>
                 </DialogContent>
