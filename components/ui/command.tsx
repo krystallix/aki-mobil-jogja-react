@@ -154,7 +154,7 @@ function CommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "bg-transparent text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800/80 dark:hover:text-neutral-100 data-selected:bg-neutral-100 data-selected:text-neutral-900 dark:data-selected:bg-neutral-800/80 dark:data-selected:text-neutral-100 relative flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium outline-hidden select-none transition-colors data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:transition-colors [&_svg]:text-neutral-400 hover:[&_svg]:text-neutral-700 dark:hover:[&_svg]:text-neutral-300 data-selected:[&_svg]:text-neutral-700 dark:data-selected:[&_svg]:text-neutral-300",
+        "bg-transparent text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 hover:text-indigo-600 dark:hover:bg-neutral-800/60 dark:hover:text-indigo-400 data-selected:bg-neutral-100 data-selected:text-indigo-600 dark:data-selected:bg-neutral-800/60 dark:data-selected:text-indigo-400 relative flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-xs font-medium outline-hidden select-none transition-colors data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:transition-colors [&_svg]:text-neutral-400 hover:[&_svg]:text-indigo-600 dark:hover:[&_svg]:text-indigo-400 data-selected:[&_svg]:text-indigo-600 dark:data-selected:[&_svg]:text-indigo-400",
         className
       )}
       {...props}

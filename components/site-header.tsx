@@ -16,6 +16,7 @@ import {
   Sparkles,
   Store,
   PlusCircle,
+  ChevronRight,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
@@ -198,27 +199,33 @@ export function SiteHeader({ searchPlaceholder = "Search transactions, catalog, 
           <CommandGroup heading="Navigation">
             <CommandItem onSelect={() => navigateTo("/dashboard")}>
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Revenue Desk &amp; Overview</span>
+              <span className="flex-1">Revenue Desk &amp; Overview</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/dashboard/katalog")}>
               <Battery className="mr-2 h-4 w-4" />
-              <span>Battery Catalog</span>
+              <span className="flex-1">Battery Catalog</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/dashboard/transaksi")}>
               <ShoppingCart className="mr-2 h-4 w-4" />
-              <span>POS Transactions</span>
+              <span className="flex-1">POS Transactions</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/dashboard/pelanggan")}>
               <Users className="mr-2 h-4 w-4" />
-              <span>Customers CRM</span>
+              <span className="flex-1">Customers CRM</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/dashboard/aki-lama")}>
               <RotateCcw className="mr-2 h-4 w-4" />
-              <span>Old Battery Stock</span>
+              <span className="flex-1">Old Battery Stock</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/dashboard/artikel")}>
               <FileText className="mr-2 h-4 w-4" />
-              <span>Articles &amp; Education</span>
+              <span className="flex-1">Articles &amp; Education</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
           </CommandGroup>
 
@@ -227,15 +234,18 @@ export function SiteHeader({ searchPlaceholder = "Search transactions, catalog, 
           <CommandGroup heading="Quick Actions">
             <CommandItem onSelect={() => navigateTo("/dashboard/transaksi")}>
               <PlusCircle className="mr-2 h-4 w-4" />
-              <span>Create New Transaction</span>
+              <span className="flex-1">Create New Transaction</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/rekomendasi-aki")}>
               <Sparkles className="mr-2 h-4 w-4" />
-              <span>Open Battery Finder</span>
+              <span className="flex-1">Open Battery Finder</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={() => navigateTo("/katalog")}>
               <Store className="mr-2 h-4 w-4" />
-              <span>View Public Catalog</span>
+              <span className="flex-1">View Public Catalog</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
           </CommandGroup>
 
@@ -244,11 +254,13 @@ export function SiteHeader({ searchPlaceholder = "Search transactions, catalog, 
           <CommandGroup heading="Account">
             <CommandItem onSelect={() => navigateTo("/dashboard/settings")}>
               <Settings className="mr-2 h-4 w-4" />
-              <span>Account Settings</span>
+              <span className="flex-1">Account Settings</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
             <CommandItem onSelect={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" />
-              <span className="text-rose-600">Sign Out</span>
+              <LogOut className="mr-2 h-4 w-4 text-rose-500" />
+              <span className="flex-1 text-rose-600">Sign Out</span>
+              <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-60" />
             </CommandItem>
           </CommandGroup>
         </CommandList>
