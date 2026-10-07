@@ -1135,6 +1135,27 @@ export default function TransaksiPage() {
                                                 </div>
 
                                                 <div className="relative z-10">
+                                                    {/* Warranty Banner inside Preview Canvas */}
+                                                    {mainWarrantyItem && mainWarrantyItem.warranty && (
+                                                        <div className={`mb-8 p-4 rounded-lg flex items-center gap-3.5 border ${mainWarrantyItem.warranty.isActive ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
+                                                            {mainWarrantyItem.warranty.isActive ? (
+                                                                <ShieldCheck className="w-6 h-6 shrink-0 text-emerald-600" />
+                                                            ) : (
+                                                                <ShieldAlert className="w-6 h-6 shrink-0 text-red-600" />
+                                                            )}
+                                                            <div>
+                                                                <p className="text-sm font-bold">
+                                                                    {mainWarrantyItem.warranty.isActive ? 'Garansi Aktif' : 'Garansi Berakhir'}
+                                                                </p>
+                                                                <p className="text-xs text-current/80 mt-0.5">
+                                                                    {mainWarrantyItem.warranty.isActive
+                                                                        ? `${mainWarrantyItem.nama_produk || 'Produk'}: ${mainWarrantyItem.warranty.diffDays} hari tersisa (s.d. ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })})`
+                                                                        : `${mainWarrantyItem.nama_produk || 'Produk'} — berakhir ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
                                                     {/* Header */}
                                                     <div className="flex flex-col sm:flex-row justify-between items-start gap-6 sm:gap-0 mb-8 sm:mb-12">
                                                         <div>
@@ -1323,6 +1344,35 @@ export default function TransaksiPage() {
                     </div>
 
                     <div style={{ position: 'relative', zIndex: 10 }}>
+                        {/* Warranty Banner inside Print/Export Canvas */}
+                        {mainWarrantyItem && mainWarrantyItem.warranty && (
+                            <div style={{
+                                marginBottom: '32px',
+                                padding: '16px',
+                                borderRadius: '8px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '14px',
+                                border: `1px solid ${mainWarrantyItem.warranty.isActive ? '#a7f3d0' : '#fecaca'}`,
+                                background: mainWarrantyItem.warranty.isActive ? '#ecfdf5' : '#fef2f2',
+                                color: mainWarrantyItem.warranty.isActive ? '#064e3b' : '#7f1d1d'
+                            }}>
+                                <div style={{ fontSize: '20px' }}>
+                                    {mainWarrantyItem.warranty.isActive ? '🛡️' : '⚠️'}
+                                </div>
+                                <div>
+                                    <p style={{ margin: 0, fontSize: '14px', fontWeight: 700 }}>
+                                        {mainWarrantyItem.warranty.isActive ? 'Garansi Aktif' : 'Garansi Berakhir'}
+                                    </p>
+                                    <p style={{ margin: '4px 0 0', fontSize: '12px', opacity: 0.85 }}>
+                                        {mainWarrantyItem.warranty.isActive
+                                            ? `${mainWarrantyItem.nama_produk || 'Produk'}: ${mainWarrantyItem.warranty.diffDays} hari tersisa (s.d. ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })})`
+                                            : `${mainWarrantyItem.nama_produk || 'Produk'} — berakhir ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Header */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
                             <div>

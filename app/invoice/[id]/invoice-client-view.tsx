@@ -202,6 +202,27 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
                         </div>
 
                         <div className="relative z-10">
+                            {/* Warranty Banner inside Canvas */}
+                            {mainWarrantyItem && mainWarrantyItem.warranty && (
+                                <div className={`mb-8 p-4 rounded-lg flex items-center gap-3.5 border ${mainWarrantyItem.warranty.isActive ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-red-50 border-red-200 text-red-900'}`}>
+                                    {mainWarrantyItem.warranty.isActive ? (
+                                        <ShieldCheck className="w-6 h-6 shrink-0 text-emerald-600" />
+                                    ) : (
+                                        <ShieldAlert className="w-6 h-6 shrink-0 text-red-600" />
+                                    )}
+                                    <div>
+                                        <p className="text-sm font-bold">
+                                            {mainWarrantyItem.warranty.isActive ? 'Garansi Aktif' : 'Garansi Berakhir'}
+                                        </p>
+                                        <p className="text-xs text-current/80 mt-0.5">
+                                            {mainWarrantyItem.warranty.isActive
+                                                ? `${mainWarrantyItem.nama_produk}: ${mainWarrantyItem.warranty.diffDays} hari tersisa (s.d. ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })})`
+                                                : `${mainWarrantyItem.nama_produk} — berakhir ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Header */}
                             <div className="flex flex-col sm:flex-row justify-between items-start gap-6 sm:gap-0 mb-8 sm:mb-12">
                                 <div>
