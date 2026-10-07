@@ -27,7 +27,6 @@ import {
     Car,
     Bike,
     BatteryCharging,
-    Clock,
     CheckCircle2,
     Phone,
     ExternalLink,
@@ -72,7 +71,17 @@ function formatDuration(dateString: string): string {
         1,
         (now.getFullYear() - past.getFullYear()) * 12 + (now.getMonth() - past.getMonth())
     );
-    return `${diffMonths} bulan lalu`;
+    return `${diffMonths} bulan`;
+}
+
+function formatShortDuration(dateString: string): string {
+    const past = new Date(dateString);
+    const now = new Date();
+    const diffMonths = Math.max(
+        1,
+        (now.getFullYear() - past.getFullYear()) * 12 + (now.getMonth() - past.getMonth())
+    );
+    return `${diffMonths}M ago`;
 }
 
 function detectIsCarBattery(productName: string): boolean {
@@ -146,28 +155,17 @@ export function CrmDialog({
         const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://akimobiljogja.com";
         const articleUrl = articleSlug ? `${baseUrl}/artikel/${articleSlug}` : `${baseUrl}/artikel`;
 
-        if (type === "mobil") {
-            return `Halo Kak ${customerName}, salam dari Siswanto Aki Mobil Jogja! 🙏
-
-Tidak terasa sudah sekitar ${duration} sejak Kakak memasang aki *${productName}* di tempat kami. Semoga aki dan mobil Kakak selalu dalam kondisi prima.
-
-Agar aki tetap awet dan tahan bertahun-tahun, Kakak bisa membaca panduan tips perawatannya di sini:
-👉 ${articleUrl}
-
-🎁 *Layanan Spesial Pelanggan Siswanto Aki:*
-Bagi Kakak pengguna mobil, kami sediakan *Layanan Pengecekan Voltase Aki & Sistem Alternator/Pengisian GRATIS* langsung di bengkel kami.
-
-Jika Kakak ingin sekalian kami cek kelistrikannya, silakan balas pesan ini untuk atur jadwal ya Kak. Terima kasih banyak dan salam sehat selalu! 🚗⚡`;
-        }
-
-        return `Halo Kak ${customerName}, salam hangat dari Siswanto Aki Jogja! 🙏
+        return `Halo ${customerName}, salam hangat dari Aki Mobil Jogja! 🙏
 
 Tidak terasa sudah sekitar ${duration} sejak pembelian aki *${productName}* di tempat kami. Kami ingin memastikan kondisi akinya tetap berfungsi maksimal.
 
 Berikut tips panduan praktis merawat aki agar performanya terjaga dan tidak cepat ngedrop:
 👉 ${articleUrl}
 
-Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untuk hubungi kami kembali ya Kak. Terima kasih banyak atas kepercayaannya! ⚡`;
+🎁 *Layanan Spesial Pelanggan Aki Mobil Jogja:*
+Kami sediakan *Layanan Pengecekan Voltase Aki & Sistem Alternator/Pengisian GRATIS* langsung di lokasi kami.
+
+Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untuk hubungi kami kembali ya. Terima kasih banyak atas kepercayaannya! ⚡`;
     };
 
     // Recalculate message when dependencies change
@@ -267,13 +265,6 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                             </DialogDescription>
                         </div>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                        <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 text-neutral-700 text-xs font-medium border border-neutral-200/60 tabular-nums">
-                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
-                            {txList.length} Orders &gt; 3 Months
-                        </span>
-                    </div>
                 </DialogHeader>
 
                 {/* macOS-style Master-Detail 2-Grid */}
@@ -299,11 +290,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setFilterStatus("all")}
-                                    className={`flex-1 h-7 py-1 px-2 rounded-md font-medium text-xs transition-all cursor-pointer ${
-                                        filterStatus === "all"
-                                            ? "bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold hover:bg-white"
-                                            : "text-neutral-500 hover:text-neutral-800 hover:bg-transparent"
-                                    }`}
+                                    className={`flex-1 h-7 py-1 px-2 rounded-md font-medium text-xs transition-all cursor-pointer ${filterStatus === "all"
+                                        ? "bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold hover:bg-white"
+                                        : "text-neutral-500 hover:text-neutral-800 hover:bg-transparent"
+                                        }`}
                                 >
                                     All ({txList.length})
                                 </Button>
@@ -312,11 +302,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setFilterStatus("pending")}
-                                    className={`flex-1 h-7 py-1 px-2 rounded-md font-medium text-xs transition-all cursor-pointer ${
-                                        filterStatus === "pending"
-                                            ? "bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold hover:bg-white"
-                                            : "text-neutral-500 hover:text-neutral-800 hover:bg-transparent"
-                                    }`}
+                                    className={`flex-1 h-7 py-1 px-2 rounded-md font-medium text-xs transition-all cursor-pointer ${filterStatus === "pending"
+                                        ? "bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold hover:bg-white"
+                                        : "text-neutral-500 hover:text-neutral-800 hover:bg-transparent"
+                                        }`}
                                 >
                                     Pending ({txList.filter((t) => !t.crm_follow_up_at).length})
                                 </Button>
@@ -325,11 +314,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setFilterStatus("contacted")}
-                                    className={`flex-1 h-7 py-1 px-2 rounded-md font-medium text-xs transition-all cursor-pointer ${
-                                        filterStatus === "contacted"
-                                            ? "bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold hover:bg-white"
-                                            : "text-neutral-500 hover:text-neutral-800 hover:bg-transparent"
-                                    }`}
+                                    className={`flex-1 h-7 py-1 px-2 rounded-md font-medium text-xs transition-all cursor-pointer ${filterStatus === "contacted"
+                                        ? "bg-white text-neutral-900 shadow-[0_1px_2px_rgba(0,0,0,0.06)] font-semibold hover:bg-white"
+                                        : "text-neutral-500 hover:text-neutral-800 hover:bg-transparent"
+                                        }`}
                                 >
                                     Contacted ({txList.filter((t) => !!t.crm_follow_up_at).length})
                                 </Button>
@@ -337,7 +325,7 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                         </div>
 
                         {/* Customer List Items */}
-                        <div className="flex-1 min-h-0 overflow-y-auto p-2.5 space-y-2 overscroll-contain">
+                        <div className="flex-1 min-h-0 overflow-y-auto p-2 space-y-1.5 overscroll-contain">
                             {filteredTransactions.length === 0 ? (
                                 <div className="p-8 text-center text-xs text-neutral-400 flex flex-col items-center gap-2">
                                     <AlertCircle className="w-8 h-8 text-neutral-300" />
@@ -348,63 +336,42 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                     const isSelected = activeTx?.id === tx.id;
                                     const isContacted = !!tx.crm_follow_up_at;
                                     const mainItem = tx.transaction_items?.[0];
-                                    const isCar = detectIsCarBattery(mainItem?.nama_produk || "");
 
                                     return (
                                         <div
                                             key={tx.id}
                                             onClick={() => setSelectedTxId(tx.id)}
-                                            className={`relative p-3 rounded-xl border text-left cursor-pointer transition-all ${
-                                                isSelected
-                                                    ? "bg-indigo-50/40 border-indigo-500 ring-1 ring-indigo-500/20 shadow-xs"
-                                                    : "bg-white hover:border-neutral-300 border-neutral-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
-                                            }`}
+                                            className={`relative px-3 py-2 rounded-lg border text-left cursor-pointer transition-all ${isSelected
+                                                ? "bg-indigo-50/50 border-indigo-500 ring-1 ring-indigo-500/20 shadow-2xs"
+                                                : "bg-white hover:border-neutral-300 border-neutral-200/80 shadow-2xs"
+                                                }`}
                                         >
-                                            <div className="flex items-start justify-between gap-2">
-                                                <div className="min-w-0 flex-1 pl-1">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <span className="font-semibold text-xs text-neutral-900 truncate">
-                                                            {tx.customer_nama}
-                                                        </span>
-                                                        <span
-                                                            className={`inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-md font-medium border ${
-                                                                isCar
-                                                                    ? "bg-indigo-50 text-indigo-700 border-indigo-100"
-                                                                    : "bg-neutral-100 text-neutral-600 border-neutral-200"
-                                                            }`}
-                                                        >
-                                                            {isCar ? "Car" : "Standard"}
-                                                        </span>
-                                                    </div>
-
-                                                    <div className="text-[11px] text-neutral-500 flex items-center gap-1.5 mt-1 truncate">
-                                                        <BatteryCharging className="w-3 h-3 text-neutral-400 shrink-0" />
-                                                        <span className="truncate">
-                                                            {mainItem ? mainItem.nama_produk : "Battery"}
-                                                        </span>
-                                                    </div>
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="min-w-0 flex items-center gap-1.5 flex-1">
+                                                    <span className="font-semibold text-xs text-neutral-900 truncate">
+                                                        {tx.customer_nama}
+                                                    </span>
+                                                    <span className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-md font-medium bg-neutral-100 text-neutral-600 border border-neutral-200/60 shrink-0">
+                                                        {formatShortDuration(tx.created_at)}
+                                                    </span>
                                                 </div>
 
                                                 {isContacted ? (
-                                                    <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium shrink-0">
+                                                    <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium shrink-0">
                                                         <CheckCircle2 className="w-2.5 h-2.5" />
                                                         Contacted
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-500 font-medium shrink-0">
+                                                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-500 font-medium shrink-0">
                                                         Pending
                                                     </span>
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center justify-between text-[11px] text-neutral-400 mt-2.5 pt-2 border-t border-neutral-100 pl-1 font-mono tabular-nums">
-                                                <span className="flex items-center gap-1">
-                                                    <Clock className="w-3 h-3 text-neutral-300" />
-                                                    {formatDuration(tx.created_at)}
-                                                </span>
-                                                <span className="flex items-center gap-1">
-                                                    <Phone className="w-3 h-3 text-neutral-300" />
-                                                    {tx.customer_no_hp || "-"}
+                                            <div className="text-[11px] text-neutral-500 flex items-center gap-1.5 mt-1 truncate">
+                                                <BatteryCharging className="w-3 h-3 text-neutral-400 shrink-0" />
+                                                <span className="truncate">
+                                                    {mainItem ? mainItem.nama_produk : "Battery"}
                                                 </span>
                                             </div>
                                         </div>
@@ -470,11 +437,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={() => setTemplateType("mobil")}
-                                                className={`flex-1 h-8 py-1.5 px-3 rounded-md font-medium text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                                                    templateType === "mobil"
-                                                        ? "bg-indigo-600 text-white font-semibold shadow-xs hover:bg-indigo-700 hover:text-white"
-                                                        : "text-neutral-600 hover:text-neutral-900 hover:bg-transparent"
-                                                }`}
+                                                className={`flex-1 h-8 py-1.5 px-3 rounded-md font-medium text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${templateType === "mobil"
+                                                    ? "bg-indigo-600 text-white font-semibold shadow-xs hover:bg-indigo-700 hover:text-white"
+                                                    : "text-neutral-600 hover:text-neutral-900 hover:bg-transparent"
+                                                    }`}
                                             >
                                                 <Car className="w-3.5 h-3.5" />
                                                 <span>Car Battery (+Free Check)</span>
@@ -484,11 +450,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                                 variant="ghost"
                                                 size="sm"
                                                 onClick={() => setTemplateType("standar")}
-                                                className={`flex-1 h-8 py-1.5 px-3 rounded-md font-medium text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-                                                    templateType === "standar"
-                                                        ? "bg-indigo-600 text-white font-semibold shadow-xs hover:bg-indigo-700 hover:text-white"
-                                                        : "text-neutral-600 hover:text-neutral-900 hover:bg-transparent"
-                                                }`}
+                                                className={`flex-1 h-8 py-1.5 px-3 rounded-md font-medium text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer ${templateType === "standar"
+                                                    ? "bg-indigo-600 text-white font-semibold shadow-xs hover:bg-indigo-700 hover:text-white"
+                                                    : "text-neutral-600 hover:text-neutral-900 hover:bg-transparent"
+                                                    }`}
                                             >
                                                 <Bike className="w-3.5 h-3.5" />
                                                 <span>Standard / Bike</span>
@@ -506,10 +471,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                             value={selectedArticleSlug}
                                             onValueChange={(val) => setSelectedArticleSlug(val)}
                                         >
-                                            <SelectTrigger className="h-9 text-xs w-full bg-white border-neutral-200 rounded-lg text-neutral-800">
+                                            <SelectTrigger className="h-9 text-xs w-full">
                                                 <SelectValue placeholder="Pilih artikel panduan..." />
                                             </SelectTrigger>
-                                            <SelectContent className="max-h-56 bg-white border-neutral-200 shadow-lg">
+                                            <SelectContent className="max-h-56">
                                                 {articles.map((art) => (
                                                     <SelectItem key={art.id} value={art.slug} className="text-xs">
                                                         {art.title}
@@ -585,11 +550,10 @@ Jika ada kendala seputar kelistrikan atau butuh konsultasi aki, jangan ragu untu
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             onClick={handleSendWhatsApp}
-                                            className={`inline-flex items-center justify-center gap-2 rounded-xl text-sm font-semibold h-10 px-5 shadow-xs transition-all active:scale-[0.98] flex-1 sm:flex-none ${
-                                                !cleanPhone
-                                                    ? "pointer-events-none opacity-40 bg-neutral-200 text-neutral-500"
-                                                    : "bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer"
-                                            }`}
+                                            className={`inline-flex items-center justify-center gap-2 rounded-xl text-sm font-semibold h-10 px-5 shadow-xs transition-all active:scale-[0.98] flex-1 sm:flex-none ${!cleanPhone
+                                                ? "pointer-events-none opacity-40 bg-neutral-200 text-neutral-500"
+                                                : "bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer"
+                                                }`}
                                         >
                                             <Send className="w-4 h-4" />
                                             <span>Open WhatsApp</span>

@@ -11,8 +11,8 @@ export default function HomeLayout({
     return (
         <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            {/* pt-20 untuk clearance dari floating navbar (fixed top-4 + height ~60px) */}
-            <main className="flex-1 pt-20">
+            {/* pt-16 untuk clearance dari fixed navbar (height 64px) */}
+            <main className="flex-1 pt-16">
                 {children}
             </main>
             <footer>

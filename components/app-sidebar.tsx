@@ -93,7 +93,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-[13px] font-bold text-neutral-900 dark:text-neutral-100 truncate leading-snug">
-                  Siswanto Aki OS
+                  Siswanto Aki
                 </span>
                 <span className="text-xs text-neutral-400 truncate leading-tight">
                   Business Operations

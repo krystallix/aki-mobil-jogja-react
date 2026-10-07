@@ -70,6 +70,7 @@ type Stats = {
     txJual: number;
     txBeli: number;
     txTukar: number;
+    txAkiLama: number;
     // Profit
     totalProfit: number;
     profitThisMonth: number;
@@ -159,17 +160,19 @@ export default function DashboardPage() {
                 supabase.from("customers").select("id, created_at"),
                 supabase.from("products").select("id, nama, merek, stok, harga_jual, harga_modal"),
                 supabase.from("transaction_items").select("product_id, nama_produk, merek, qty, harga_modal, nilai_aki_lama, subtotal, transaction_id"),
-                supabase.from("aki_lama").select("nilai").eq("status", "belum_dijual"),
+                supabase.from("aki_lama").select("id, nilai, status, created_at"),
             ]);
 
             const txs = txRes.data || [];
             const customers = customersRes.data || [];
             const products = productsRes.data || [];
             const items = txItemsRes.data || [];
-            const unsoldAkiLama = akiLamaRes.data || [];
+            const allAkiLama = akiLamaRes.data || [];
 
+            const unsoldAkiLama = allAkiLama.filter(a => a.status === "belum_dijual");
             const totalAkiLamaCount = unsoldAkiLama.length;
             const totalAkiLamaValue = unsoldAkiLama.reduce((s, a) => s + (a.nilai || 0), 0);
+            const txAkiLama = allAkiLama.filter(a => a.created_at && a.created_at >= startOfMonth && a.created_at <= endOfMonth).length;
 
             const paidTxs = txs.filter(t => t.status === "paid");
             const paidIds = new Set(paidTxs.map(t => t.id));
@@ -261,6 +264,7 @@ export default function DashboardPage() {
                 txJual,
                 txBeli,
                 txTukar,
+                txAkiLama,
                 totalProfit,
                 profitThisMonth,
                 totalCustomers: customers.length,
@@ -306,17 +310,17 @@ export default function DashboardPage() {
 
     if (!stats) return null;
 
-    // Payment/Transaction types percentage
-    const totalTypeCount = Math.max(stats.txJual + stats.txTukar + stats.txBeli, 1);
-    const jualPercent = Math.round((stats.txJual / totalTypeCount) * 100);
-    const tukarPercent = Math.round((stats.txTukar / totalTypeCount) * 100);
-    const beliPercent = Math.round((stats.txBeli / totalTypeCount) * 100);
-    const lamaPercent = Math.max(0, 100 - (jualPercent + tukarPercent + beliPercent));
+    // Transaction types percentage
+    const totalTypeCount = stats.txJual + stats.txTukar + stats.txBeli + stats.txAkiLama;
+    const tukarPercent = totalTypeCount > 0 ? Math.round((stats.txTukar / totalTypeCount) * 100) : 0;
+    const jualPercent = totalTypeCount > 0 ? Math.round((stats.txJual / totalTypeCount) * 100) : 0;
+    const beliPercent = totalTypeCount > 0 ? Math.round((stats.txBeli / totalTypeCount) * 100) : 0;
+    const lamaPercent = totalTypeCount > 0 ? Math.round((stats.txAkiLama / totalTypeCount) * 100) : 0;
 
     return (
         <DashboardLayout>
             <div className="p-4 sm:p-6 lg:p-8 space-y-6 w-full">
-                
+
                 {/* ── TOP HEADER / BREADCRUMB BAR (Matching Image 1) ── */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
@@ -373,7 +377,7 @@ export default function DashboardPage() {
                             className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg bg-white dark:bg-card border-neutral-200/90 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200 shadow-2xs transition-all cursor-pointer"
                         >
                             <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
-                            <span>CRM (&gt;3 Bln)</span>
+                            <span>CRM</span>
                             {crmPendingCount > 0 && (
                                 <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold font-mono bg-indigo-600 text-white rounded-full min-w-4 h-4 leading-none">
                                     {crmPendingCount}
@@ -530,7 +534,7 @@ export default function DashboardPage() {
 
                 {/* ── MIDDLE ROW: REVENUE CURVE CHART (LEFT) + PAYMENT METHODS / CHANNELS (RIGHT) ── */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-                    
+
                     {/* Gross Revenue Curve Chart (8 Cols) - Identical to Image 1 */}
                     <div className="lg:col-span-8 p-5 sm:p-6 rounded-2xl bg-white dark:bg-card border border-neutral-200/80 dark:border-neutral-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between">
                         <div className="flex items-center justify-between mb-4">
@@ -599,7 +603,7 @@ export default function DashboardPage() {
                     <div className="lg:col-span-4 p-5 sm:p-6 rounded-2xl bg-white dark:bg-card border border-neutral-200/80 dark:border-neutral-800 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between">
                         <div className="flex items-center justify-between mb-4">
                             <div>
-                                <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">Channel &amp; Payment</h3>
+                                <h3 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">Transaction Distribution</h3>
                                 <p className="text-xs text-neutral-400 font-medium">Store transaction type distribution</p>
                             </div>
                             <Button type="button" variant="ghost" size="icon-sm" className="h-7 w-7 text-neutral-400 hover:text-neutral-600">
@@ -609,30 +613,36 @@ export default function DashboardPage() {
 
                         {/* Progress Bar Rows */}
                         <div className="space-y-4 my-auto">
-                            {/* 1. Direct Sales */}
+                            {/* 1. Trade-in */}
                             <div>
                                 <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
-                                    <span className="text-neutral-700 dark:text-neutral-300">Direct Sales</span>
-                                    <span className="font-mono text-neutral-900 dark:text-neutral-100">{jualPercent}%</span>
+                                    <span className="text-neutral-700 dark:text-neutral-300">Battery Trade-In</span>
+                                    <span className="font-mono text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                                        <span className="text-neutral-400 font-normal text-[11px]">{stats.txTukar} tx</span>
+                                        <span>{tukarPercent}%</span>
+                                    </span>
                                 </div>
                                 <div className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-indigo-600 rounded-full transition-all duration-700"
-                                        style={{ width: `${jualPercent}%` }}
+                                        style={{ width: `${tukarPercent}%` }}
                                     />
                                 </div>
                             </div>
 
-                            {/* 2. Trade-in */}
+                            {/* 2. Direct Sales */}
                             <div>
                                 <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
-                                    <span className="text-neutral-700 dark:text-neutral-300">Battery Trade-In</span>
-                                    <span className="font-mono text-neutral-900 dark:text-neutral-100">{tukarPercent}%</span>
+                                    <span className="text-neutral-700 dark:text-neutral-300">Direct Sales</span>
+                                    <span className="font-mono text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                                        <span className="text-neutral-400 font-normal text-[11px]">{stats.txJual} tx</span>
+                                        <span>{jualPercent}%</span>
+                                    </span>
                                 </div>
                                 <div className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                                     <div
                                         className="h-full bg-indigo-500 rounded-full transition-all duration-700"
-                                        style={{ width: `${tukarPercent}%` }}
+                                        style={{ width: `${jualPercent}%` }}
                                     />
                                 </div>
                             </div>
@@ -641,7 +651,10 @@ export default function DashboardPage() {
                             <div>
                                 <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
                                     <span className="text-neutral-700 dark:text-neutral-300">Stock Purchase</span>
-                                    <span className="font-mono text-neutral-900 dark:text-neutral-100">{beliPercent}%</span>
+                                    <span className="font-mono text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                                        <span className="text-neutral-400 font-normal text-[11px]">{stats.txBeli} tx</span>
+                                        <span>{beliPercent}%</span>
+                                    </span>
                                 </div>
                                 <div className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                                     <div
@@ -655,7 +668,10 @@ export default function DashboardPage() {
                             <div>
                                 <div className="flex items-center justify-between text-xs font-semibold mb-1.5">
                                     <span className="text-neutral-700 dark:text-neutral-300">Used Scrap Battery</span>
-                                    <span className="font-mono text-neutral-900 dark:text-neutral-100">{lamaPercent}%</span>
+                                    <span className="font-mono text-neutral-900 dark:text-neutral-100 flex items-center gap-1.5">
+                                        <span className="text-neutral-400 font-normal text-[11px]">{stats.txAkiLama} unit</span>
+                                        <span>{lamaPercent}%</span>
+                                    </span>
                                 </div>
                                 <div className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
                                     <div
@@ -668,7 +684,9 @@ export default function DashboardPage() {
 
                         <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-400 flex items-center justify-between">
                             <span>Total Orders Volume</span>
-                            <span className="font-bold font-mono text-neutral-700 dark:text-neutral-300">{stats.txPaid} Settled Orders</span>
+                            <span className="font-bold font-mono text-neutral-700 dark:text-neutral-300">
+                                {stats.totalTx} Orders ({stats.txPaid} Paid)
+                            </span>
                         </div>
                     </div>
                 </div>

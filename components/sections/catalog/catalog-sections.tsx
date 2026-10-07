@@ -161,7 +161,7 @@ export default function CatalogSections({
                 </div>
             </div>
 
-            <div className="py-10 lg:py-20 bg-background border-b border-border/50 relative overflow-hidden">
+            <div className="py-10 lg:py-20 bg-background border-b border-border/50 relative">
 
                 <div className="container mx-auto px-6 max-w-7xl mb-8 lg:mb-12 relative z-10">
                     <div className="flex justify-between items-end">
@@ -221,13 +221,14 @@ export default function CatalogSections({
 
 
                     {/* Desktop & Mobile Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
                         {/* Desktop Filter - Hidden on Mobile */}
-                        <div className="hidden md:block">
+                        <div className="hidden md:block md:col-span-1 sticky top-20 self-start z-20">
                             <motion.div
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.5, delay: 0.2 }}
+                                className=" overflow-y-auto scrollbar-hide pr-1"
                             >
                                 <FilterSection
                                     selectedCategories={selectedCategories}

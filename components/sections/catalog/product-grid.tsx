@@ -196,6 +196,7 @@ export default function ProductGrid({ products, onAddToCart, onReset }: ProductG
                                     animate="visible"
                                     exit="exit"
                                     layout
+                                    className="h-full"
                                 >
                                     <ProductCard
                                         product={product}

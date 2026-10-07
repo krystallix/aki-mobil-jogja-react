@@ -241,51 +241,90 @@ export default function InvoiceClientView({ transaction }: { transaction: any })
                             </div>
 
                             {/* Table */}
-                            <div className="mb-8 sm:mb-10 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
-                                <table className="w-full text-left border-collapse min-w-[600px]">
-                                    <thead className="bg-[#0f3460] text-white text-[10px] font-bold uppercase tracking-wider">
-                                        <tr>
-                                            <th className="py-2.5 px-4 rounded-tl-sm">Produk / Layanan</th>
-                                            <th className="py-2.5 px-4 text-center">Qty.</th>
-                                            <th className="py-2.5 px-4 text-right">Harga Unit</th>
-                                            <th className="py-2.5 px-4 text-right rounded-tr-sm">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="border-b border-gray-200">
-                                        {formItems.map((item: any, idx: number) => (
-                                            <tr key={idx} className="border-t border-gray-100">
-                                                <td className="py-4 px-4">
-                                                    <div className="flex items-center gap-2">
-                                                        <p className="text-sm font-bold text-gray-900">{item.nama_produk}</p>
-                                                        <span className={`text-[8px] px-1 py-0.5 rounded font-black uppercase border ${item.kondisi === 'bekas' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
-                                                            {item.kondisi || 'baru'}
-                                                        </span>
-                                                    </div>
-                                                    <p className="text-xs text-gray-500 mt-0.5">{item.garansi ? `Garansi: ${item.garansi}` : 'Tanpa garansi'}</p>
-                                                </td>
-                                                <td className="py-4 px-4 text-sm text-center font-medium">{item.qty}</td>
-                                                <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(item.subtotal / (item.qty || 1))}</td>
-                                                <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(item.subtotal)}</td>
-                                            </tr>
-                                        ))}
-                                        {ongkir > 0 && (
-                                            <tr className="border-t border-gray-100">
-                                                <td className="py-4 px-4">
-                                                    <p className="text-sm font-bold text-gray-900">Ongkos Kirim</p>
-                                                    <p className="text-xs text-gray-500 mt-0.5">Biaya pengiriman/pemasangan</p>
-                                                </td>
-                                                <td className="py-4 px-4 text-sm text-center font-medium">1</td>
-                                                <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(ongkir)}</td>
-                                                <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(ongkir)}</td>
-                                            </tr>
-                                        )}
-                                        {formItems.length === 0 && ongkir === 0 && (
+                            <div className="mb-8 sm:mb-10 overflow-hidden">
+                                {/* Mobile Card List View (No horizontal scroll) */}
+                                <div className="sm:hidden space-y-2.5">
+                                    <div className="bg-[#0f3460] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-sm">
+                                        Produk / Layanan
+                                    </div>
+                                    {formItems.map((item: any, idx: number) => (
+                                        <div key={idx} className="p-3 rounded-lg border border-gray-100 bg-gray-50/50 space-y-2">
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div>
+                                                    <p className="text-xs font-bold text-gray-900">{item.nama_produk}</p>
+                                                    <p className="text-[11px] text-gray-500 mt-0.5">{item.garansi ? `Garansi: ${item.garansi}` : 'Tanpa garansi'}</p>
+                                                </div>
+                                                <span className={`text-[8px] px-1 py-0.5 rounded font-black uppercase shrink-0 border ${item.kondisi === 'bekas' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
+                                                    {item.kondisi || 'baru'}
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-baseline pt-1.5 border-t border-gray-200/60 text-xs">
+                                                <span className="text-gray-500">{item.qty} × {formatRupiah(item.subtotal / (item.qty || 1))}</span>
+                                                <span className="font-bold text-gray-900">{formatRupiah(item.subtotal)}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {ongkir > 0 && (
+                                        <div className="p-3 rounded-lg border border-gray-100 bg-gray-50/50 flex justify-between items-center text-xs">
+                                            <div>
+                                                <p className="font-bold text-gray-900">Ongkos Kirim</p>
+                                                <p className="text-[11px] text-gray-500">Biaya pengiriman/pemasangan</p>
+                                            </div>
+                                            <span className="font-bold text-gray-900">{formatRupiah(ongkir)}</span>
+                                        </div>
+                                    )}
+                                    {formItems.length === 0 && ongkir === 0 && (
+                                        <div className="py-6 text-center text-xs text-gray-400">Belum ada item</div>
+                                    )}
+                                </div>
+
+                                {/* Desktop / Tablet Table View */}
+                                <div className="hidden sm:block">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead className="bg-[#0f3460] text-white text-[10px] font-bold uppercase tracking-wider">
                                             <tr>
-                                                <td colSpan={4} className="py-8 text-center text-xs text-gray-400">Belum ada item</td>
+                                                <th className="py-2.5 px-4 rounded-tl-sm">Produk / Layanan</th>
+                                                <th className="py-2.5 px-4 text-center">Qty.</th>
+                                                <th className="py-2.5 px-4 text-right">Harga Unit</th>
+                                                <th className="py-2.5 px-4 text-right rounded-tr-sm">Total</th>
                                             </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="border-b border-gray-200">
+                                            {formItems.map((item: any, idx: number) => (
+                                                <tr key={idx} className="border-t border-gray-100">
+                                                    <td className="py-4 px-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <p className="text-sm font-bold text-gray-900">{item.nama_produk}</p>
+                                                            <span className={`text-[8px] px-1 py-0.5 rounded font-black uppercase border ${item.kondisi === 'bekas' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
+                                                                {item.kondisi || 'baru'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 mt-0.5">{item.garansi ? `Garansi: ${item.garansi}` : 'Tanpa garansi'}</p>
+                                                    </td>
+                                                    <td className="py-4 px-4 text-sm text-center font-medium">{item.qty}</td>
+                                                    <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(item.subtotal / (item.qty || 1))}</td>
+                                                    <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(item.subtotal)}</td>
+                                                </tr>
+                                            ))}
+                                            {ongkir > 0 && (
+                                                <tr className="border-t border-gray-100">
+                                                    <td className="py-4 px-4">
+                                                        <p className="text-sm font-bold text-gray-900">Ongkos Kirim</p>
+                                                        <p className="text-xs text-gray-500 mt-0.5">Biaya pengiriman/pemasangan</p>
+                                                    </td>
+                                                    <td className="py-4 px-4 text-sm text-center font-medium">1</td>
+                                                    <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(ongkir)}</td>
+                                                    <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(ongkir)}</td>
+                                                </tr>
+                                            )}
+                                            {formItems.length === 0 && ongkir === 0 && (
+                                                <tr>
+                                                    <td colSpan={4} className="py-8 text-center text-xs text-gray-400">Belum ada item</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             {/* Totals */}

@@ -68,13 +68,13 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
 
     return (
-        <div className="group border border-border/60 rounded-xl lg:rounded-2xl overflow-hidden hover:border-border transition-all duration-300 bg-card relative">
+        <div className="group border border-border/60 rounded-xl lg:rounded-2xl overflow-hidden hover:border-border transition-all duration-300 bg-card relative flex flex-col h-full">
 
             <Link href={`/katalog/product/${product.slug}`} className="absolute inset-0 z-20">
                 <span className="sr-only">Lihat detail {product.nama}</span>
             </Link>
 
-            <div className="relative overflow-hidden bg-linear-to-br from-primary/5 via-background to-muted/5 h-44 border-b border-border/50 p-4 flex items-center justify-center">
+            <div className="relative shrink-0 overflow-hidden bg-linear-to-br from-primary/5 via-background to-muted/5 h-44 border-b border-border/50 p-4 flex items-center justify-center">
                 {/* Decorative indigo glow */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
                 <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-primary/2 rounded-full blur-2xl pointer-events-none" />
@@ -114,49 +114,45 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 </Button>
             </div>
 
-            <div className="p-3 space-y-2 relative z-10">
-                {/* Pointer events none triggers clicks to pass through to the Link behind, 
-                    but we need interactive buttons to work. 
-                    Actually, stacking context is tricky. 
-                    Better approach: Wrap the whole card content in a div that is NOT a link, 
-                    but put Link around specific click areas or make the Link absolute covering everything,
-                    and give buttons a higher z-index.
-                */}
-
-                <h3 className="text-base font-bold line-clamp-1 leading-tight" title={product.nama}>
-                    <Link href={`/katalog/product/${product.slug}`} className="hover:text-primary transition-colors relative z-30">
-                        {product.nama}
-                    </Link>
-                </h3>
+            <div className="p-3 flex flex-col flex-1 relative z-10">
+                <div className="space-y-2 flex-1">
+                    <h3 className="text-base font-bold line-clamp-1 leading-tight" title={product.nama}>
+                        <Link href={`/katalog/product/${product.slug}`} className="hover:text-primary transition-colors relative z-30">
+                            {product.nama}
+                        </Link>
+                    </h3>
 
 
-                <div className="hidden md:flex gap-3 text-xs text-muted-foreground pointer-events-auto">
-                    {product.specifications[0]?.kapasitas && product.specifications[0].kapasitas !== '-' && (
+                    <div className="hidden md:flex gap-3 text-xs text-muted-foreground pointer-events-auto">
+                        {product.specifications[0]?.kapasitas && product.specifications[0].kapasitas !== '-' && (
+                            <div className="flex items-center gap-1">
+                                <Zap className="size-3" />
+                                <span>{product.specifications[0].kapasitas}</span>
+                            </div>
+                        )}
+                        {product.garansi && product.garansi !== '-' && (
+                            <div className="flex items-center gap-1">
+                                <ShieldCheck className="size-3" />
+                                <span>{product.garansi}</span>
+                            </div>
+                        )}
                         <div className="flex items-center gap-1">
-                            <Zap className="size-3" />
-                            <span>{product.specifications[0].kapasitas}</span>
+                            <BatteryCharging className="size-3" />
+                            <span className="capitalize">{product.tipe}</span>
                         </div>
-                    )}
-                    {product.garansi && product.garansi !== '-' && (
-                        <div className="flex items-center gap-1">
-                            <ShieldCheck className="size-3" />
-                            <span>{product.garansi}</span>
-                        </div>
-                    )}
-                    <div className="flex items-center gap-1">
-                        <BatteryCharging className="size-3" />
-                        <span className="capitalize">{product.tipe}</span>
                     </div>
+
+
+                    {product.applications && product.applications.length > 0 ? (
+                        <div className="hidden md:block pointer-events-auto">
+                            <p className="text-xs text-muted-foreground line-clamp-1">
+                                {product.applications.map(app => app.nama_mobil).join(", ")}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="hidden md:block h-4" />
+                    )}
                 </div>
-
-
-                {product.applications && product.applications.length > 0 && (
-                    <div className="hidden md:block pointer-events-auto">
-                        <p className="text-xs text-muted-foreground line-clamp-1">
-                            {product.applications.map(app => app.nama_mobil).join(", ")}
-                        </p>
-                    </div>
-                )}
 
 
                 <div className="pt-2 mt-auto space-y-2 pointer-events-auto">

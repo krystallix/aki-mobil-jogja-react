@@ -5,7 +5,7 @@ import DashboardLayout from "@/components/layouts/dashboard-layout";
 import {
     Search, Plus, Save, Loader2, ChevronLeft,
     X, Share2, AlertCircle, ShoppingBag, Calendar as CalendarIcon,
-    Trash2, FileText
+    Trash2, FileText, ShieldCheck, ShieldAlert
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -650,6 +650,29 @@ export default function TransaksiPage() {
         ? `${origin}/invoice/${formData.id.split('-').pop()}-${formData.customer_id.split('-')[0]}` 
         : '';
 
+    const calculateItemWarranty = (item: { garansi: string | null }, createdAt?: string | Date) => {
+        if (!item.garansi || !createdAt) return null;
+        const match = item.garansi.match(/(\d+)/);
+        if (!match) return null;
+        const months = parseInt(match[1]);
+        const startDate = new Date(createdAt);
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + months);
+        const today = new Date();
+        const diffTime = endDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return { isActive: diffDays > 0, endDate, diffDays };
+    };
+
+    const mainWarrantyItem = formItems
+        .filter((item) => item.garansi && (item.garansi.toLowerCase().includes('bln') || item.garansi.toLowerCase().includes('bulan') || /\d+/.test(item.garansi)))
+        .map((item) => ({ ...item, warranty: calculateItemWarranty(item, formData.created_at || new Date()) }))
+        .sort((a, b) => {
+            if (!a.warranty) return 1;
+            if (!b.warranty) return -1;
+            return b.warranty.endDate.getTime() - a.warranty.endDate.getTime();
+        })[0];
+
     return (
         <DashboardLayout>
             <div className="h-full bg-background">
@@ -1078,132 +1101,190 @@ export default function TransaksiPage() {
                                     </div>
 
                                     {/* PREVIEW AREA (7 Cols) */}
-                                    <div id="invoice-preview" className="xl:col-span-7 flex justify-center sticky top-6 z-0 scroll-mt-20">
-                                        <div
-                                            ref={invoiceRef}
-                                            className="w-full bg-white text-slate-900 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-200 rounded-lg p-8 md:p-12 relative overflow-hidden"
-                                            style={{ minHeight: '600px' }}
-                                        >
-                                            {/* Watermark Pattern */}
-                                            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.02] select-none z-0 overflow-hidden">
-                                                <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
-                                                    {Array.from({ length: 400 }).map((_, i) => (
-                                                        <span key={i} className="text-lg font-black uppercase whitespace-nowrap text-[#0f3460]">Siswanto Aki</span>
-                                                    ))}
+                                    <div id="invoice-preview" className="xl:col-span-7 flex flex-col items-center sticky top-6 z-0 scroll-mt-20">
+                                        {/* Warranty Banner */}
+                                        {mainWarrantyItem && mainWarrantyItem.warranty && (
+                                            <div className={`w-full mb-3 px-5 py-3.5 rounded-xl flex items-center gap-3.5 border ${mainWarrantyItem.warranty.isActive ? 'bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300' : 'bg-red-50 border-red-200 text-red-900 dark:bg-red-950/40 dark:border-red-800 dark:text-red-300'}`}>
+                                                {mainWarrantyItem.warranty.isActive ? <ShieldCheck className="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400" /> : <ShieldAlert className="w-5 h-5 shrink-0 text-red-600 dark:text-red-400" />}
+                                                <div>
+                                                    <p className="text-xs sm:text-sm font-bold">
+                                                        {mainWarrantyItem.warranty.isActive ? 'Garansi Aktif' : 'Garansi Berakhir'}
+                                                    </p>
+                                                    <p className="text-[11px] sm:text-xs text-current/80 mt-0.5">
+                                                        {mainWarrantyItem.warranty.isActive
+                                                            ? `${mainWarrantyItem.nama_produk || 'Produk'}: ${mainWarrantyItem.warranty.diffDays} hari tersisa (s.d. ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })})`
+                                                            : `${mainWarrantyItem.nama_produk || 'Produk'} — berakhir ${mainWarrantyItem.warranty.endDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                                                    </p>
                                                 </div>
                                             </div>
+                                        )}
 
-                                            <div className="relative z-10">
-                                                {/* Header */}
-                                                <div className="flex justify-between items-start mb-12">
-                                                    <div>
-                                                        <div className="flex items-center gap-3 mb-4">
-                                                            <div className="w-8 h-8 bg-[#0f3460] rounded-lg flex items-center justify-center shrink-0">
-                                                                <img src="/logo-light.svg" alt="Siswanto Aki" className="w-7 h-7 object-contain" />
+                                        <div className="w-full overflow-hidden flex justify-center">
+                                            <div
+                                                ref={invoiceRef}
+                                                className="w-full bg-white text-slate-900 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-gray-200 rounded-lg p-6 sm:p-8 md:p-12 relative overflow-hidden"
+                                                style={{ minHeight: '600px' }}
+                                            >
+                                                {/* Watermark Pattern */}
+                                                <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.02] select-none z-0 overflow-hidden">
+                                                    <div className="flex flex-wrap gap-x-8 gap-y-12 w-[200%] h-[200%] -rotate-45 justify-center items-center">
+                                                        {Array.from({ length: 400 }).map((_, i) => (
+                                                            <span key={i} className="text-lg font-black uppercase whitespace-nowrap text-[#0f3460]">Siswanto Aki</span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="relative z-10">
+                                                    {/* Header */}
+                                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-6 sm:gap-0 mb-8 sm:mb-12">
+                                                        <div>
+                                                            <div className="flex items-center gap-3 mb-4">
+                                                                <div className="w-8 h-8 bg-[#0f3460] rounded-lg flex items-center justify-center shrink-0">
+                                                                    <img src="/logo-light.svg" alt="Siswanto Aki" className="w-7 h-7 object-contain" />
+                                                                </div>
+                                                                <h2 className="text-2xl font-black text-[#0f3460]">Siswanto Aki</h2>
                                                             </div>
-                                                            <h2 className="text-2xl font-black text-[#0f3460]">Siswanto Aki</h2>
+                                                            <p className="text-xs text-gray-500 font-medium leading-relaxed">Kanggotan 21, Pleret, Bantul<br />Yogyakarta, 55791<br />0813-5400-7400 / 0882-2796-8449</p>
                                                         </div>
-                                                        <p className="text-xs text-gray-500 font-medium leading-relaxed">Kanggotan 21, Pleret, Bantul<br />Yogyakarta, 55791<br />0813-5400-7400 / 0882-2796-8449</p>
+                                                        <div className="w-full sm:w-64">
+                                                            <div className="bg-[#0f3460] text-white rounded-t-sm p-3">
+                                                                <h3 className="text-lg font-bold">Invoice #{formData.id?.split('-').pop() || 'NEW'}</h3>
+                                                            </div>
+                                                            <div className="bg-gray-50 p-3 grid grid-cols-2 gap-y-2 text-xs text-gray-600 font-medium">
+                                                                <span>Dibuat</span>
+                                                                <span className="text-right text-gray-900">{formatDateWIB(formData.created_at || new Date())}</span>
+                                                                <span>Tipe</span>
+                                                                <span className="text-right text-gray-900 uppercase font-bold text-[10px]">{formData.tipe?.replace('_', ' ')}</span>
+                                                                <span>Status</span>
+                                                                <span className="text-right text-gray-900 uppercase">{formData.status}</span>
+                                                            </div>
+                                                            <div className="bg-[#0f3460] text-white p-3 rounded-b-sm flex justify-between items-center font-bold">
+                                                                <span>Total</span>
+                                                                <span className="text-lg">{formatRupiah(currentTotal)}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="w-64">
-                                                        <div className="bg-[#0f3460] text-white rounded-t-sm p-3">
-                                                            <h3 className="text-lg font-bold">Invoice #{formData.id?.split('-').pop() || 'NEW'}</h3>
-                                                        </div>
-                                                        <div className="bg-gray-50 p-3 grid grid-cols-2 gap-y-2 text-xs text-gray-600 font-medium">
-                                                            <span>Dibuat</span>
-                                                            <span className="text-right text-gray-900">{formatDateWIB(formData.created_at || new Date())}</span>
-                                                            <span>Tipe</span>
-                                                            <span className="text-right text-gray-900 uppercase font-bold text-[10px]">{formData.tipe?.replace('_', ' ')}</span>
-                                                            <span>Status</span>
-                                                            <span className="text-right text-gray-900 uppercase">{formData.status}</span>
-                                                        </div>
-                                                        <div className="bg-[#0f3460] text-white p-3 rounded-b-sm flex justify-between items-center font-bold">
-                                                            <span>Total</span>
-                                                            <span className="text-lg">{formatRupiah(currentTotal)}</span>
-                                                        </div>
+
+                                                    {/* Recipient */}
+                                                    <div className="mb-8 sm:mb-10">
+                                                        <p className="text-[10px] font-bold text-[#0f3460] uppercase tracking-widest mb-1.5">Pelanggan:</p>
+                                                        <h4 className="text-xl font-bold text-gray-900 mb-1">{formData.customer_nama || 'Nama Pelanggan'}</h4>
+                                                        <p className="text-sm text-gray-500">{formData.customer_no_hp || '-'}</p>
+                                                        <p className="text-sm text-gray-500 max-w-[250px]">{formData.customer_alamat || '-'}</p>
                                                     </div>
-                                                </div>
 
-                                                {/* Recipient */}
-                                                <div className="mb-10">
-                                                    <p className="text-[10px] font-bold text-[#0f3460] uppercase tracking-widest mb-1.5">Pelanggan:</p>
-                                                    <h4 className="text-xl font-bold text-gray-900 mb-1">{formData.customer_nama || 'Nama Pelanggan'}</h4>
-                                                    <p className="text-sm text-gray-500">{formData.customer_no_hp || '-'}</p>
-                                                    <p className="text-sm text-gray-500 max-w-[250px]">{formData.customer_alamat || '-'}</p>
-                                                </div>
-
-                                                {/* Table */}
-                                                <div className="mb-10 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
-                                                    <table className="w-full text-left border-collapse min-w-[600px]">
-                                                        <thead className="bg-[#0f3460] text-white text-[10px] font-bold uppercase tracking-wider">
-                                                            <tr>
-                                                                <th className="py-2.5 px-4 rounded-tl-sm">Produk / Layanan</th>
-                                                                <th className="py-2.5 px-4 text-center">Qty.</th>
-                                                                <th className="py-2.5 px-4 text-right">Harga Unit</th>
-                                                                <th className="py-2.5 px-4 text-right rounded-tr-sm">Total</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="border-b border-gray-200">
+                                                    {/* Table */}
+                                                    <div className="mb-8 sm:mb-10 overflow-hidden">
+                                                        {/* Mobile Card List View (No horizontal scroll) */}
+                                                        <div className="sm:hidden space-y-2.5">
+                                                            <div className="bg-[#0f3460] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-sm">
+                                                                Produk / Layanan
+                                                            </div>
                                                             {formItems.map((item, idx) => (
-                                                                <tr key={idx} className="border-t border-gray-100">
-                                                                    <td className="py-4 px-4">
-                                                                        <div className="flex items-center gap-2">
-                                                                            <p className="text-sm font-bold text-gray-900">{item.nama_produk}</p>
-                                                                            <span className={`text-[8px] px-1 py-0.5 rounded font-black uppercase border ${item.kondisi === 'bekas' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
-                                                                                {item.kondisi || 'baru'}
-                                                                            </span>
+                                                                <div key={idx} className="p-3 rounded-lg border border-gray-100 bg-gray-50/50 space-y-2">
+                                                                    <div className="flex items-start justify-between gap-2">
+                                                                        <div>
+                                                                            <p className="text-xs font-bold text-gray-900">{item.nama_produk}</p>
+                                                                            <p className="text-[11px] text-gray-500 mt-0.5">{item.garansi ? `Garansi: ${item.garansi}` : 'Tanpa garansi'}</p>
                                                                         </div>
-                                                                        <p className="text-xs text-gray-500 mt-0.5">{item.garansi ? `Garansi: ${item.garansi}` : 'Tanpa garansi'}</p>
-                                                                    </td>
-                                                                    <td className="py-4 px-4 text-sm text-center font-medium">{item.qty}</td>
-                                                                    <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(item.subtotal / (item.qty || 1))}</td>
-                                                                    <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(item.subtotal)}</td>
-                                                                </tr>
+                                                                        <span className={`text-[8px] px-1 py-0.5 rounded font-black uppercase shrink-0 border ${item.kondisi === 'bekas' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
+                                                                            {item.kondisi || 'baru'}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="flex justify-between items-baseline pt-1.5 border-t border-gray-200/60 text-xs">
+                                                                        <span className="text-gray-500">{item.qty} × {formatRupiah(item.subtotal / (item.qty || 1))}</span>
+                                                                        <span className="font-bold text-gray-900">{formatRupiah(item.subtotal)}</span>
+                                                                    </div>
+                                                                </div>
                                                             ))}
                                                             {ongkir > 0 && (
-                                                                <tr className="border-t border-gray-100">
-                                                                    <td className="py-4 px-4">
-                                                                        <p className="text-sm font-bold text-gray-900">Ongkos Kirim</p>
-                                                                        <p className="text-xs text-gray-500 mt-0.5">Biaya pengiriman/pemasangan</p>
-                                                                    </td>
-                                                                    <td className="py-4 px-4 text-sm text-center font-medium">1</td>
-                                                                    <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(ongkir)}</td>
-                                                                    <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(ongkir)}</td>
-                                                                </tr>
+                                                                <div className="p-3 rounded-lg border border-gray-100 bg-gray-50/50 flex justify-between items-center text-xs">
+                                                                    <div>
+                                                                        <p className="font-bold text-gray-900">Ongkos Kirim</p>
+                                                                        <p className="text-[11px] text-gray-500">Biaya pengiriman/pemasangan</p>
+                                                                    </div>
+                                                                    <span className="font-bold text-gray-900">{formatRupiah(ongkir)}</span>
+                                                                </div>
                                                             )}
                                                             {formItems.length === 0 && ongkir === 0 && (
-                                                                <tr>
-                                                                    <td colSpan={4} className="py-8 text-center text-xs text-gray-400">Belum ada item</td>
-                                                                </tr>
+                                                                <div className="py-6 text-center text-xs text-gray-400">Belum ada item</div>
                                                             )}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                                {/* Totals */}
-                                                <div className="flex justify-between items-end">
-                                                    <div className="flex flex-col gap-4">
-                                                        {invoiceLink && (
-                                                            <div>
-                                                                <QRCodeSVG value={invoiceLink} size={56} />
-                                                            </div>
-                                                        )}
-                                                        <p className="text-xs text-gray-400 max-w-[200px]">Terima kasih atas kepercayaannya.</p>
-                                                    </div>
-                                                    <div className="w-64">
-                                                        <div className="flex justify-between py-2 text-sm">
-                                                            <span className="text-gray-600">Subtotal</span>
-                                                            <span className="font-bold text-gray-900">{formatRupiah(currentSubtotal)}</span>
                                                         </div>
-                                                        {formData.diskon ? (
-                                                            <div className="flex justify-between py-2 text-sm text-red-600">
-                                                                <span>Diskon</span>
-                                                                <span className="font-bold">-{formatRupiah(formData.diskon)}</span>
+
+                                                        {/* Desktop / Tablet Table View */}
+                                                        <div className="hidden sm:block">
+                                                            <table className="w-full text-left border-collapse">
+                                                                <thead className="bg-[#0f3460] text-white text-[10px] font-bold uppercase tracking-wider">
+                                                                    <tr>
+                                                                        <th className="py-2.5 px-4 rounded-tl-sm">Produk / Layanan</th>
+                                                                        <th className="py-2.5 px-4 text-center">Qty.</th>
+                                                                        <th className="py-2.5 px-4 text-right">Harga Unit</th>
+                                                                        <th className="py-2.5 px-4 text-right rounded-tr-sm">Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody className="border-b border-gray-200">
+                                                                    {formItems.map((item, idx) => (
+                                                                        <tr key={idx} className="border-t border-gray-100">
+                                                                            <td className="py-4 px-4">
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <p className="text-sm font-bold text-gray-900">{item.nama_produk}</p>
+                                                                                    <span className={`text-[8px] px-1 py-0.5 rounded font-black uppercase border ${item.kondisi === 'bekas' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-emerald-50 border-emerald-200 text-emerald-700'}`}>
+                                                                                        {item.kondisi || 'baru'}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <p className="text-xs text-gray-500 mt-0.5">{item.garansi ? `Garansi: ${item.garansi}` : 'Tanpa garansi'}</p>
+                                                                            </td>
+                                                                            <td className="py-4 px-4 text-sm text-center font-medium">{item.qty}</td>
+                                                                            <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(item.subtotal / (item.qty || 1))}</td>
+                                                                            <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(item.subtotal)}</td>
+                                                                        </tr>
+                                                                    ))}
+                                                                    {ongkir > 0 && (
+                                                                        <tr className="border-t border-gray-100">
+                                                                            <td className="py-4 px-4">
+                                                                                <p className="text-sm font-bold text-gray-900">Ongkos Kirim</p>
+                                                                                <p className="text-xs text-gray-500 mt-0.5">Biaya pengiriman/pemasangan</p>
+                                                                            </td>
+                                                                            <td className="py-4 px-4 text-sm text-center font-medium">1</td>
+                                                                            <td className="py-4 px-4 text-sm text-right font-medium">{formatRupiah(ongkir)}</td>
+                                                                            <td className="py-4 px-4 text-sm text-right font-bold text-gray-900">{formatRupiah(ongkir)}</td>
+                                                                        </tr>
+                                                                    )}
+                                                                    {formItems.length === 0 && ongkir === 0 && (
+                                                                        <tr>
+                                                                            <td colSpan={4} className="py-8 text-center text-xs text-gray-400">Belum ada item</td>
+                                                                        </tr>
+                                                                    )}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Totals */}
+                                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0">
+                                                        <div className="flex flex-col gap-4">
+                                                            {invoiceLink && (
+                                                                <div>
+                                                                    <QRCodeSVG value={invoiceLink} size={56} />
+                                                                </div>
+                                                            )}
+                                                            <p className="text-xs text-gray-400 max-w-[200px]">Terima kasih atas kepercayaannya.</p>
+                                                        </div>
+                                                        <div className="w-full sm:w-64">
+                                                            <div className="flex justify-between py-2 text-sm">
+                                                                <span className="text-gray-600">Subtotal</span>
+                                                                <span className="font-bold text-gray-900">{formatRupiah(currentSubtotal)}</span>
                                                             </div>
-                                                        ) : null}
-                                                        <div className="flex justify-between py-3 mt-1 border-t border-gray-200 text-lg font-bold text-[#0f3460]">
-                                                            <span>Total</span>
-                                                            <span>{formatRupiah(currentTotal)}</span>
+                                                            {formData.diskon ? (
+                                                                <div className="flex justify-between py-2 text-sm text-red-600">
+                                                                    <span>Diskon</span>
+                                                                    <span className="font-bold">-{formatRupiah(formData.diskon)}</span>
+                                                                </div>
+                                                            ) : null}
+                                                            <div className="flex justify-between py-3 mt-1 border-t border-gray-200 text-lg font-bold text-[#0f3460]">
+                                                                <span>Total</span>
+                                                                <span>{formatRupiah(currentTotal)}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
