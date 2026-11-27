@@ -101,6 +101,7 @@ export default async function KatalogPage() {
                     initialBrands={brands}
                     initialAmperes={amperes}
                     initialProducts={products}
+                    headingAs="h1"
                 />
             </Suspense>
         </HomeLayout>

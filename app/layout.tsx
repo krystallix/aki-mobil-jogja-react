@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import ProgressBarProvider from "@/components/ProgressBar";
+import FloatingWhatsApp from "@/components/floating-whatsapp";
 import { Suspense } from "react";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -83,6 +84,7 @@ export default function RootLayout({
           <ProgressBarProvider>
             <TooltipProvider>
               {children}
+              <FloatingWhatsApp />
               <Toaster />
             </TooltipProvider>
           </ProgressBarProvider>

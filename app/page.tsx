@@ -14,10 +14,12 @@ import { fetchCategories, fetchBrands, fetchCapacities, fetchAllProducts } from 
 export const revalidate = 300
 
 export const metadata: Metadata = {
-    title: "Toko Aki Terdekat Jogja - Siswanto Aki | Servis & Tukar Tambah Aki Mobil Bantul 24 Jam",
-    description: "Siswanto Aki Jogja (@siswantoaki.jogja) — toko aki terdekat di Bantul, Yogyakarta untuk servis aki, reparasi & tukar tambah aki mobil. Layanan antar pasang 24 jam, teknisi berpengalaman, harga transparan, garansi resmi.",
+    title: "Toko Aki Mobil Jogja 24 Jam - Antar Pasang | Siswanto Aki",
+    description: "Toko aki mobil panggilan Jogja & Bantul 24 jam. Gratis antar pasang, tukar tambah, setrum/cas & jumper aki. Harga transparan, garansi resmi. Chat WA sekarang!",
     keywords: [
         'toko aki terdekat', 'toko aki terdekat jogja', 'toko aki terdekat bantul',
+        'aki panggilan terdekat', 'bengkel aki terdekat', 'setrum aki mobil terdekat',
+        'cas aki mobil jogja', 'jumper aki mobil jogja',
         'servis aki jogja', 'servis aki bantul', 'servis aki mobil jogja',
         'siswanto aki', 'siswantoaki jogja', 'siswantoaki.jogja',
         'aki mobil jogja', 'aki mobil bantul', 'ganti aki 24 jam bantul',
@@ -31,8 +33,8 @@ export const metadata: Metadata = {
         canonical: 'https://akimobiljogja.com',
     },
     openGraph: {
-        title: 'Siswanto Aki Jogja - Toko Aki Terdekat & Tukar Tambah Aki Mobil Bantul',
-        description: 'Siswanto Aki Jogja (@siswantoaki.jogja) — toko aki terdekat di Bantul, Yogyakarta untuk servis aki, reparasi & tukar tambah aki mobil. Layanan antar pasang 24 jam, teknisi berpengalaman.',
+        title: 'Toko Aki Mobil Jogja 24 Jam - Antar Pasang | Siswanto Aki',
+        description: 'Toko aki mobil panggilan Jogja & Bantul 24 jam. Gratis antar pasang, tukar tambah, setrum/cas & jumper aki. Harga transparan, garansi resmi.',
         url: 'https://akimobiljogja.com',
         siteName: 'Siswanto Aki',
         images: [{
@@ -46,8 +48,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Siswanto Aki Jogja - Toko Aki Terdekat & Tukar Tambah Aki Mobil Bantul',
-        description: 'Siswanto Aki Jogja (@siswantoaki.jogja) — toko aki terdekat di Bantul, Yogyakarta untuk servis aki, reparasi & tukar tambah aki mobil. Layanan antar pasang 24 jam.',
+        title: 'Toko Aki Mobil Jogja 24 Jam - Antar Pasang | Siswanto Aki',
+        description: 'Toko aki mobil panggilan Jogja & Bantul 24 jam. Gratis antar pasang, tukar tambah, setrum/cas & jumper aki.',
         images: ['https://akimobiljogja.com/og-image.jpg'],
         creator: '@siswantoaki.jogja',
     },
@@ -78,7 +80,7 @@ export default async function Page() {
         name: 'Siswanto Aki Jogja',
         alternateName: ['Siswanto Aki', 'siswantoaki.jogja', 'Siswanto Aki Bantul', 'Toko Aki Terdekat Jogja'],
         image: 'https://akimobiljogja.com/og-image.jpg',
-        description: 'Siswanto Aki Jogja — toko aki terdekat di Bantul, Yogyakarta untuk reparasi & tukar tambah aki mobil. Layanan antar pasang 24 jam.',
+        description: 'Siswanto Aki Jogja — toko aki mobil panggilan terdekat di Bantul, Yogyakarta. Melayani tukar tambah, servis, setrum/cas, jumper aki, dan gratis antar pasang 24 jam.',
         address: {
             '@type': 'PostalAddress',
             streetAddress: 'Kanggotan No. 21, Pleret',

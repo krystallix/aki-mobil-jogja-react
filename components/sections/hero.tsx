@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -94,6 +95,9 @@ export default function HeroSection() {
 
     return (
         <section className="pt-24 pb-6 lg:pt-28 lg:pb-10">
+            <h1 className="sr-only">
+                Toko Aki Mobil Jogja &amp; Bantul 24 Jam — Antar Pasang Gratis, Tukar Tambah, Setrum &amp; Jumper Aki | Siswanto Aki
+            </h1>
             <div className={`container mx-auto px-4 lg:px-6 max-w-7xl ${slide.id === 'intro' ? 'overflow-visible' : ''}`}>
                 {/* Banner Card */}
                 <motion.div
@@ -165,20 +169,32 @@ export default function HeroSection() {
                                             href={slide.ctaHref}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="relative z-40 inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 hover:bg-white/90 active:scale-[0.98] w-fit bg-white text-zinc-950 shadow-lg shadow-black/10"
+                                            className="relative z-40 inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 hover:bg-green-500 active:scale-[0.98] w-fit bg-green-600 text-white shadow-lg shadow-black/20"
                                         >
+                                            <FaWhatsapp className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                                             {slide.ctaLabel}
                                             <ArrowRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
                                         </a>
                                     ) : (
-                                        <Link href={slide.ctaHref}>
-                                            <span
-                                                className="relative z-40 inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 hover:bg-white/90 active:scale-[0.98] w-fit bg-white text-zinc-950 shadow-lg shadow-black/10"
+                                        <div className="flex flex-wrap items-center gap-2 relative z-40">
+                                            <Link href={slide.ctaHref}>
+                                                <span
+                                                    className="inline-flex items-center gap-1.5 lg:gap-2 px-4 py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 hover:bg-white/90 active:scale-[0.98] w-fit bg-white text-zinc-950 shadow-lg shadow-black/10"
+                                                >
+                                                    {slide.ctaLabel}
+                                                    <ArrowRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
+                                                </span>
+                                            </Link>
+                                            <a
+                                                href={whatsappUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1.5 px-3 py-2 lg:px-5 lg:py-3 rounded-lg lg:rounded-2xl font-bold text-[10px] lg:text-sm transition-all duration-300 bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-black/10"
                                             >
-                                                {slide.ctaLabel}
-                                                <ArrowRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
-                                            </span>
-                                        </Link>
+                                                <FaWhatsapp className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+                                                Tanya WA
+                                            </a>
+                                        </div>
                                     )}
                                 </motion.div>
                             </AnimatePresence>

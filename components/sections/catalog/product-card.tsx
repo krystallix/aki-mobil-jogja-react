@@ -1,5 +1,6 @@
 "use client"
-import { Zap, ShieldCheck, BatteryCharging, Heart, ArrowRight, ShoppingCart } from "lucide-react";
+import { Zap, ShieldCheck, BatteryCharging, Heart, ArrowRight } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -61,7 +62,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
 
     const handleWhatsApp = () => {
-        const message = `Halo, saya tertarik dengan produk:\n${product.nama}\nHarga: ${formatPrice(product.harga_tukar || product.harga_jual)}`;
+        const message = `Halo Siswanto Aki, saya mau tanya stok & harga tukar tambah untuk:\n${product.nama}\nEstimasi Harga: ${formatPrice(product.harga_tukar || product.harga_jual)}`;
         const whatsappNumber = "6281354007400";
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
@@ -192,11 +193,11 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                                 e.preventDefault();
                                 handleWhatsApp();
                             }}
-                            className="flex-1 h-9 cursor-pointer rounded-full bg-linear-to-r from-indigo-600 to-indigo-700 text-white hover:scale-105 transition-all duration-300 shadow-indigo-500/20 border-none"
+                            className="flex-1 h-9 cursor-pointer rounded-full bg-green-600 hover:bg-green-700 text-white hover:scale-105 transition-all duration-300 shadow-green-600/20 border-none"
                         >
-                            <ShoppingCart className="w-4 h-4 mr-1.5" />
-                            <span className="hidden md:block font-bold">Pesan WA</span>
-                            <span className="block md:hidden font-bold">Pesan</span>
+                            <FaWhatsapp className="w-4 h-4 mr-1.5 shrink-0" />
+                            <span className="hidden md:block font-bold">Tanya Stok WA</span>
+                            <span className="block md:hidden font-bold">Tanya WA</span>
                         </Button>
 
                     </div>

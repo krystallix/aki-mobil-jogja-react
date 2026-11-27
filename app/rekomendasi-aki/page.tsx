@@ -1,7 +1,10 @@
 import HomeLayout from "@/components/layouts/home-layout";
-import RekomendasiAkiClient from "./rekomendasi-aki-client";
+import RekomendasiAkiClient, { type BatteryRec } from "./rekomendasi-aki-client";
 import JsonLd from "@/components/json-ld";
 import type { Metadata } from "next";
+import { createClient } from "@supabase/supabase-js";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
     title: "Rekomendasi Aki Kendaraan | Siswanto Aki",
@@ -40,7 +43,25 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RekomendasiAkiPage() {
+async function fetchBatteryRecommendations(): Promise<BatteryRec[]> {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
+    if (!url || !key) return [];
+
+    const supabase = createClient(url, key);
+    const { data, error } = await supabase
+        .from("v_battery_recommendations")
+        .select("*")
+        .order("brand", { ascending: true })
+        .order("model", { ascending: true });
+
+    if (error || !data) return [];
+    return data as BatteryRec[];
+}
+
+export default async function RekomendasiAkiPage() {
+    const initialData = await fetchBatteryRecommendations();
+
     const jsonLd = {
         '@context': 'https://schema.org',
         '@graph': [
@@ -85,7 +106,7 @@ export default function RekomendasiAkiPage() {
                         </p>
                     </div>
 
-                    <RekomendasiAkiClient />
+                    <RekomendasiAkiClient initialData={initialData} />
                 </div>
             </div>
         </HomeLayout>

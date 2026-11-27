@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, ChevronLeft, ChevronRight, Battery, Zap, Shield, Plus } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -12,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type BatteryRec = {
+export type BatteryRec = {
     brand: string;
     model: string;
     year_start: number | null;
@@ -66,9 +67,9 @@ function BatteryBadge({ code, ah, type }: { code: string | null; ah: number | nu
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-export default function RekomendasiAkiClient() {
-    const [data, setData] = useState<BatteryRec[]>([]);
-    const [loading, setLoading] = useState(true);
+export default function RekomendasiAkiClient({ initialData = [] }: { initialData?: BatteryRec[] }) {
+    const [data, setData] = useState<BatteryRec[]>(initialData);
+    const [loading, setLoading] = useState(initialData.length === 0);
     const [error, setError] = useState<string | null>(null);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -79,6 +80,7 @@ export default function RekomendasiAkiClient() {
     const [, startTransition] = useTransition();
 
     useEffect(() => {
+        if (initialData.length > 0) return;
         const supabase = createClient();
         (async () => {
             setLoading(true);
@@ -96,7 +98,7 @@ export default function RekomendasiAkiClient() {
             setData((rows as BatteryRec[]) ?? []);
             setLoading(false);
         })();
-    }, []);
+    }, [initialData.length]);
 
     const sortedBrands = useMemo(() => {
         const unique = Array.from(new Set(data.map((r) => r.brand))).sort();
@@ -400,6 +402,33 @@ export default function RekomendasiAkiClient() {
                     )}
                 </motion.div>
             )}
+
+            {/* Contextual WhatsApp CTA */}
+            <div className="mt-6 rounded-2xl border border-green-600/20 bg-green-600/5 p-5 lg:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                    <h2 className="text-base lg:text-lg font-bold text-foreground">
+                        Sudah ketemu tipe aki mobilmu atau masih ragu?
+                    </h2>
+                    <p className="text-xs lg:text-sm text-muted-foreground">
+                        Tanya harga tukar tambah, cek stok hari ini, atau pesan antar pasang 24 jam area Jogja &amp; Bantul.
+                    </p>
+                </div>
+                <a
+                    href={`https://wa.me/6281354007400?text=${encodeURIComponent(
+                        search.trim()
+                            ? `Halo Siswanto Aki, saya cari aki untuk ${search.trim()}. Bisa info rekomendasi & harga tukar tambahnya?`
+                            : selectedBrand !== "ALL"
+                                ? `Halo Siswanto Aki, saya cari aki untuk mobil ${selectedBrand}. Bisa info stok & harga tukar tambahnya?`
+                                : "Halo Siswanto Aki, saya mau tanya rekomendasi aki & harga tukar tambah untuk mobil saya."
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 shrink-0 px-5 py-3 rounded-full bg-green-600 hover:bg-green-700 text-white font-bold text-xs lg:text-sm transition-all hover:scale-[1.02] w-full sm:w-auto"
+                >
+                    <FaWhatsapp className="w-4 h-4" />
+                    Tanya Harga &amp; Stok via WA
+                </a>
+            </div>
         </div>
     );
 }
