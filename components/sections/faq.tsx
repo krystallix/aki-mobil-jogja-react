@@ -4,7 +4,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Check, Clock, CreditCard, ShieldCheck, Truck, Wrench } from "lucide-react"
+import { BatteryCharging, Check, Clock, CreditCard, Recycle, ShieldCheck, Truck, Wrench } from "lucide-react"
 import JsonLd from "@/components/json-ld"
 
 export default function FaqSections() {
@@ -33,7 +33,23 @@ export default function FaqSections() {
                 name: 'Tokonya buka jam berapa aja?',
                 acceptedAnswer: {
                     '@type': 'Answer',
-                    text: 'Kita buka setiap hari dari jam 7 pagi sampai 9 malam. Kalau ada darurat malam hari, bisa hubungi nomor WhatsApp kita, biasanya masih bisa dilayani asal di area jangkauan. Hari libur tetap buka normal.',
+                    text: 'Kami melayani 24 jam setiap hari (termasuk hari libur) untuk layanan aki panggilan, antar pasang, dan darurat area Jogja & Bantul via WhatsApp. Anda juga bisa datang langsung ke toko kami di Pleret, Bantul.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Apakah melayani setrum/cas aki dan jumper aki panggilan?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Ya, kami melayani jasa setrum/cas aki mobil maupun jumper aki panggilan 24 jam untuk area Jogja, Bantul, dan sekitarnya. Teknisi akan mengecek kondisi aki terlebih dahulu apakah masih layak disetrum atau perlu diganti.',
+                },
+            },
+            {
+                '@type': 'Question',
+                name: 'Apakah bisa tukar tambah dengan aki lama?',
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Bisa! Dengan tukar tambah aki bekas mobil Anda, harga aki baru menjadi jauh lebih hemat. Nilai potongan menyesuaikan kapasitas (Ah) dan kondisi aki lama Anda.',
                 },
             },
             {
@@ -114,7 +130,31 @@ export default function FaqSections() {
                             Tokonya buka jam berapa aja?
                         </AccordionTrigger>
                         <AccordionContent className="text-muted-foreground text-base p-4 leading-relaxed">
-                            Kita buka setiap hari dari jam 7 pagi sampai 9 malam. Kalau ada darurat malam hari, bisa hubungi nomor WhatsApp kita, biasanya masih bisa dilayani asal di area jangkauan. Hari libur tetap buka normal kok!
+                            Kami melayani 24 jam setiap hari (termasuk hari libur) untuk layanan aki panggilan, antar pasang, dan darurat area Jogja &amp; Bantul via WhatsApp. Anda juga bisa datang langsung ke toko kami di Pleret, Bantul.
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="setrum" className="border-b border-border/50 px-6">
+                        <AccordionTrigger className="py-4 hover:no-underline text-base lg:text-lg text-left flex items-center gap-4 text-foreground hover:text-primary transition-colors">
+                            <div className="p-2 border border-border/50 rounded-lg bg-muted/50 text-muted-foreground shrink-0">
+                                <BatteryCharging className="size-4 lg:size-5" />
+                            </div>
+                            Apakah melayani setrum/cas aki dan jumper aki panggilan?
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-base p-4 leading-relaxed">
+                            Ya, kami melayani jasa setrum/cas aki mobil maupun jumper aki panggilan 24 jam untuk area Jogja, Bantul, dan sekitarnya. Teknisi akan mengecek kondisi aki terlebih dahulu apakah masih layak disetrum atau perlu diganti.
+                        </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="tukar-tambah" className="border-b border-border/50 px-6">
+                        <AccordionTrigger className="py-4 hover:no-underline text-base lg:text-lg text-left flex items-center gap-4 text-foreground hover:text-primary transition-colors">
+                            <div className="p-2 border border-border/50 rounded-lg bg-muted/50 text-muted-foreground shrink-0">
+                                <Recycle className="size-4 lg:size-5" />
+                            </div>
+                            Apakah bisa tukar tambah dengan aki lama?
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-base p-4 leading-relaxed">
+                            Bisa! Dengan tukar tambah aki bekas mobil Anda, harga aki baru menjadi jauh lebih hemat. Nilai potongan menyesuaikan kapasitas (Ah) dan kondisi aki lama Anda.
                         </AccordionContent>
                     </AccordionItem>
 

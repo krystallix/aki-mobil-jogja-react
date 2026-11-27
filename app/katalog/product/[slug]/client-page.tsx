@@ -88,7 +88,7 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
 
     const handleWhatsApp = () => {
         if (!product) return;
-        const message = `Halo, saya tertarik dengan produk:\n${product.nama}\nHarga: ${formatPrice(product.harga_tukar || product.harga_jual)}`;
+        const message = `Halo Siswanto Aki, saya mau tanya stok & harga tukar tambah untuk:\n${product.nama}\nEstimasi Harga: ${formatPrice(product.harga_tukar || product.harga_jual)}`;
         const whatsappNumber = "6281354007400";
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
@@ -225,6 +225,9 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                                         {formatPrice(product.harga_jual)}
                                     </p>
                                 )}
+                                <p className="text-xs md:text-sm text-muted-foreground mt-3 pt-3 border-t border-border/50 relative z-10">
+                                    Harga tukar tambah bisa lebih hemat sesuai kondisi aki lama. Chat WA untuk cek stok &amp; estimasi teknisi tiba.
+                                </p>
                             </div>
 
                             {/* Bento Grid Specifications */}
@@ -338,6 +341,37 @@ export default function ProductDetailPage({ initialProduct, relatedProducts: ini
                     )}
                 </div>
 
+            </div>
+
+            {/* Mobile Sticky WhatsApp Bar */}
+            <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-background/95 backdrop-blur-md border-t border-border/60 px-4 py-3 shadow-lg">
+                <div className="flex items-center gap-2.5 max-w-7xl mx-auto">
+                    <div className="min-w-0 shrink-0">
+                        <p className="text-[10px] text-muted-foreground leading-none">
+                            {product.harga_tukar ? "Harga Tukar Tambah" : "Harga"}
+                        </p>
+                        <p className="text-sm font-extrabold text-foreground leading-tight">
+                            {formatPrice(product.harga_tukar || product.harga_jual)}
+                        </p>
+                    </div>
+                    <Button
+                        size="sm"
+                        className="flex-1 h-11 rounded-full text-xs font-bold bg-green-600 hover:bg-green-700 text-white shadow-none"
+                        onClick={handleWhatsApp}
+                    >
+                        <FaWhatsapp className="mr-1.5 h-4 w-4 shrink-0" />
+                        Tanya &amp; Pesan WA
+                    </Button>
+                    <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-11 w-11 rounded-full border-border/60 shrink-0"
+                        onClick={handleCall}
+                        aria-label="Telepon Siswanto Aki"
+                    >
+                        <Phone className="h-4 w-4" />
+                    </Button>
+                </div>
             </div>
         </HomeLayout>
     );

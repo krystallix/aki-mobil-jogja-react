@@ -13,13 +13,15 @@ interface CatalogSectionsProps {
     initialBrands: any[];
     initialAmperes: any[];
     initialProducts: any[];
+    headingAs?: "h1" | "h2";
 }
 
 export default function CatalogSections({
     initialCategories,
     initialBrands,
     initialAmperes,
-    initialProducts
+    initialProducts,
+    headingAs = "h2",
 }: CatalogSectionsProps) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -167,9 +169,15 @@ export default function CatalogSections({
                     <div className="flex justify-between items-end">
                         <div>
 
-                            <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50">
-                                Katalog Produk
-                            </h2>
+                            {headingAs === "h1" ? (
+                                <h1 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50">
+                                    Katalog Aki Mobil
+                                </h1>
+                            ) : (
+                                <h2 className="text-4xl lg:text-6xl font-extrabold tracking-tighter mb-2 lg:mb-4 text-transparent bg-clip-text bg-linear-to-br from-foreground via-foreground to-foreground/50">
+                                    Katalog Produk
+                                </h2>
+                            )}
                             <p className="text-sm lg:text-lg text-muted-foreground font-light max-w-2xl">
                                 Temukan aki yang tepat untuk kendaraan Anda. Kami menyediakan berbagai jenis aki dengan kualitas terjamin.
                             </p>

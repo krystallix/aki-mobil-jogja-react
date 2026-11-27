@@ -108,23 +108,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             '@type': 'Brand',
             name: product.merek || 'Siswanto Aki'
         },
-        review: {
-            '@type': 'Review',
-            reviewRating: {
-                '@type': 'Rating',
-                ratingValue: '5',
-                bestRating: '5'
-            },
-            author: {
-                '@type': 'Person',
-                name: 'Siswanto Aki'
-            }
-        },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.8',
-            reviewCount: '24'
-        },
         offers: {
             '@type': 'Offer',
             url: `https://akimobiljogja.com/katalog/product/${slug}`,

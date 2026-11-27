@@ -1,16 +1,17 @@
 'use client'
 
-import { ShieldCheck, MessageCircle, Truck, Wrench, Zap, Recycle, ArrowRight } from "lucide-react";
+import { ShieldCheck, BatteryCharging, Truck, Wrench, Zap, Recycle, ArrowRight } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
 const features = [
-    { icon: ShieldCheck, title: "Garansi Resmi", desc: "Garansi pabrik hingga 12 bulan" },
-    { icon: MessageCircle, title: "Konsultasi Gratis", desc: "Tanya dulu, beli kemudian" },
-    { icon: Truck, title: "Gratis Antar Pasang", desc: "Teknisi datang ke lokasi Anda" },
-    { icon: Wrench, title: "Cek Aki Gratis", desc: "Diagnosis sebelum ganti" },
-    { icon: Zap, title: "Layanan 24 Jam", desc: "Siap melayani kapan saja" },
-    { icon: Recycle, title: "Tukar Tambah", desc: "Harga lebih hemat dengan aki lama" },
+    { icon: Truck, title: "Aki Panggilan 24 Jam", desc: "Gratis antar pasang ke lokasi Jogja & Bantul" },
+    { icon: BatteryCharging, title: "Setrum / Cas & Jumper", desc: "Layanan cas aki & jumper darurat di tempat" },
+    { icon: Recycle, title: "Tukar Tambah Aki", desc: "Potongan harga menarik dengan aki lama" },
+    { icon: ShieldCheck, title: "Garansi Resmi", desc: "Produk original bergaransi hingga 12 bulan" },
+    { icon: Wrench, title: "Cek Aki & Alternator Gratis", desc: "Diagnosis akurat sebelum ganti aki baru" },
+    { icon: Zap, title: "Respon Cepat 24/7", desc: "Teknisi berpengalaman siap bantu kapan saja" },
 ];
 
 const stats = [
@@ -49,8 +50,8 @@ export default function BenefitsSection() {
                                     <span className="lg:block"> Kami?</span>
                                 </h2>
                                 {/* Description — desktop only */}
-                                <p className="hidden lg:block text-sm text-white/50 leading-relaxed max-w-xs mt-3">
-                                    Pelayanan terpercaya dengan produk berkualitas tinggi dan teknisi berpengalaman.
+                                <p className="hidden lg:block text-sm text-white/60 leading-relaxed max-w-xs mt-3">
+                                    Bengkel &amp; toko aki mobil panggilan di Pleret, Bantul melayani antar pasang, tukar tambah, setrum/cas, dan jumper aki area Yogyakarta &amp; sekitarnya.
                                 </p>
                             </div>
 
@@ -113,18 +114,18 @@ export default function BenefitsSection() {
                     className="mt-2.5 lg:mt-4 flex items-center justify-between gap-3 px-4 py-3 lg:px-8 lg:py-5 rounded-xl lg:rounded-2xl border border-border/60 bg-card"
                 >
                     <p className="text-xs lg:text-sm font-semibold text-foreground">
-                        Ganti aki sekarang?
-                        <span className="hidden sm:inline text-muted-foreground font-normal ml-1.5">Antar pasang gratis ke lokasi Anda.</span>
+                        Butuh aki panggilan, setrum, atau jumper?
+                        <span className="hidden sm:inline text-muted-foreground font-normal ml-1.5">Antar pasang gratis ke lokasi area Jogja &amp; Bantul.</span>
                     </p>
                     <div className="flex gap-2 shrink-0">
                         <a
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 lg:px-5 lg:py-2.5 rounded-full text-white font-bold text-[11px] lg:text-sm hover:opacity-90 active:scale-[0.98] transition-all duration-200 border border-indigo-500/30"
-                            style={{ background: "radial-gradient(ellipse at 20% 30%, rgba(165,180,252,0.25) 0%, transparent 65%), rgb(55,48,163)" }}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 lg:px-5 lg:py-2.5 rounded-full bg-green-600 hover:bg-green-700 text-white font-bold text-[11px] lg:text-sm active:scale-[0.98] transition-all duration-200"
                         >
-                            Hubungi Kami
+                            <FaWhatsapp className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+                            Chat WA 24 Jam
                             <ArrowRight className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
                         </a>
                         <Link href="/katalog">

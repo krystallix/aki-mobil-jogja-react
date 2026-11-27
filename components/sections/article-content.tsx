@@ -3,14 +3,9 @@
 import { ArticleData } from '@/lib/supabase/queries';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, Tag, ArrowLeft, Share2, Phone, MessageSquare, Link2, Check } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft, Share2, MessageSquare, Link2, Check } from 'lucide-react';
 import { useState } from 'react';
 import { useIsNativeShare } from '@/hooks/use-is-native-share';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import TiptapImage from '@tiptap/extension-image';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
 import { FaWhatsapp, FaFacebookF, FaTelegramPlane } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import {
@@ -44,28 +39,9 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
         } catch (err) { }
     };
 
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            TiptapImage.configure({
-                HTMLAttributes: {
-                    class: 'rounded-3xl my-8',
-                },
-            }),
-            Underline,
-            TextAlign.configure({
-                types: ['heading', 'paragraph'],
-            }),
-        ],
-        content: article.content,
-        editable: false,
-        immediatelyRender: false,
-        editorProps: {
-            attributes: {
-                class: 'prose prose-lg lg:prose-xl max-w-none focus:outline-none',
-            },
-        },
-    });
+    const whatsappUrl = `https://wa.me/6281354007400?text=${encodeURIComponent(
+        `Halo Siswanto Aki, saya baru baca artikel "${article.title}" dan ingin konsultasi tentang aki mobil.`
+    )}`;
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString('id-ID', {
@@ -248,16 +224,17 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                             </div>
                         )}
 
-                        <div className="prose prose-lg lg:prose-xl max-w-none 
+                        <div
+                            className="prose prose-lg lg:prose-xl max-w-none 
                             prose-headings:font-extrabold prose-headings:tracking-tighter prose-headings:text-foreground
                             prose-h2:text-3xl lg:prose-h2:text-4xl prose-h2:mt-12
                             prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:font-light
                             prose-strong:text-foreground prose-strong:font-bold
                             prose-img:rounded-3xl prose-img:border prose-img:border-border/50
                             prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:font-medium prose-blockquote:text-foreground
-                            prose-a:text-primary prose-a:font-bold prose-a:no-underline hover:prose-a:underline">
-                            <EditorContent editor={editor} />
-                        </div>
+                            prose-a:text-primary prose-a:font-bold prose-a:no-underline hover:prose-a:underline"
+                            dangerouslySetInnerHTML={{ __html: article.content || "" }}
+                        />
 
                         {/* Tags Section */}
                         {article.tags && article.tags.length > 0 && (
@@ -307,13 +284,13 @@ export default function ArticleContent({ article, relatedArticles }: ArticleCont
                                 </div>
                                 
                                 <a
-                                    href="https://wa.me/6281354007400"
+                                    href={whatsappUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-2 shrink-0 px-6 h-10 rounded-full bg-white text-primary font-bold hover:scale-105 hover:bg-white/90 transition-all text-sm w-full sm:w-auto shadow-lg"
+                                    className="inline-flex items-center justify-center gap-2 shrink-0 px-6 h-10 rounded-full bg-green-600 text-white font-bold hover:scale-105 hover:bg-green-700 transition-all text-sm w-full sm:w-auto shadow-lg"
                                 >
                                     <FaWhatsapp size={16} />
-                                    Chat Sekarang
+                                    Tanya via WA
                                 </a>
                             </div>
                         </div>
